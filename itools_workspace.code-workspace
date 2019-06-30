@@ -1,0 +1,22 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"python.autoComplete.extraPaths": [
+			"C:/Users/Maxi/AppData/Local/Programs/Python/Python37/Lib/site-packages/bmesh",
+			"C:/Users/Maxi/AppData/Local/Programs/Python/Python37/Lib/site-packages/bpy",
+			"C:/Users/Maxi/AppData/Local/Programs/Python/Python37/Lib/site-packages/bpy_extras"
+			
+		],
+		"python.linting.pylintArgs": [
+			"--init-hook",
+			"import sys; sys.path.append('C:/Users/Maxi/AppData/Local/Programs/Python/Python37/Lib/site-packages/bpy_extras'),'C:/Users/Maxi/AppData/Local/Programs/Python/Python37/Lib/site-packages/bmesh'); sys.path.append('C:/Users/Maxi/AppData/Local/Programs/Python/Python37/Lib/site-packages/bpy')"
+		],
+		"python.linting.pep8Args": ["--ignore=E501, E701", "--verbose"],
+		"python.autoComplete.addBrackets": true,
+
+	}
+}
