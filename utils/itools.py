@@ -24,9 +24,13 @@ def get_mode():
 
 
 def set_mode(mode, grow=False):
-    if mode == 'OBJECT':
+    actual_mode = get_mode()
+    if mode == 'OBJECT' and actual_mode != 'OBJECT':
         bpy.ops.object.mode_set(mode='OBJECT')
-    elif mode == 'VERT' or mode == 'EDGE' or mode == 'FACE':
+
+    elif mode in ['VERT', 'EDGE', 'FACE']:
+        if actual_mode == 'OBJECT':
+            bpy.ops.object.mode_set(mode='EDIT')
         bpy.ops.mesh.select_mode(type=mode, use_expand=grow)
 
 
@@ -37,7 +41,7 @@ def get_bmesh():
         print("Must be in obj mode to get bmesh")
 
 
-# Return items index for selected mesh elements or names for objects
+# Return item or index for selected mesh elements or names for objects
 def get_selected(mode='', item=True):
     if not mode:
         mode = get_mode()
