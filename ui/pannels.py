@@ -33,7 +33,7 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row3.operator('mesh.radial_symmetry', text="Radial Symmetry")
 
         row4 = layout.row()
-        # row4.operator('mesh.quick_ffd', text="Quick Lattice")
+        row4.operator('mesh.quick_lattice', text="Quick Lattice")
         row4.operator('mesh.quick_pivot', text="Quick Origin")
         row4.operator('mesh.simple_edit_pivot', text="Edit Origin")
 
@@ -45,16 +45,19 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row6 = layout.row()
         row6.operator('mesh.target_weld_toggle', text="Target Weld Toggle")
 
-        # row6.operator('mesh.smart_extrude_modal', text="Smart Extrude")
-        # row6.operator('mesh.smart_translate_modal', text="Smart Translate")
-
         row7 = layout.row()
-        row7.operator('mesh.context_sensitive_slide', text="CS Slide")
-        row7.operator('mesh.context_sensitive_bevel', text="CS Bevel")
+        # row6.operator('mesh.smart_extrude_modal', text="Smart Extrude")
+        row7.operator('mesh.smart_translate_modal', text="Smart Translate")
+        row7.operator('mesh.smart_rotate_modal', text="Smart Rotate")
+        row7.operator('mesh.smart_scale_modal', text="Smart Scale")
 
         row8 = layout.row()
-        # row8.operator('uv.rotate_90_pos', text="Rotate UV 90 Pos")
-        # row8.operator('uv.rotate_90_neg', text="Rotate UV 90 Neg")
+        row8.operator('mesh.context_sensitive_slide', text="CS Slide")
+        row8.operator('mesh.context_sensitive_bevel', text="CS Bevel")
 
         row9 = layout.row()
-        row9.operator('itools.quick_align', text="Quick Align")
+        # row9.operator('uv.rotate_90_pos', text="Rotate UV 90 Pos")
+        # row9.operator('uv.rotate_90_neg', text="Rotate UV 90 Neg")
+
+        row10 = layout.row()
+        row10.operator('itools.quick_align', text="Quick Align")

@@ -9,6 +9,8 @@ from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelecti
 from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle
 from . op.smart_delete import SmartDelete
 from . op.selection import SmartSelectLoop, SmartSelectRing
+from . op.smart_transform import SmartTranslate, SmartRotate, SmartScale
+from . op.quick_lattice import QuickLattice
 from . utils.pref_settings import ExampleAddonPreferences, OBJECT_OT_addon_prefs_example, register_keymaps, unregister_keymaps
 
 
@@ -30,9 +32,8 @@ classes = (MaxivzTools_PT_Panel, MaxivzToolsDebug_PT_Panel, DebugOp,
            ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle,
            QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete,
            ExampleAddonPreferences, OBJECT_OT_addon_prefs_example,
-           SmartSelectLoop, SmartSelectRing)
-
-# register, unregister = bpy.utils.register_classes_factory(classes)
+           SmartSelectLoop, SmartSelectRing, SmartTranslate,
+           SmartRotate, SmartScale, QuickLattice)
 
 
 def register():

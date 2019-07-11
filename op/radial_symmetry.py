@@ -27,7 +27,7 @@ class QuickRadialSymmetry(bpy.types.Operator):
         description="Number of iterations",
         default=1,
         min=1,
-      )
+    )
 
     mouse_x = 0.0
     initial_pos_x = 0.0
@@ -56,18 +56,14 @@ class QuickRadialSymmetry(bpy.types.Operator):
             selection.select_set(True)
             bpy.context.view_layer.objects.active = selection
 
-            bpy.ops.object.modifier_add(type='ARRAY')
-            selection.modifiers["Array"].name = "Radial Symmetry"
-            selection.modifiers["Radial Symmetry"].relative_offset_displace[0] = 0
-            selection.modifiers["Radial Symmetry"].count = 3
-            selection.modifiers["Radial Symmetry"].offset_object = bpy.data.objects[symmetry_center.name]
-            selection.modifiers["Radial Symmetry"].use_object_offset = True
+            # Create modifier and assign name
+            mod = selection.modifiers.new(name="Radial Array", type='ARRAY')
+            mod.relative_offset_displace[0] = 0
+            mod.count = 3
+            mod.offset_object = bpy.data.objects[symmetry_center.name]
+            mod.use_object_offset = True
 
             # Update both depsgraph and viewlayer
-            dg = bpy.context.evaluated_depsgraph_get()
-            print([obj for obj in dg.objects]) 
-            dg.update()
-
             bpy.context.view_layer.objects.active = selection
             bpy.context.view_layer.update()
 
@@ -202,9 +198,9 @@ class QuickRadialSymmetry(bpy.types.Operator):
             if event.value == 'RELEASE':
                 self.using_settings = True
 
-                #Update both depsgraph and viewlayer at the end of the modal execution
-                dg = bpy.context.evaluated_depsgraph_get() 
-                dg.update() 
+                # Update both depsgraph and viewlayer at the end of the modal execution
+                dg = bpy.context.evaluated_depsgraph_get()
+                dg.update()
 
                 bpy.context.view_layer.objects.active = bpy.data.objects[self.selection]
                 bpy.context.view_layer.update()

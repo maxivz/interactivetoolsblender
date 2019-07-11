@@ -181,7 +181,6 @@ def select(target, mode='', item=True, replace=False, deselect=False, add_to_his
                 if add_to_history:
                     bm.select_history.add(bm.faces[face])
 
-
     elif mode == 'EDIT_CURVE':
         print("Curve")
         curves = bpy.context.active_object.data.splines

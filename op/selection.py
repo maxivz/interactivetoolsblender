@@ -71,8 +71,6 @@ def organize_elements_by_loop(elements, mode, ring=False):
 
 
 def is_step_selection(selection, mode, ring=False):
-    start = time.time()
-    print("IS STEP SELECTION STARTS")
     if len(selection) > 2:
         selection_results = []
         results = []
@@ -265,5 +263,5 @@ def select_loop_directional(edge, directional=True, direction=0):
         else:
             directionality_loop = False
         counter += 1
-    end = time.time()    
+    end = time.time()
     print("SELECT LOOP DIRECTIONAL ENDS TIME: %s", time)
