@@ -6,7 +6,7 @@ import datetime
 
 
 class QuickRadialSymmetry(bpy.types.Operator):
-    bl_idname = "itools.radial_symmetry"
+    bl_idname = "mesh.radial_symmetry"
     bl_label = "Quick Radial Symmetry"
     bl_description = "Setup a Quick Radial Symmetry"
     bl_options = {'REGISTER', 'UNDO', 'GRAB_CURSOR'}
@@ -63,6 +63,14 @@ class QuickRadialSymmetry(bpy.types.Operator):
             selection.modifiers["Radial Symmetry"].offset_object = bpy.data.objects[symmetry_center.name]
             selection.modifiers["Radial Symmetry"].use_object_offset = True
 
+            # Update both depsgraph and viewlayer
+            dg = bpy.context.evaluated_depsgraph_get()
+            print([obj for obj in dg.objects]) 
+            dg.update()
+
+            bpy.context.view_layer.objects.active = selection
+            bpy.context.view_layer.update()
+
     def calculate_iterations(self, context, selection):
         if self.change_iteration:
             if self.using_settings:
@@ -74,6 +82,17 @@ class QuickRadialSymmetry(bpy.types.Operator):
             if self.sym_count < 1:
                 self.sym_count = 1
                 self.initial_pos_x = self.mouse_x
+
+            # selection.modifiers["Radial Symmetry"].count = self.sym_count
+            bpy.context.view_layer.objects.active = selection
+            print(bpy.context.view_layer.objects.active)
+
+            bpy.context.view_layer.update()
+
+            if selection.modifiers.find("Radial Symmetry") < 0:
+                modifiers = [modifier for modifier in selection.modifiers]
+                print("Radial Symmetry modifier not found, modifiers")
+                print(modifiers)
 
             selection.modifiers["Radial Symmetry"].count = self.sym_count
             self.change_iteration = False
@@ -182,6 +201,14 @@ class QuickRadialSymmetry(bpy.types.Operator):
         elif event.type == 'LEFTMOUSE':  # Confirm
             if event.value == 'RELEASE':
                 self.using_settings = True
+
+                #Update both depsgraph and viewlayer at the end of the modal execution
+                dg = bpy.context.evaluated_depsgraph_get() 
+                dg.update() 
+
+                bpy.context.view_layer.objects.active = bpy.data.objects[self.selection]
+                bpy.context.view_layer.update()
+
                 return {'FINISHED'}
 
         elif event.type in {'RIGHTMOUSE', 'ESC'}:  # Confirm

@@ -1,6 +1,7 @@
 import bpy
 from .. utils import itools as itools
 from .. op.super_smart_create import SuperSmartCreate
+from .. op import selection as sel
 
 # import time
 # Make function to debug time it takes
@@ -27,5 +28,8 @@ class DebugOp(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        print(itools.get_selected())
+        print("Debug")
+        selection = itools.get_selected(item=False, ordered=True)
+        print(selection)
+        # sel.is_step_selection(selection, 'EDGE')
         return {'FINISHED'}

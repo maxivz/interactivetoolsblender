@@ -4,8 +4,29 @@ from .. utils import itools as itools
 # Change vertex group implementation for data blocks
 
 
+class SelectionModeCycle(bpy.types.Operator):
+    bl_idname = "mesh.selection_mode_cycle"
+    bl_label = "Mesh Mode Cycle"
+    bl_description = "Set selection modes quickly"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        mode = itools.get_mode()
+        if mode == 'OBJECT':
+            bpy.ops.object.editmode_toggle()
+
+        elif mode == 'VERT':
+            itools.set_mode('EDGE')
+        elif mode == 'EDGE':
+            itools.set_mode('FACE')
+        elif mode == 'FACE':
+            itools.set_mode('VERT')
+
+        return {'FINISHED'}
+
+
 class QuickSelectionVert(bpy.types.Operator):
-    bl_idname = "itools.quick_selection_vert"
+    bl_idname = "mesh.quick_selection_vert"
     bl_label = "Quick Selection Vert"
     bl_description = "Set selection modes quickly"
     bl_options = {'REGISTER', 'UNDO'}
@@ -24,7 +45,7 @@ class QuickSelectionVert(bpy.types.Operator):
 
 
 class QuickSelectionVertSticky(bpy.types.Operator):
-    bl_idname = "itools.quick_selection_vert"
+    bl_idname = "mesh.quick_selection_vert"
     bl_label = "Quick Selection Vert"
     bl_description = "Set selection modes quickly"
     bl_options = {'REGISTER', 'UNDO'}
@@ -65,7 +86,7 @@ class QuickSelectionVertSticky(bpy.types.Operator):
 
 
 class QuickSelectionEdge(bpy.types.Operator):
-    bl_idname = "itools.quick_selection_edge"
+    bl_idname = "mesh.quick_selection_edge"
     bl_label = "Quick Selection Edge"
     bl_description = "Set selection modes quickly"
     bl_options = {'REGISTER', 'UNDO'}
@@ -84,7 +105,7 @@ class QuickSelectionEdge(bpy.types.Operator):
 
 
 class QuickSelectionEdgeSticky(bpy.types.Operator):
-    bl_idname = "itools.quick_selection_edge_sticky"
+    bl_idname = "mesh.quick_selection_edge_sticky"
     bl_label = "Quick Selection Edge, stores previous selection"
     bl_description = "Set selection modes quickly"
     bl_options = {'REGISTER', 'UNDO'}
@@ -124,7 +145,7 @@ class QuickSelectionEdgeSticky(bpy.types.Operator):
 
 
 class QuickSelectionFace(bpy.types.Operator):
-    bl_idname = "itools.quick_selection_face"
+    bl_idname = "mesh.quick_selection_face"
     bl_label = "Quick Selection Face"
     bl_description = "Set selection modes quickly"
     bl_options = {'REGISTER', 'UNDO'}
@@ -143,7 +164,7 @@ class QuickSelectionFace(bpy.types.Operator):
 
 
 class QuickSelectionFaceSticky(bpy.types.Operator):
-    bl_idname = "itools.quick_selection_face_sticky"
+    bl_idname = "mesh.quick_selection_face_sticky"
     bl_label = "Quick Selection Face Sticky"
     bl_description = "Set selection modes quickly"
     bl_options = {'REGISTER', 'UNDO'}

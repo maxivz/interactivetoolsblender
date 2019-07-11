@@ -226,6 +226,7 @@ class SetCylindricalObjSides(bpy.types.Operator):
 			bpy.ops.object.select_all(action='DESELECT')
 			bpy.data.objects[mesh_to_select[0].name].select_set(state=True)
 			bpy.context.view_layer.objects.active = mesh_to_select[0]
+
 			bpy.ops.object.modifier_add(type='SCREW')
 			bpy.context.object.modifiers["Screw"].name = "Cylindrical Sides"
 			bpy.context.object.modifiers["Cylindrical Sides"].use_merge_vertices = True

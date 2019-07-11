@@ -6,7 +6,7 @@ from ..utils import mesh as mesh
 
 
 class SuperSmartCreate(bpy.types.Operator):
-    bl_idname = "itools.super_smart_create"
+    bl_idname = "mesh.super_smart_create"
     bl_label = "Super Smart Create"
     bl_description = "Context sensitive creation"
     bl_options = {'REGISTER', 'UNDO'}
@@ -32,10 +32,10 @@ class SuperSmartCreate(bpy.types.Operator):
             itools.set_mode('EDGE')
             itools.select(edge, replace=True)
             self.split_edge_select_vert()
-            new_verts.append(itools.get_selected('VERT', item = False)[0])
+            new_verts.append(itools.get_selected('VERT', item=False)[0])
 
         itools.set_mode('VERT')
-        itools.select(new_verts, replace=True, item = False)
+        itools.select(new_verts, replace=True, item=False)
         bpy.ops.mesh.vert_connect()
         itools.set_mode('EDGE')
 
@@ -80,9 +80,9 @@ class SuperSmartCreate(bpy.types.Operator):
             selection = itools.get_selected()
 
             if len(selection) == 0:
-                print("Execute some tool")
+                bpy.ops.mesh.knife_tool('INVOKE_DEFAULT')
 
-            if len(selection) == 1 or (mesh.verts_share_edge(selection) and mesh.are_border_verts(selection)):
+            elif len(selection) == 1 or (mesh.verts_share_edge(selection) and mesh.are_border_verts(selection)):
                 mesh_f2.bpy.ops.mesh.f2('INVOKE_DEFAULT')
 
             elif mesh.verts_share_face(selection):
@@ -97,9 +97,9 @@ class SuperSmartCreate(bpy.types.Operator):
             selection = itools.get_selected()
 
             if len(selection) == 0:
-                print("Execute Edge loop cut tool")
+                bpy.ops.mesh.loopcut_slide('INVOKE_DEFAULT')
 
-            if len(selection) == 1:
+            elif len(selection) == 1:
                 self.split_edge_select_vert()
 
             elif mesh.is_border(selection):
@@ -142,9 +142,8 @@ class SuperSmartCreate(bpy.types.Operator):
                 print("")
                 bpy.ops.curve.subdivide()
 
-
             if len(selection) > 1:
-                bpy.ops.mesh.bridge_edge_loops()     
+                bpy.ops.mesh.bridge_edge_loops()
 
     def execute(self, context):
         self.super_smart_create()

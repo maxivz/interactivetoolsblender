@@ -4,7 +4,7 @@ from ..utils import mesh as mesh
 
 
 class SmartDelete(bpy.types.Operator):
-    bl_idname = "itools.smart_delete"
+    bl_idname = "mesh.smart_delete"
     bl_label = "Smart Delete"
     bl_description = "Context Sensitive Deletion"
     bl_options = {'REGISTER', 'UNDO'}
