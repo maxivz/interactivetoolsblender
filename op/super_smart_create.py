@@ -12,7 +12,6 @@ class SuperSmartCreate(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def split_edge_select_vert(self):
-
         bpy.ops.mesh.subdivide()
         itools.update_indexes('ALL')
 
@@ -25,7 +24,6 @@ class SuperSmartCreate(bpy.types.Operator):
         itools.select(new_selection, replace=True)
 
     def split_edges_make_loop(self, selection):
-
         new_verts = []
 
         for edge in selection:
@@ -68,11 +66,10 @@ class SuperSmartCreate(bpy.types.Operator):
 
         if mode == 'OBJECT':
             if len(itools.get_selected()) > 0:
-                bpy.ops.object.duplicate()
+                bpy.ops.wm.call_menu_pie(name="mesh.ssc_duplicate_menu")
 
             else:
-                # if nothing is selected then run creation pie
-                print("Nothing Selected")
+                bpy.ops.wm.call_menu_pie(name="mesh.ssc_new_obj_menu")
 
         # if Vertex is selected
         elif mode == 'VERT':

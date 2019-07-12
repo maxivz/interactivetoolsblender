@@ -1,4 +1,5 @@
 import bpy
+from .ui.pies import SSC_Duplicate_Menu, SSC_New_Obj_Menu
 from . ui.pannels import MaxivzTools_PT_Panel
 from . utils.debug import MaxivzToolsDebug_PT_Panel, DebugOp
 from . op.super_smart_create import SuperSmartCreate
@@ -13,7 +14,6 @@ from . op.smart_transform import SmartTranslate, SmartRotate, SmartScale
 from . op.quick_lattice import QuickLattice
 from . utils.pref_settings import ExampleAddonPreferences, OBJECT_OT_addon_prefs_example, register_keymaps, unregister_keymaps
 
-
 bl_info = {
     "name": "MaxivzsTools",
     "author": "Maxi Vazquez",
@@ -25,7 +25,8 @@ bl_info = {
 }
 
 
-classes = (MaxivzTools_PT_Panel, MaxivzToolsDebug_PT_Panel, DebugOp,
+classes = (MaxivzTools_PT_Panel, MaxivzToolsDebug_PT_Panel, SSC_Duplicate_Menu,
+           DebugOp, SSC_New_Obj_Menu,
            SuperSmartCreate, TransformModeCycle, QuickAlign, QuickRadialSymmetry,
            QuickPivot, QuickEditPivot, SelectionModeCycle,
            QuickSelectionEdge, QuickSelectionVert, QuickSelectionFace,
@@ -48,7 +49,7 @@ def register():
 def unregister():
     from bpy.utils import unregister_class
     for cls in reversed(classes):
-        unregister_class(cls)   
+        unregister_class(cls)
 
     # Keymap removal
     unregister_keymaps()

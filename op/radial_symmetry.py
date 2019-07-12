@@ -44,24 +44,27 @@ class QuickRadialSymmetry(bpy.types.Operator):
     change_axis = False
     change_rotation = False
     change_iteration = False
-
+    mod = ""
+    symmetry_center = ""
     def setup_symmetry(self, context, selection):
         if selection is not []:
             sel_pivot = selection.location
+            new_obj = bpy.data.objects.new('new_obj', None) 
             bpy.ops.object.empty_add(type='ARROWS', location=sel_pivot)
-            symmetry_center = bpy.context.active_object
+            self.symmetry_center = bpy.context.active_object
             symmetry_center.rotation_euler = (0, 0, math.radians(120))
             symmetry_center.name = selection.name + ".SymmetryPivot"
             symmetry_center.select_set(False)
             selection.select_set(True)
-            bpy.context.view_layer.objects.active = selection
+
+            bpy.context.view_layer.update()
 
             # Create modifier and assign name
-            mod = selection.modifiers.new(name="Radial Array", type='ARRAY')
-            mod.relative_offset_displace[0] = 0
-            mod.count = 3
-            mod.offset_object = bpy.data.objects[symmetry_center.name]
-            mod.use_object_offset = True
+            self.mod = selection.modifiers.new(name="Radial Symmetry", type='ARRAY')
+            self.mod.relative_offset_displace[0] = 0
+            self.mod.count = 3
+            self.mod.offset_object = bpy.data.objects[symmetry_center.name]
+            self.mod.use_object_offset = True
 
             # Update both depsgraph and viewlayer
             bpy.context.view_layer.objects.active = selection
@@ -81,16 +84,8 @@ class QuickRadialSymmetry(bpy.types.Operator):
 
             # selection.modifiers["Radial Symmetry"].count = self.sym_count
             bpy.context.view_layer.objects.active = selection
-            print(bpy.context.view_layer.objects.active)
 
-            bpy.context.view_layer.update()
-
-            if selection.modifiers.find("Radial Symmetry") < 0:
-                modifiers = [modifier for modifier in selection.modifiers]
-                print("Radial Symmetry modifier not found, modifiers")
-                print(modifiers)
-
-            selection.modifiers["Radial Symmetry"].count = self.sym_count
+            self.mod.count = self.sym_count
             self.change_iteration = False
 
     def calculate_axis(self, context):
@@ -141,9 +136,10 @@ class QuickRadialSymmetry(bpy.types.Operator):
             self.ui_count = self.sym_count
 
     def recover_settings(self, context, selection):
-        self.initial_sym_count = selection.modifiers["Radial Symmetry"].count
-        self.offset_obj = selection.modifiers["Radial Symmetry"].offset_object.name
-        rotation = selection.modifiers["Radial Symmetry"].offset_object.rotation_euler
+        self.mod = selection.modifiers["Radial Symmetry"]
+        self.initial_sym_count = self.mod.count
+        self.offset_obj = self.mod.offset_object.name
+        rotation = self.mod.offset_object.rotation_euler
 
         if rotation[0] > 0:
             self.initial_sym_axis = 0
