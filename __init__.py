@@ -37,7 +37,7 @@ classes = (MaxivzTools_PT_Panel, MaxivzToolsDebug_PT_Panel, SSC_Duplicate_Menu,
            QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete,
            ExampleAddonPreferences, OBJECT_OT_addon_prefs_example,
            SmartSelectLoop, SmartSelectRing, SmartTranslate,
-           QuickLattice, SmartExtrude,4
+           QuickLattice, SmartExtrude,
            QuickRotateUv90Pos, QuickRotateUv90Neg)
 
 

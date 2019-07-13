@@ -14,9 +14,9 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
 
         layout.label(text="Modes Cycling")
         row = layout.row()
-        row.operator('mesh.selection_mode_cycle', text="Selection Mode Cycle", icon = "RESTRICT_SELECT_OFF")
+        row.operator('mesh.selection_mode_cycle', text="Selection Mode Cycle", icon="RESTRICT_SELECT_OFF")
         row = layout.row()
-        row.operator('mesh.transform_mode_cycle', text="Transform Cycle", icon ="OUTLINER_OB_EMPTY")
+        row.operator('mesh.transform_mode_cycle', text="Transform Cycle", icon="OUTLINER_OB_EMPTY")
 
         layout.label(text="Selection")
         row = layout.row(align=True)
@@ -64,4 +64,3 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row10 = layout.row()
         row10.operator('uv.rotate_90_pos', text="Rotate 90 +", icon="LOOP_FORWARDS")
         row10.operator('uv.rotate_90_neg', text="Rotate 90 -", icon="LOOP_BACK")
-
