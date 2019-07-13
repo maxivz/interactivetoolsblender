@@ -40,15 +40,15 @@ class CSBevel(bpy.types.Operator):
 
     def cs_bevel(self):
 
-        context = (tuple(bpy.context.scene.tool_settings.mesh_select_mode))
+        mode = itools.get_mode()
 
-        if context == 'VERT':
+        if mode == 'VERT':
             bpy.ops.mesh.bevel('INVOKE_DEFAULT', vertex_only=True)
 
-        if context == 'EDGE':
+        if mode == 'EDGE':
             bpy.ops.mesh.bevel('INVOKE_DEFAULT', vertex_only=False)
 
-        if context == 'FACE':
+        if mode == 'FACE':
             bpy.ops.mesh.inset('INVOKE_DEFAULT')
 
     def execute(self, context):
@@ -63,13 +63,13 @@ class ContextSensitiveSlide(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        bm = get_bmesh()
-        context = itools.get_mode()
+        bm = itools.get_bmesh()
+        mode = itools.get_mode()
 
-        if context == 'VERT':
+        if mode == 'VERT':
             bpy.ops.transform.vert_slide('INVOKE_DEFAULT')
 
-        elif context == 'EDGE':
+        elif mode == 'EDGE':
             bpy.ops.transform.edge_slide('INVOKE_DEFAULT')
 
         return{'FINISHED'}
@@ -102,9 +102,9 @@ class QuickModifierToggle(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def modifier_toggle(self, context):
-        context = itools.get_mode()
+        mode = itools.get_mode()
 
-        if context in ['VERT', 'EDGE', 'FACE']:
+        if mode in ['VERT', 'EDGE', 'FACE']:
             itools.set_mode('OBJECT')
 
         selected = itools.get_selected()
@@ -120,8 +120,8 @@ class QuickModifierToggle(bpy.types.Operator):
                     modifier.show_in_editmode = True
                     modifier.show_viewport = True
 
-        if context in ['VERT', 'EDGE', 'FACE']:
-            itools.set_mode(context)
+        if mode in ['VERT', 'EDGE', 'FACE']:
+            itools.set_mode(mode)
 
     def execute(self, context):
         self.modifier_toggle(context)

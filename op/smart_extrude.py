@@ -1,18 +1,15 @@
 import bpy
 from bpy_extras.view3d_utils import region_2d_to_location_3d
+from ..utils import itools as itools
+from ..utils.mesh import is_border_edge
+from .smart_transform import mouse_2d_to_3d
 from mathutils import Vector
 
 
-def mouse_2d_to_3d(context, event):
-    x, y = event.mouse_region_x, event.mouse_region_y
-    location = region_2d_to_location_3d(context.region, context.space_data.region_3d, (x, y), (0, 0, 0))
-    return Vector(location)
-
-
-class SmartTranslate(bpy.types.Operator):
-    bl_idname = "mesh.smart_translate_modal"
-    bl_label = "Smart Translate"
-    bl_description = "Smart Translate Tool"
+class SmartExtrude(bpy.types.Operator):
+    bl_idname = "mesh.smart_extrude_modal"
+    bl_label = "Smart Extrude Modal"
+    bl_description = "Context Sensitive Extrude operation"
     bl_options = {'REGISTER', 'UNDO'}
 
     initial_mouse_pos = Vector((0, 0, 0))
@@ -52,6 +49,30 @@ class SmartTranslate(bpy.types.Operator):
         bpy.ops.transform.translate(value=translation, orient_type='GLOBAL')
         return True
 
+    def context_sensitive_extend(self, context):
+        if context.mode == 'OBJECT':
+            if len(context.selected_objects) > 0:
+                initial_pos = context.selected_objects[0].location
+                bpy.ops.object.duplicate()
+            else:
+                return {'FINISHED'}
+
+        elif context.mode == 'EDIT_MESH':
+            bm = itools.get_bmesh()
+            mode = itools.get_mode()
+            if mode == 'EDGE':
+                selection = itools.get_selected('EDGE', item=True)
+                if all(is_border_edge(edge) for edge in selection):
+                    bpy.ops.mesh.extrude_edges_move(MESH_OT_extrude_edges_indiv=None, TRANSFORM_OT_translate=None)
+                else:
+                    return {'FINISHED'}
+            else:
+                bpy.ops.mesh.duplicate(mode=1)
+        elif context.mode == 'EDIT_CURVE':
+            bpy.ops.curve.extrude_move(CURVE_OT_extrude={"mode": 'TRANSLATION'},
+                                       TRANSFORM_OT_translate={"value": (0, 0, 0)})
+            print("Curve")
+
     def __init__(self):
         self.initial_mouse_pos = Vector((0, 0, 0))
         self.translation_accumulator = Vector((0, 0, 0))
@@ -69,18 +90,21 @@ class SmartTranslate(bpy.types.Operator):
             self.calculate_translation(context, event)
             self.execute(context)
 
-        elif event.type == 'MIDDLEMOUSE':  # Confirm
+        elif event.type == 'LEFTMOUSE':  # Confirm
             if event.value == 'RELEASE':
                 return {'FINISHED'}
 
         elif event.type in {'RIGHTMOUSE', 'ESC'}:  # Confirm
-            bpy.ops.transform.translate(value=-self.translation_accumulator, orient_type='GLOBAL')
+            bpy.ops.transform.translate(value=(Vector((0, 0, 0)) - self.translation_accumulator),
+                                        orient_type='GLOBAL')
+            SmartDelete.smart_delete(context)
             return {'CANCELLED'}
 
         return {'RUNNING_MODAL'}
 
     def invoke(self, context, event):
         self.initial_mouse_pos = mouse_2d_to_3d(context, event)
+        self.context_sensitive_extend(context)
         self.execute(context)
         context.window_manager.modal_handler_add(self)
         return {'RUNNING_MODAL'}

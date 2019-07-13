@@ -11,6 +11,8 @@ class QuickRadialSymmetry(bpy.types.Operator):
     bl_description = "Setup a Quick Radial Symmetry"
     bl_options = {'REGISTER', 'UNDO', 'GRAB_CURSOR'}
 
+    """
+    Editing menu disabled until I figure out solution to bug
     ui_axis: EnumProperty(
         name="Symmetry Axis:",
         description="Axis to use for the symmetry",
@@ -28,6 +30,7 @@ class QuickRadialSymmetry(bpy.types.Operator):
         default=1,
         min=1,
     )
+    """
 
     mouse_x = 0.0
     initial_pos_x = 0.0
@@ -36,7 +39,6 @@ class QuickRadialSymmetry(bpy.types.Operator):
     initial_sym_axis = 0
     initial_sym_count = 0
     offset_obj = "Empty"
-    offset_obj_name = ""
     selection = "Empty"
     senitivity = 0.01
     modkey = 0
@@ -44,31 +46,32 @@ class QuickRadialSymmetry(bpy.types.Operator):
     change_axis = False
     change_rotation = False
     change_iteration = False
-    mod = ""
     symmetry_center = ""
+
     def setup_symmetry(self, context, selection):
         if selection is not []:
             sel_pivot = selection.location
-            new_obj = bpy.data.objects.new('new_obj', None) 
+            new_obj = bpy.data.objects.new('new_obj', None)
             bpy.ops.object.empty_add(type='ARROWS', location=sel_pivot)
             self.symmetry_center = bpy.context.active_object
-            symmetry_center.rotation_euler = (0, 0, math.radians(120))
-            symmetry_center.name = selection.name + ".SymmetryPivot"
-            symmetry_center.select_set(False)
+            self.symmetry_center.rotation_euler = (0, 0, math.radians(120))
+            self.symmetry_center.name = selection.name + ".SymmetryPivot"
+            self.symmetry_center.select_set(False)
             selection.select_set(True)
 
-            bpy.context.view_layer.update()
-
             # Create modifier and assign name
-            self.mod = selection.modifiers.new(name="Radial Symmetry", type='ARRAY')
-            self.mod.relative_offset_displace[0] = 0
-            self.mod.count = 3
-            self.mod.offset_object = bpy.data.objects[symmetry_center.name]
-            self.mod.use_object_offset = True
+            mod = selection.modifiers.new(name="Radial Symmetry", type='ARRAY')
+            mod.relative_offset_displace[0] = 0
+            mod.count = 3
+            mod.offset_object = bpy.data.objects[self.symmetry_center.name]
+            mod.use_object_offset = True
 
             # Update both depsgraph and viewlayer
             bpy.context.view_layer.objects.active = selection
             bpy.context.view_layer.update()
+
+            dg = bpy.context.evaluated_depsgraph_get()
+            dg.update()
 
     def calculate_iterations(self, context, selection):
         if self.change_iteration:
@@ -85,7 +88,7 @@ class QuickRadialSymmetry(bpy.types.Operator):
             # selection.modifiers["Radial Symmetry"].count = self.sym_count
             bpy.context.view_layer.objects.active = selection
 
-            self.mod.count = self.sym_count
+            selection.modifiers["Radial Symmetry"].count = self.sym_count
             self.change_iteration = False
 
     def calculate_axis(self, context):
@@ -136,10 +139,10 @@ class QuickRadialSymmetry(bpy.types.Operator):
             self.ui_count = self.sym_count
 
     def recover_settings(self, context, selection):
-        self.mod = selection.modifiers["Radial Symmetry"]
-        self.initial_sym_count = self.mod.count
-        self.offset_obj = self.mod.offset_object.name
-        rotation = self.mod.offset_object.rotation_euler
+        mod = selection.modifiers["Radial Symmetry"]
+        self.initial_sym_count = mod.count
+        self.offset_obj = mod.offset_object.name
+        rotation = mod.offset_object.rotation_euler
 
         if rotation[0] > 0:
             self.initial_sym_axis = 0
@@ -194,13 +197,6 @@ class QuickRadialSymmetry(bpy.types.Operator):
             if event.value == 'RELEASE':
                 self.using_settings = True
 
-                # Update both depsgraph and viewlayer at the end of the modal execution
-                dg = bpy.context.evaluated_depsgraph_get()
-                dg.update()
-
-                bpy.context.view_layer.objects.active = bpy.data.objects[self.selection]
-                bpy.context.view_layer.update()
-
                 return {'FINISHED'}
 
         elif event.type in {'RIGHTMOUSE', 'ESC'}:  # Confirm
@@ -220,6 +216,8 @@ class QuickRadialSymmetry(bpy.types.Operator):
         context.window_manager.modal_handler_add(self)
         return {'RUNNING_MODAL'}
 
+    """
+    Editing menu disabled until I figure out solution to bug
     def draw(self, context):
         layout = self.layout
         col = layout.column()
@@ -231,3 +229,4 @@ class QuickRadialSymmetry(bpy.types.Operator):
         row2 = col.row()
         row2.label(text="Axis")
         row2.prop(self, "ui_axis")
+    """

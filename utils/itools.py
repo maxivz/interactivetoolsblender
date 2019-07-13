@@ -3,6 +3,10 @@ import bmesh
 from collections import OrderedDict
 
 
+MAX_ITERATIONS = 400
+DOUBLECLICK_TIME = 0.1
+
+
 def list_intersection(a, b):
     temp = set(b)
     result = [item for item in a if item in temp]

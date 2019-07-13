@@ -10,16 +10,23 @@ class SmartDelete(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def smart_delete(cls, context):
-        mode = (tuple(bpy.context.scene.tool_settings.mesh_select_mode))
+        mode = itools.get_mode()
 
         if mode == 'OBJECT':
             bpy.ops.object.delete()
 
         elif mode in ['VERT', 'EDGE', 'FACE']:
-            bm = get_bmesh()
+            bm = itools.get_bmesh()
 
             if mode == 'VERT':
-                bpy.ops.mesh.delete(type='VERT')
+                selection = itools.get_selected()
+                verts_connectivity2 = [vert for vert in selection if len([edge for edge in vert.link_edges]) == 2]
+
+                if len(verts_connectivity2) == len(selection):
+                    bpy.ops.mesh.dissolve_verts()
+
+                else:
+                    bpy.ops.mesh.delete(type='VERT')
 
             elif mode == 'EDGE':
                 selection = itools.get_selected()
@@ -41,9 +48,7 @@ class SmartDelete(bpy.types.Operator):
 
         return{'FINISHED'}
 
-    def draw(self, context):
-        pass
-
     def execute(self, context):
         self.smart_delete(context)
         return {'FINISHED'}
+

@@ -168,7 +168,7 @@ class QuickSelectionFaceSticky(bpy.types.Operator):
     bl_label = "Quick Selection Face Sticky"
     bl_description = "Set selection modes quickly"
     bl_options = {'REGISTER', 'UNDO'}
-    
+
     def execute(self, context):
         selection = bpy.context.active_object
         if context.mode == 'OBJECT':
@@ -199,5 +199,5 @@ class QuickSelectionFaceSticky(bpy.types.Operator):
                     # Delete Stored Vertex Group Data
                     selection.vertex_groups.remove(vg)
         elif context.mode == 'EDIT_CURVE':
-            bpy.ops.object.editmode_toggle() 
+            bpy.ops.object.editmode_toggle()
         return {'FINISHED'}
