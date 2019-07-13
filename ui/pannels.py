@@ -61,6 +61,11 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row.operator('mesh.wire_shaded_toggle', text="Wire / Shaded")
 
         layout.label(text="UV Utilities")
-        row10 = layout.row()
-        row10.operator('uv.rotate_90_pos', text="Rotate 90 +", icon="LOOP_FORWARDS")
-        row10.operator('uv.rotate_90_neg', text="Rotate 90 -", icon="LOOP_BACK")
+        row = layout.row()
+        row.operator('uv.rotate_90_pos', text="Rotate 90 +", icon="LOOP_FORWARDS")
+        row.operator('uv.rotate_90_neg', text="Rotate 90 -", icon="LOOP_BACK")
+        row = layout.row()
+        row.operator('uv.seams_from_sharps', text="Seams From Sharps")
+        row = layout.row()
+        row.operator('uv.uvs_from_sharps', text="Uvs From Sharps")
+        

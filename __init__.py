@@ -14,7 +14,7 @@ from . op.selection import SmartSelectLoop, SmartSelectRing
 from . op.smart_transform import SmartTranslate
 from . op.quick_lattice import QuickLattice
 from . op.rebase_cylinder import RebaseCylinder
-from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg
+from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromSharps, UvsFromSharps
 from . utils.pref_settings import ExampleAddonPreferences, OBJECT_OT_addon_prefs_example, register_keymaps, unregister_keymaps
 
 bl_info = {
@@ -37,8 +37,8 @@ classes = (MaxivzTools_PT_Panel, MaxivzToolsDebug_PT_Panel, SSC_Duplicate_Menu,
            QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete,
            ExampleAddonPreferences, OBJECT_OT_addon_prefs_example,
            SmartSelectLoop, SmartSelectRing, SmartTranslate,
-           QuickLattice, SmartExtrude,
-           QuickRotateUv90Pos, QuickRotateUv90Neg)
+           QuickLattice, SmartExtrude, SeamsFromSharps,
+           QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps)
 
 
 def register():
