@@ -47,7 +47,7 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row.operator('mesh.quick_pivot', text="Quick Origin")
         row.operator('mesh.simple_edit_pivot', text="Edit Origin")
         row = layout.row()
-        row.operator('itools.quick_align', text="Quick Align")
+        row.operator('mesh.quick_align', text="Quick Align")
         row = layout.row()
         row.operator('mesh.quick_lattice', text="Quick Lattice")
         row = layout.row(align=True)

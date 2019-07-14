@@ -6,7 +6,7 @@ from .. utils import itools as itools
 
 
 class QuickAlign(bpy.types.Operator):
-    bl_idname = "itools.quick_align"
+    bl_idname = "mesh.quick_align"
     bl_label = "Quick Align"
     bl_description = "Quickly Align Objects"
     bl_options = {'REGISTER', 'UNDO'}
