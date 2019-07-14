@@ -97,5 +97,5 @@ for k in kc.keymaps["Frames"].keymap_items:
         k.value = 'PRESS'
         k.shift = True
         k.ctrl = True
-        k.alt = True    
+        k.alt = True
 """

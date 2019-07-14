@@ -16,6 +16,8 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row = layout.row()
         row.operator('mesh.selection_mode_cycle', text="Selection Mode Cycle", icon="RESTRICT_SELECT_OFF")
         row = layout.row()
+        row.operator('mesh.selection_mode_cycle_sticky', text="Selection Mode Cycle Sticky")
+        row = layout.row()
         row.operator('mesh.transform_mode_cycle', text="Transform Cycle", icon="OUTLINER_OB_EMPTY")
 
         layout.label(text="Selection")
@@ -23,6 +25,10 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row.operator('mesh.quick_selection_vert', text="QS Vert", icon="VERTEXSEL")
         row.operator('mesh.quick_selection_edge', text="QS Edge", icon="EDGESEL")
         row.operator('mesh.quick_selection_face', text="QS Face", icon="FACESEL")
+        row = layout.row(align=True)
+        row.operator('mesh.quick_selection_vert_sticky', text="S Vert", icon="VERTEXSEL")
+        row.operator('mesh.quick_selection_edge_sticky', text="S Edge", icon="EDGESEL")
+        row.operator('mesh.quick_selection_face_sticky', text="S Face", icon="FACESEL")
         row = layout.row(align=True)
         row.operator('mesh.smart_select_loop', text="Smart Loop")
         row.operator('mesh.smart_select_ring', text="Smart Ring")
@@ -68,4 +74,3 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row.operator('uv.seams_from_sharps', text="Seams From Sharps")
         row = layout.row()
         row.operator('uv.uvs_from_sharps', text="Uvs From Sharps")
-        

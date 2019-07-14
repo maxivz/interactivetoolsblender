@@ -1,13 +1,13 @@
 import bpy
 from .ui.pies import SSC_Duplicate_Menu, SSC_New_Obj_Menu
 from . ui.pannels import MaxivzTools_PT_Panel
-from . utils.debug import MaxivzToolsDebug_PT_Panel, DebugOp
+# from . utils.debug import MaxivzToolsDebug_PT_Panel, DebugOp
 from . op.super_smart_create import SuperSmartCreate
 from . op.radial_symmetry import QuickRadialSymmetry
 from . op.quick_align import QuickAlign
 from . op.pivot import QuickPivot, QuickEditPivot
 from . op.smart_extrude import SmartExtrude
-from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace
+from . op.mesh_modes import SelectionModeCycle, SelectionModeCycleSticky, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace, QuickSelectionVertSticky, QuickSelectionEdgeSticky, QuickSelectionFaceSticky
 from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle
 from . op.smart_delete import SmartDelete
 from . op.selection import SmartSelectLoop, SmartSelectRing
@@ -28,11 +28,11 @@ bl_info = {
 }
 
 
-classes = (MaxivzTools_PT_Panel, MaxivzToolsDebug_PT_Panel, SSC_Duplicate_Menu,
-           DebugOp, SSC_New_Obj_Menu, RebaseCylinder,
+classes = (MaxivzTools_PT_Panel, SSC_Duplicate_Menu, SSC_New_Obj_Menu, RebaseCylinder,
            SuperSmartCreate, TransformModeCycle, QuickAlign, QuickRadialSymmetry,
-           QuickPivot, QuickEditPivot, SelectionModeCycle,
+           QuickPivot, QuickEditPivot, SelectionModeCycle, SelectionModeCycleSticky,
            QuickSelectionEdge, QuickSelectionVert, QuickSelectionFace,
+           QuickSelectionVertSticky, QuickSelectionEdgeSticky, QuickSelectionFaceSticky,
            ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle,
            QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete,
            ExampleAddonPreferences, OBJECT_OT_addon_prefs_example,

@@ -1,11 +1,8 @@
 import bpy
 from .. utils import itools as itools
+from .. utils import dictionaries as dic
 from .. op.super_smart_create import SuperSmartCreate
 from .. op import selection as sel
-
-# import time
-# Make function to debug time it takes
-# time_start = time.time()
 
 
 class MaxivzToolsDebug_PT_Panel(bpy.types.Panel):
@@ -29,7 +26,4 @@ class DebugOp(bpy.types.Operator):
 
     def execute(self, context):
         print("Debug")
-        selection = itools.get_selected(item=False, ordered=True)
-        print(selection)
-        # sel.is_step_selection(selection, 'EDGE')
         return {'FINISHED'}

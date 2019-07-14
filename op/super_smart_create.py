@@ -132,15 +132,9 @@ class SuperSmartCreate(bpy.types.Operator):
         elif mode == 'EDIT_CURVE':
             selection = itools.get_selected()
 
-            if len(selection) == 0:
-                print("Reserved for the future")
-
             if len(selection) == 2:
-                print("")
                 bpy.ops.curve.subdivide()
-
-            if len(selection) > 1:
-                bpy.ops.mesh.bridge_edge_loops()
+                bpy.ops.curve.select_less()
 
     def execute(self, context):
         self.super_smart_create()
