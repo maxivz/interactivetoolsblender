@@ -14,45 +14,12 @@ def store_sel_data(mode):
         dic.write("selected_faces", itools.get_selected(mode, item=False))
 
 
-def quick_selection(context, target_mode):
-    current_mode = itools.get_mode()
-    other_modes = itools.list_difference(['VERT', 'EDGE', 'FACE', 'OBJECT'], [target_mode])
-
-    if current_mode in other_modes:
-        if current_mode != 'OBJECT':
-            itools.update_indexes()
-            store_sel_data(current_mode)
-
-        itools.set_mode(target_mode)
-
-        if target_mode == 'VERT':
-            stored_selection = dic.read("selected_verts")
-
-        elif target_mode == 'EDGE':
-            stored_selection = dic.read("selected_edges")
-
-        elif target_mode == 'FACE':
-            stored_selection = dic.read("selected_faces")
-
-        if len(stored_selection) > 0 and "itools" in context.object:
-            itools.update_indexes()
-            indexes = [index for index in stored_selection]
-            itools.select(indexes, item=False, replace=True)
-
-    elif current_mode == target_mode:
-        itools.update_indexes()
-        store_sel_data(current_mode)
-        itools.set_mode('OBJECT')
-
-    elif target_mode == 'EDIT_CURVE':
-        bpy.ops.object.editmode_toggle()
-
-
 def quick_selection(target_mode, sticky=False):
     current_mode = itools.get_mode()
+    current_object = bpy.context.object
     other_modes = itools.list_difference(['VERT', 'EDGE', 'FACE', 'OBJECT'], [target_mode])
 
-    if current_mode in other_modes:
+    if current_mode in other_modes and current_object.type != 'CURVE':
         if current_mode != 'OBJECT' and sticky:
             itools.update_indexes()
             store_sel_data(current_mode)
@@ -74,13 +41,13 @@ def quick_selection(target_mode, sticky=False):
                 indexes = [index for index in stored_selection]
                 itools.select(indexes, item=False, replace=True)
 
-    elif current_mode == target_mode:
+    elif current_mode == target_mode and current_object.type != 'CURVE':
         if sticky:
             itools.update_indexes()
             store_sel_data(current_mode)
         itools.set_mode('OBJECT')
 
-    elif target_mode == 'EDIT_CURVE':
+    elif current_object.type == 'CURVE':
         bpy.ops.object.editmode_toggle()
 
 
