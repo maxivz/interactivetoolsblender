@@ -23,4 +23,4 @@ def read(data_block, obj=""):
         return obj['itools'][data_block]
 
     else:
-        return False
+        return ""
