@@ -130,7 +130,7 @@ class QuickSelectionEdge(bpy.types.Operator):
 
 class QuickSelectionEdgeSticky(bpy.types.Operator):
     bl_idname = "mesh.quick_selection_edge_sticky"
-    bl_label = "Quick Selection Edge, stores previous selection"
+    bl_label = "Quick Selection Edge Sticky"
     bl_description = "Set selection mode quickly, restores last selection in this mode"
     bl_options = {'REGISTER', 'UNDO'}
 
