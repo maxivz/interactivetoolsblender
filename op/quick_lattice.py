@@ -26,7 +26,7 @@ class QuickLattice(bpy.types.Operator):
         if selection is not []:
             if context.mode == 'OBJECT':
                 verts = selection.data.vertices
-                vert_positions = [vert.co @ selection.matrix_world for vert in verts] 
+                vert_positions = [vert.co @ selection.matrix_world for vert in verts]
                 rotation = bpy.data.objects[selection.name].rotation_euler
 
             elif context.mode == 'EDIT_MESH':
@@ -54,32 +54,30 @@ class QuickLattice(bpy.types.Operator):
                 vert_indexes = [vert.index for vert in verts]
                 vert_positions = [(selection.matrix_world @ vert.co) for vert in verts]
 
-                # Calculate positions
-                minimum = Vector()
-                maximum = Vector()
-
-                for axis in range(3):
-                    poslist = [pos[axis] for pos in vert_positions]
-                    maximum[axis] = max(poslist)
-                    minimum[axis] = min(poslist)
-
-                location = (maximum + minimum) / 2
-                dimensions = maximum - minimum
-
-                # Make sure no axis is 0 as this caused the bug where you couldnt move the lattice.
-                for axis in range(3):
-                    print(axis)
-                    if dimensions[axis] == 0:
-                        dimensions[axis] = 0.001
-
-                print(dimensions)
-
                 # Make vertex group, assign verts and update viewlayer
                 itools.set_mode('OBJECT')
                 vg = selection.vertex_groups.new(name="lattice_group")
                 vg.add(vert_indexes, 1.0, 'ADD')
                 bpy.context.view_layer.update()
                 rotation = Vector()
+
+            # Calculate positions
+            minimum = Vector()
+            maximum = Vector()
+
+            for axis in range(3):
+                poslist = [pos[axis] for pos in vert_positions]
+                maximum[axis] = max(poslist)
+                minimum[axis] = min(poslist)
+
+            location = (maximum + minimum) / 2
+            dimensions = maximum - minimum
+
+            # Make sure no axis is 0 as this caused the bug where you couldnt move the lattice.
+            for axis in range(3):
+                print(axis)
+                if dimensions[axis] == 0:
+                    dimensions[axis] = 0.001
 
             # Add Lattice
             bpy.ops.object.add(type='LATTICE', enter_editmode=False, location=(0, 0, 0))

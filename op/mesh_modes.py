@@ -14,7 +14,7 @@ def store_sel_data(mode):
         dic.write("selected_faces", itools.get_selected(mode, item=False))
 
 
-def quick_selection(target_mode, sticky=False):
+def quick_selection(target_mode, sticky=False, safe_mode=False):
     current_mode = itools.get_mode()
     current_object = bpy.context.object
     other_modes = itools.list_difference(['VERT', 'EDGE', 'FACE', 'OBJECT'], [target_mode])
@@ -39,7 +39,10 @@ def quick_selection(target_mode, sticky=False):
             if len(stored_selection) > 0 and "itools" in bpy.context.object:
                 itools.update_indexes()
                 indexes = [index for index in stored_selection]
-                itools.select(indexes, item=False, replace=True)
+                if safe_mode:
+                    itools.select(indexes, item=False, replace=True, safe_mode=safe_mode)
+                else:
+                    itools.select(indexes, item=False, replace=True)
 
     elif current_mode == target_mode and current_object.type != 'CURVE':
         if sticky:
@@ -84,13 +87,13 @@ class SelectionModeCycleSticky(bpy.types.Operator):
             bpy.ops.object.editmode_toggle()
 
         elif mode == 'VERT':
-            quick_selection('EDGE', sticky=True)
+            quick_selection('EDGE', sticky=True, safe_mode=True)
 
         elif mode == 'EDGE':
-            quick_selection('FACE', sticky=True)
+            quick_selection('FACE', sticky=True, safe_mode=True)
 
         elif mode == 'FACE':
-            quick_selection('VERT', sticky=True)
+            quick_selection('VERT', sticky=True, safe_mode=True)
 
         return {'FINISHED'}
 
@@ -113,7 +116,7 @@ class QuickSelectionVertSticky(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        quick_selection('VERT', sticky=True)
+        quick_selection('VERT', sticky=True, safe_mode=True)
         return {'FINISHED'}
 
 
@@ -135,7 +138,7 @@ class QuickSelectionEdgeSticky(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        quick_selection('EDGE', sticky=True)
+        quick_selection('EDGE', sticky=True, safe_mode=True)
         return {'FINISHED'}
 
 
@@ -157,5 +160,5 @@ class QuickSelectionFaceSticky(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        quick_selection('FACE', sticky=True)
+        quick_selection('FACE', sticky=True, safe_mode=True)
         return {'FINISHED'}

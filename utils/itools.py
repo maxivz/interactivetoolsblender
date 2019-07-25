@@ -63,7 +63,7 @@ def to_index(items):
 
 # Return item or index for selected mesh elements or names for objects
 # Add selection order by using print([a.index for a in bm.select_history])
-def get_selected(mode='', item=True, ordered=False):
+def get_selected(mode='', item=True, ordered=False, all=False):
     selection = []
     if not mode:
         mode = get_mode()
@@ -86,6 +86,14 @@ def get_selected(mode='', item=True, ordered=False):
             elif mode == 'FACE':
                 selection = [face for face in bm.select_history if isinstance(face, bmesh.types.BMFace)]
 
+        if all:
+            if mode == 'VERT':
+                selection = [vert for vert in bm.verts]
+            elif mode == 'EDGE':
+                selection = [edge for edge in bm.edges]
+            elif mode == 'FACE':
+                selection = [face for face in bm.faces]
+
         else:
             if mode == 'VERT':
                 selection = [vert for vert in bm.verts if vert.select]
@@ -103,12 +111,23 @@ def get_selected(mode='', item=True, ordered=False):
         curves = bpy.context.active_object.data.splines
         points = []
 
-        for curve in curves:
-            if curve.type == 'BEZIER':
-                points.append([point for point in curve.bezier_points if point.select_control_point])
+        if all:
+            for curve in curves:
+                if curve.type == 'BEZIER':
+                    points.append([point for point in curve.bezier_points])
 
-            else:
-                points.append([point for point in curve.points if point.select])
+                else:
+                    points.append([point for point in curve.points])
+
+        else:
+            for curve in curves:
+                if curve.type == 'BEZIER':
+                    points.append([point for point in curve.bezier_points
+                                   if point.select_control_point])
+
+                else:
+                    points.append([point for point in curve.points
+                                   if point.select])
 
         points = [item for sublist in points for item in sublist]
         return points
@@ -135,9 +154,12 @@ def active_set(obj, item=True):
 
 
 # Make selection based on indexes for selected mesh elements or names for objects
-def select(target, mode='', item=True, replace=False, deselect=False, add_to_history=False):
+def select(target, mode='', item=True, replace=False, deselect=False, add_to_history=False, safe_mode=False):
     if not mode:
         mode = get_mode()
+
+    if safe_mode:
+        existing_items = get_selected(mode=mode, item=item, all=True)
 
     selection_value = True
 
@@ -154,6 +176,7 @@ def select(target, mode='', item=True, replace=False, deselect=False, add_to_his
         if item:
             for obj in target:
                 target.select_set(selection_value)
+
         else:
             for obj in target:
                 bpy.data.objects[obj].select_set(selection_value)
@@ -167,74 +190,68 @@ def select(target, mode='', item=True, replace=False, deselect=False, add_to_his
         if item:
             target = [item.index for item in target]
 
-        if mode == 'VERT':
-            for vert in target:
-                bm.verts[vert].select = selection_value
-                if add_to_history:
-                    bm.select_history.add(bm.verts[vert])
+        if safe_mode:
+            if mode == 'VERT':
+                for vert in target:
+                    if vert in existing_items:
+                        bm.verts[vert].select = selection_value
+                        if add_to_history:
+                            bm.select_history.add(bm.verts[vert])
 
-        elif mode == 'EDGE':
-            for edge in target:
-                bm.edges[edge].select = selection_value
-                if add_to_history:
-                    bm.select_history.add(bm.edges[edge])
+            elif mode == 'EDGE':
+                for edge in target:
+                    if edge in existing_items:
+                        bm.edges[edge].select = selection_value
+                        if add_to_history:
+                            bm.select_history.add(bm.edges[edge])
 
-        elif mode == 'FACE':
-            for face in target:
-                bm.faces[face].select = selection_value
-                if add_to_history:
-                    bm.select_history.add(bm.faces[face])
+            elif mode == 'FACE':
+                for face in target:
+                    if face in existing_items:
+                        bm.faces[face].select = selection_value
+                        if add_to_history:
+                            bm.select_history.add(bm.faces[face])
+
+        else:
+            if mode == 'VERT':
+                for vert in target:
+                    bm.verts[vert].select = selection_value
+                    if add_to_history:
+                        bm.select_history.add(bm.verts[vert])
+
+            elif mode == 'EDGE':
+                for edge in target:
+                    bm.edges[edge].select = selection_value
+                    if add_to_history:
+                        bm.select_history.add(bm.edges[edge])
+
+            elif mode == 'FACE':
+                for face in target:
+                    bm.faces[face].select = selection_value
+                    if add_to_history:
+                        bm.select_history.add(bm.faces[face])
 
     elif mode == 'EDIT_CURVE':
         print("Curve")
         curves = bpy.context.active_object.data.splines
         points = []
         for curve in curves:
-            if curve.type == 'BEZIER':
-                for point in curve.bezier_points:
-                    point.select_control_point = True
+            if safe_mode:
+                if curve.type == 'BEZIER':
+                    for point in curve.bezier_points:
+                        if point in existing_items:
+                            point.select_control_point = True
+                else:
+                    for point in curve.points:
+                        if point in existing_items:
+                            point.select = True
             else:
-                for point in curve.points:
-                    point.select = True
-    """
-            if item:
-                if mode == 'VERT':
-                    for vert in target:
-                        vert.select = selection_value
-                        if add_to_history:
-                            bm.select_history.add(bm.verts[vert.index])
-
-                elif mode == 'EDGE':
-                    for edge in target:
-                        edge.select = selection_value
-                        if add_to_history:
-                            bm.select_history.add(bm.edges[edge.index])
-
-                elif mode == 'FACE':
-                    for face in target:
-                        edge.select = selection_value
-                        if add_to_history:
-                            bm.select_history.add(bm.faces[face.index])
-
-            else:
-                if mode == 'VERT':
-                    for vert in target:
-                        bm.verts[vert].select = selection_value
-                        if add_to_history:
-                            bm.select_history.add(bm.verts[vert])
-
-                elif mode == 'EDGE':
-                    for edge in target:
-                        bm.edges[edge].select = selection_value
-                        if add_to_history:
-                            bm.select_history.add(bm.edges[edge])
-
-                elif mode == 'FACE':
-                    for face in target:
-                        bm.faces[face].select = selection_value
-                        if add_to_history:
-                            bm.select_history.add(bm.faces[face])
-    """
+                if curve.type == 'BEZIER':
+                    for point in curve.bezier_points:
+                        point.select_control_point = True
+                else:
+                    for point in curve.points:
+                        point.select = True
 
 
 def update_indexes(mode=''):
@@ -243,15 +260,19 @@ def update_indexes(mode=''):
         print("Try to get mode")
         mode = get_mode()
         print(mode)
+
     if 'VERT' or 'ALL' in mode:
         bm.verts.index_update()
         bm.verts.ensure_lookup_table()
+
     if 'EDGE' or 'ALL' in mode:
         bm.edges.index_update()
         bm.edges.ensure_lookup_table()
+
     if 'FACE' or 'ALL' in mode:
         bm.faces.index_update()
         bm.faces.ensure_lookup_table()
+
     bmesh.update_edit_mesh(bpy.context.edit_object.data)
 
 
