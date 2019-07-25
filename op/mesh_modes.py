@@ -53,6 +53,9 @@ def quick_selection(target_mode, sticky=False, safe_mode=False):
     elif current_object.type == 'CURVE':
         bpy.ops.object.editmode_toggle()
 
+    elif current_object.type == 'LATTICE':
+        bpy.ops.object.editmode_toggle()
+
 
 class SelectionModeCycle(bpy.types.Operator):
     bl_idname = "mesh.selection_mode_cycle"
@@ -62,15 +65,21 @@ class SelectionModeCycle(bpy.types.Operator):
 
     def execute(self, context):
         mode = itools.get_mode()
+        print(mode)
         if mode == 'OBJECT':
             bpy.ops.object.editmode_toggle()
 
         elif mode == 'VERT':
             itools.set_mode('EDGE')
+
         elif mode == 'EDGE':
             itools.set_mode('FACE')
+
         elif mode == 'FACE':
             itools.set_mode('VERT')
+
+        elif mode in ['EDIT_CURVE', 'EDIT_LATTICE']:
+            bpy.ops.object.editmode_toggle()
 
         return {'FINISHED'}
 
@@ -94,6 +103,9 @@ class SelectionModeCycleSticky(bpy.types.Operator):
 
         elif mode == 'FACE':
             quick_selection('VERT', sticky=True, safe_mode=True)
+
+        elif mode in ['EDIT_CURVE', 'EDIT_LATTICE']:
+            bpy.ops.object.editmode_toggle()
 
         return {'FINISHED'}
 
