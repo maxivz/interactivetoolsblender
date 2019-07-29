@@ -1,5 +1,6 @@
 import bpy
 from bpy.types import Menu
+from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_bezierutilities_active
 
 
 class SSC_Duplicate_Menu(Menu):
@@ -35,14 +36,36 @@ class SSC_New_Obj_Menu(Menu):
         layout = self.layout
         pie = layout.menu_pie()
 
+        qblocker = get_qblocker_active() and get_ssc_qblocker_integration()
+        bezierutils = get_bezierutilities_active() and get_ssc_bezierutilities_integration()
+
         # 4 - LEFT
-        pie.operator("curve.primitive_bezier_curve_add", text="Add Curve", icon="IPO_EASE_IN")
+        if bezierutils:
+            pie.operator("curve.flexitool_create", text="Add Curve", icon="IPO_EASE_IN")
+
+        else:
+            pie.operator("curve.primitive_bezier_curve_add", text="Add Curve", icon="IPO_EASE_IN")
         # 6 - RIGHT
-        pie.operator("mesh.primitive_cube_add", text="Add Cube", icon="MESH_CUBE")
+
+        if qblocker:
+            pie.operator("object.box_create", text="Add Cube", icon="MESH_CUBE")
+
+        else:
+            pie.operator("mesh.primitive_cube_add", text="Add Cube", icon="MESH_CUBE")
+
         # 2 - BOTTOM
-        pie.operator("mesh.primitive_cylinder_add", text="Add Cylinder", icon="MESH_CYLINDER")
+        if qblocker:
+            pie.operator("object.cylinder_create", text="Add Cylinder", icon="MESH_CYLINDER")
+
+        else:
+            pie.operator("mesh.primitive_cylinder_add", text="Add Cylinder", icon="MESH_CYLINDER")
+
         # 8 - TOP
-        pie.operator("mesh.primitive_uv_sphere_add", text="Add Sphere", icon="MESH_UVSPHERE")
+        if qblocker:
+            pie.operator("object.sphere_create", text="Add Sphere", icon="MESH_CYLINDER")
+
+        else:
+            pie.operator("mesh.primitive_uv_sphere_add", text="Add Sphere", icon="MESH_UVSPHERE")
         # 7 - TOP - LEFT
 
         # 9 - TOP - RIGHT

@@ -3,6 +3,7 @@ import bmesh
 import mesh_f2
 from ..utils import itools as itools
 from ..utils import mesh as mesh
+from ..utils.user_prefs import get_f2_active, get_ssc_switch_modes
 
 
 class SuperSmartCreate(bpy.types.Operator):
@@ -15,13 +16,14 @@ class SuperSmartCreate(bpy.types.Operator):
         bpy.ops.mesh.subdivide()
         itools.update_indexes('ALL')
 
-        selection = itools.get_selected()
-        new_selection = [vert for edge in selection for vert in edge.verts
-                         if all(edge in selection for edge in vert.link_edges)]
-        new_selection = itools.remove_duplicates(new_selection)
+        if get_ssc_switch_modes():
+            selection = itools.get_selected()
+            new_selection = [vert for edge in selection for vert in edge.verts
+                             if all(edge in selection for edge in vert.link_edges)]
+            new_selection = itools.remove_duplicates(new_selection)
 
-        itools.set_mode('VERT')
-        itools.select(new_selection, replace=True)
+            itools.set_mode('VERT')
+            itools.select(new_selection, replace=True)
 
     def split_edges_make_loop(self, selection):
         new_verts = []
@@ -80,7 +82,8 @@ class SuperSmartCreate(bpy.types.Operator):
                 bpy.ops.mesh.knife_tool('INVOKE_DEFAULT')
 
             elif len(selection) == 1 or (mesh.verts_share_edge(selection) and mesh.are_border_verts(selection)):
-                mesh_f2.bpy.ops.mesh.f2('INVOKE_DEFAULT')
+                if get_f2_active():
+                    mesh_f2.bpy.ops.mesh.f2('INVOKE_DEFAULT')
 
             elif mesh.verts_share_face(selection):
                 self.connect_verts_to_last(selection)
@@ -101,16 +104,17 @@ class SuperSmartCreate(bpy.types.Operator):
 
             elif mesh.is_border(selection):
                 bpy.ops.mesh.edge_face_add()
-                itools.set_mode('FACE')
+                if get_ssc_switch_modes():
+                    itools.set_mode('FACE')
 
             elif mesh.is_ring(selection):
                 self.split_edges_make_loop(selection)
 
-            elif mesh.is_adjacent(selection):
+            elif mesh.is_adjacent(selection, mode) and mesh.is_partial_border(selection):
                 bpy.ops.mesh.edge_face_add()
                 itools.set_mode('EDGE')
 
-            else:
+            elif mesh.is_partial_border(selection):
                 bpy.ops.mesh.bridge_edge_loops()
                 itools.set_mode('EDGE')
 
@@ -119,22 +123,36 @@ class SuperSmartCreate(bpy.types.Operator):
             bm = itools.get_bmesh()
             selection = itools.get_selected()
 
-            if len(selection) == 0:
-                print("Reserved for the future")
-
             if len(selection) == 1:
                 self.quad_fill()
 
-            if len(selection) > 1:
-                bpy.ops.mesh.bridge_edge_loops()
+            elif len(selection) > 1 and len(mesh.organize_faces_by_continuity(selection)) == 2:
+                try:
+                    bpy.ops.mesh.bridge_edge_loops()
+
+                except:
+                    print("Cant bridge selection")
+
+            else:
+                bpy.ops.mesh.subdivide()
 
         # if curve selected
         elif mode == 'EDIT_CURVE':
             selection = itools.get_selected()
 
-            if len(selection) == 2:
-                bpy.ops.curve.subdivide()
-                bpy.ops.curve.select_less()
+            if len(selection) == 0:
+                bpy.ops.curve.draw()
+
+            elif len(selection) == 1:
+                bpy.ops.curve.extrude_move(TRANSFORM_OT_translate={"value": (0, 0, 0)})
+
+            elif len(selection) == 2:
+                try:
+                    bpy.ops.curve.make_segment()
+
+                except:
+                    bpy.ops.curve.subdivide()
+                    bpy.ops.curve.select_less()
 
     def execute(self, context):
         self.super_smart_create()

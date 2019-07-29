@@ -1,21 +1,22 @@
 import bpy
-from .ui.pies import SSC_Duplicate_Menu, SSC_New_Obj_Menu
+from . ui.pies import SSC_Duplicate_Menu, SSC_New_Obj_Menu
 from . ui.pannels import MaxivzTools_PT_Panel
-# from . utils.debug import MaxivzToolsDebug_PT_Panel, DebugOp
+from . utils.debug import MaxivzToolsDebug_PT_Panel, DebugOp
 from . op.super_smart_create import SuperSmartCreate
 from . op.radial_symmetry import QuickRadialSymmetry
 from . op.quick_align import QuickAlign
 from . op.pivot import QuickPivot, QuickEditPivot
 from . op.smart_extrude import SmartExtrude
-from . op.mesh_modes import SelectionModeCycle, SelectionModeCycleSticky, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace, QuickSelectionVertSticky, QuickSelectionEdgeSticky, QuickSelectionFaceSticky
-from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle
+from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace
+from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate
 from . op.smart_delete import SmartDelete
 from . op.selection import SmartSelectLoop, SmartSelectRing
 from . op.smart_transform import SmartTranslate
 from . op.quick_lattice import QuickLattice
 from . op.rebase_cylinder import RebaseCylinder
 from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromSharps, UvsFromSharps
-from . utils.pref_settings import ExampleAddonPreferences, OBJECT_OT_addon_prefs_example, register_keymaps, unregister_keymaps
+from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps
+
 
 bl_info = {
     "name": "MaxivzsTools",
@@ -30,24 +31,25 @@ bl_info = {
 
 classes = (MaxivzTools_PT_Panel, SSC_Duplicate_Menu, SSC_New_Obj_Menu, RebaseCylinder,
            SuperSmartCreate, TransformModeCycle, QuickAlign, QuickRadialSymmetry,
-           QuickPivot, QuickEditPivot, SelectionModeCycle, SelectionModeCycleSticky,
+           QuickPivot, QuickEditPivot, SelectionModeCycle,
            QuickSelectionEdge, QuickSelectionVert, QuickSelectionFace,
-           QuickSelectionVertSticky, QuickSelectionEdgeSticky, QuickSelectionFaceSticky,
-           ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle,
+           FlexiBezierToolsCreate, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle,
            QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete,
-           ExampleAddonPreferences, OBJECT_OT_addon_prefs_example,
+           AddonPreferences, OBJECT_OT_addon_prefs_example,
            SmartSelectLoop, SmartSelectRing, SmartTranslate,
            QuickLattice, SmartExtrude, SeamsFromSharps,
-           QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps)
+           QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,
+           MaxivzToolsDebug_PT_Panel, DebugOp, MenuPlaceholder)
 
 
 def register():
+    # auto_load.register()
     from bpy.utils import register_class
     for cls in classes:
         register_class(cls)
 
     # Keymapping
-    register_keymaps()
+    # register_keymaps()
 
 
 def unregister():

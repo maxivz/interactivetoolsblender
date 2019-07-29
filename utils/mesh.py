@@ -51,10 +51,53 @@ def is_border(selection):
     return (all(is_border_edge(edge) for edge in selection) and len(adjacent_edges) >= len(selection) * 2)
 
 
-def is_adjacent(selection):
-    vert_list = [edge.verts for edge in selection]
-    common_vert = reduce(lambda x, y: itools.list_intersection(x, y), vert_list)
-    return len(common_vert) == 1
+def is_partial_border(selection):
+    return (all(is_border_edge(edge) for edge in selection))
+
+
+def is_adjacent(selection, mode):
+    if mode == 'EDGE':
+        vert_list = [edge.verts for edge in selection]
+        common_vert = reduce(lambda x, y: itools.list_intersection(x, y), vert_list)
+        return len(common_vert) == 1
+
+    elif mode == 'FACE':
+        edge_list = [edge for face in selection for edge in face.edges]
+        print("Edge list :", edge_list)
+        vert_list = [edge.verts for edge in edge_list]
+        print("Vert list :", vert_list)
+        common_vert = reduce(lambda x, y: itools.list_intersection(x, y), vert_list)
+        return len(common_vert) > 0
+
+
+def organize_faces_by_continuity(selection):
+        groups = []
+        ordered_groups = []
+        temp = []
+
+        for face in selection:
+                adjacent_faces = []
+                adjacent_faces = [face2.index for edge in face.edges
+                                  for face2 in edge.link_faces
+                                  if face2 in selection]
+                adjacent_faces.append(face.index)
+                adjacent_faces = list(set(adjacent_faces))
+                groups.append(adjacent_faces)
+
+        while len(groups) > 0:
+                temp = groups[0]
+                for group in groups[1:]:
+                        intersection = itools.list_intersection(temp, group)
+                        if len(intersection) > 0:
+                                temp = itools.list_union(temp, group)
+
+                ordered_groups.append(temp)
+
+                groups = [group for group in groups
+                          if not any(element in temp
+                                     for element in group)]
+
+        return ordered_groups
 
 
 def is_ring(selection):

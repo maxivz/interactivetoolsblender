@@ -186,7 +186,7 @@ class SmartSelectRing(bpy.types.Operator):
      *Step Face Loop only goes in one direction for faces
     """
     bl_idname = "mesh.smart_select_ring"
-    bl_label = "Smart Select Loop"
+    bl_label = "Smart Select Ring"
     bl_description = "Context sensitive smart ring selection"
     bl_options = {'REGISTER', 'UNDO'}
 

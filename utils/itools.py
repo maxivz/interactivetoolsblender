@@ -1,10 +1,14 @@
 import bpy
 import bmesh
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 
 
 MAX_ITERATIONS = 400
 DOUBLECLICK_TIME = 0.1
+
+
+def list_union(a, b):
+    return list(set(a) | set(b))
 
 
 def list_intersection(a, b):
@@ -252,6 +256,45 @@ def select(target, mode='', item=True, replace=False, deselect=False, add_to_his
                 else:
                     for point in curve.points:
                         point.select = True
+
+
+def convert_selection(selection, to):
+    mode = get_mode()
+
+    if mode == 'VERT':
+        if to == 'EDGE':
+            new_selection = [edge for vert in selection
+                             for edge in vert.link_edges]
+
+        elif to == 'FACE':
+            new_selection = [face for vert in selection
+                             for face in vert.link_faces]
+
+        new_selection = [item for item, count
+                         in Counter(new_selection).items()
+                         if count > 1]
+
+    elif mode == 'EDGE':
+        if to == 'VERT':
+            new_selection = [vert for edge in selection
+                             for vert in edge.verts]
+
+        elif to == 'FACE':
+            new_selection = [face for edge in selection
+                             for face in edge.link_faces]
+
+    elif mode == 'FACE':
+        if to == 'VERT':
+            new_selection = [vert for face in selection
+                             for vert in face.verts]
+
+        elif to == 'EDGE':
+            new_selection = [edge for face in selection
+                             for edge in face.edges]
+
+    new_selection = remove_duplicates(new_selection)
+
+    return new_selection
 
 
 def update_indexes(mode=''):

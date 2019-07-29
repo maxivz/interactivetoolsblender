@@ -1,37 +1,40 @@
 import bpy
 import bmesh
+import math
 from ..utils import itools as itools
 
 
 def selected_uv_verts_pos():
-    bm = get_bmesh()
+    bm = itools.get_bmesh()
     uv_layer = bm.loops.layers.uv.verify()
     verts_loc = [loop[uv_layer].uv for face in bm.faces for loop in face.loops if loop[uv_layer].select]
     return verts_loc
 
 
-def sharp_to_seams(context):
+def sharp_to_seams(context, selection=[]):
     mode = itools.get_mode()
     me = context.object.data
-    if mode == 'OBJECT':
-        itools.set_mode('EDGE')
 
-    if mode in ['VERT', 'EDGE', 'FACE']:
+    itools.set_mode('EDGE')
+
+    if len(selection) < 1:
         bm = itools.get_bmesh()
-        for edge in bm.edges:
-            edge.seam = False
+        selection = [edge for edge in bm.edges]
 
-        for edge in bm.edges:
-            if not edge.smooth:
-                edge.seam = True
+    for edge in selection:
+        edge.seam = False
 
-        itools.set_mode('OBJECT')
-        itools.set_mode(mode)
+    for edge in selection:
+        if not edge.smooth:
+            edge.seam = True
+
+    itools.set_mode('OBJECT')
+    itools.set_mode(mode)
 
 
 class QuickRotateUv90Pos(bpy.types.Operator):
     bl_idname = "uv.rotate_90_pos"
-    bl_label = "Rotate UV 90 Pos"
+    bl_label = "Rotate UV 90 +"
     bl_description = "Rotate Uvs +90 degrees"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -45,7 +48,7 @@ class QuickRotateUv90Pos(bpy.types.Operator):
 
 class QuickRotateUv90Neg(bpy.types.Operator):
     bl_idname = "uv.rotate_90_neg"
-    bl_label = "Rotate Uvs -90 degrees"
+    bl_label = "Rotate UV 90 -"
     bl_description = "Rotate Uvs -90 degrees"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -56,24 +59,42 @@ class QuickRotateUv90Neg(bpy.types.Operator):
 
 class SeamsFromSharps(bpy.types.Operator):
     bl_idname = "uv.seams_from_sharps"
-    bl_label = "Convets hard edges to seams"
+    bl_label = "Seams From Sharps"
     bl_description = "Convets hard edges to seams"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        sharp_to_seams(context)
+        mode = itools.get_mode()
+        selection = []
+
+        if mode in ['VERT', 'EDGE', 'FACE']:
+            bm = itools.get_bmesh()
+            itools.set_mode('EDGE')
+            selection = itools.get_selected()
+
+        sharp_to_seams(context, selection)
+        itools.set_mode(mode)
         return{'FINISHED'}
 
 
 class UvsFromSharps(bpy.types.Operator):
     bl_idname = "uv.uvs_from_sharps"
-    bl_label = "Convets hard edges to uv seams and unwraps the model"
+    bl_label = "UVs From Sharps"
     bl_description = "Convets hard edges to seams and unwraps the model"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        itools.set_mode('FACE')
-        sharp_to_seams(context)
-        bpy.ops.mesh.select_all(action='SELECT')
+        mode = itools.get_mode()
+        selection = []
+
+        itools.set_mode('EDGE')
+        bm = itools.get_bmesh()
+        selection = itools.get_selected()
+        sharp_to_seams(context, selection)
+
+        if len(selection) < 1:
+            bpy.ops.mesh.select_all(action='SELECT')
+
         bpy.ops.uv.unwrap(method='ANGLE_BASED', margin=0.02)
+        bpy.ops.mesh.select_all(action='SELECT')
         return{'FINISHED'}

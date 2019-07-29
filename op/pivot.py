@@ -1,4 +1,5 @@
 import bpy
+from ..utils import itools as itools
 
 # Needs optimization pass, possibly merge both into one. Make them proper operators
 
@@ -68,6 +69,11 @@ class QuickEditPivot(bpy.types.Operator):
         bpy.data.objects[obj.name].select_set(True)
         context.view_layer.objects.active = obj
 
+    @classmethod
+    def poll(cls, context):
+        mode = itools.get_mode()
+        return mode not in ['VERT', 'EDGE', 'FACE']
+
     def execute(self, context):
         obj = bpy.context.active_object
         if obj.name.endswith(".PivotHelper"):
@@ -75,5 +81,9 @@ class QuickEditPivot(bpy.types.Operator):
         elif self.get_pivot(context, obj):
             piv = bpy.context.active_object
         else:
+            mode = itools.get_mode()
+            if mode in ['VERT', 'EDGE', 'FACE']:
+                itools.set_mode('OBJECT')
+
             self.create_pivot(context, obj)
         return{'FINISHED'}

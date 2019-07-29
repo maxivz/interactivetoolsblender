@@ -1,6 +1,7 @@
 import bpy
 from ..utils import itools as itools
 from ..utils import mesh as mesh
+from ..utils.user_prefs import get_enable_dissolve_faces
 
 
 class SmartDelete(bpy.types.Operator):
@@ -30,15 +31,21 @@ class SmartDelete(bpy.types.Operator):
 
             elif mode == 'EDGE':
                 selection = itools.get_selected()
+                if get_enable_dissolve_faces():
+                    if mesh.is_border(selection):
+                        for edge in selection:
+                            for face in edge.link_faces:
+                                face.select = 1
+                        bpy.ops.mesh.delete(type='FACE')
 
-                if mesh.is_border(selection):
-                    for edge in selection:
-                        for face in edge.link_faces:
-                            face.select = 1
-                    bpy.ops.mesh.delete(type='FACE')
+                    else:
+                        bpy.ops.mesh.dissolve_edges()
 
                 else:
-                    bpy.ops.mesh.dissolve_edges()
+                    for edge in selection:
+                            for face in edge.link_faces:
+                                face.select = 1
+                            bpy.ops.mesh.delete(type='FACE')
 
             elif mode == 'FACE':
                 bpy.ops.mesh.delete(type='FACE')
@@ -51,4 +58,3 @@ class SmartDelete(bpy.types.Operator):
     def execute(self, context):
         self.smart_delete(context)
         return {'FINISHED'}
-

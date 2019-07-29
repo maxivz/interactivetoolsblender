@@ -139,7 +139,12 @@ class QuickLattice(bpy.types.Operator):
         mode = itools.get_mode()
         cond_a = mode in ['VERT', 'EDGE', 'FACE'] and len(itools.get_selected()) > 0
         cond_b = mode == 'OBJECT' and len(context.selected_objects) == 1
-        context.selected_objects[0].type = 'LATTICE'
+
+        if len(context.selected_objects) > 0:
+            cond_c = context.selected_objects[0].type == 'LATTICE'
+
+        else:
+            cond_c = False
 
         return cond_a or cond_b or cond_c
 

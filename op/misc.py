@@ -34,7 +34,7 @@ class TransformModeCycle(bpy.types.Operator):
 
 class CSBevel(bpy.types.Operator):
     bl_idname = "mesh.context_sensitive_bevel"
-    bl_label = "CS Bevel"
+    bl_label = "Context Sensistive Bevel"
     bl_description = "Context Sensitive Bevels and Inset"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -77,7 +77,7 @@ class ContextSensitiveSlide(bpy.types.Operator):
 
 class TargetWeldToggle(bpy.types.Operator):
     bl_idname = "mesh.target_weld_toggle"
-    bl_label = "Target Weld Toggle"
+    bl_label = "Target Weld On / Off"
     bl_description = "Toggles snap to vertex and automerge editing on and off"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -97,7 +97,7 @@ class TargetWeldToggle(bpy.types.Operator):
 
 class QuickModifierToggle(bpy.types.Operator):
     bl_idname = "mesh.modifier_toggle"
-    bl_label = "Modifier Toggle"
+    bl_label = "Modifiers On / Off"
     bl_description = "Toggles the modifiers on and off for selected objects"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -130,7 +130,7 @@ class QuickModifierToggle(bpy.types.Operator):
 
 class QuickWireToggle(bpy.types.Operator):
     bl_idname = "mesh.wire_toggle"
-    bl_label = "Quick Wire Toggle"
+    bl_label = "Wireframe On / Off"
     bl_description = "Toggles wire mode on and off on all objects"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -163,4 +163,17 @@ class WireShadedToggle(bpy.types.Operator):
 
     def execute(self, context):
         self.wire_shaded_toggle(context)
+        return{'FINISHED'}
+
+
+class FlexiBezierToolsCreate(bpy.types.Operator):
+    bl_idname = "curve.flexitool_create"
+    bl_label = "Flexi Bezier Tools Create"
+    bl_description = "Executes Flexi Bezier Tools Create"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        for area in bpy.context.screen.areas:
+            if area.type == "VIEW_3D":
+                bpy.ops.wm.tool_set_by_id(name='flexi_bezier.draw_tool')
         return{'FINISHED'}

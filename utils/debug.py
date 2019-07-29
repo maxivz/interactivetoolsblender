@@ -1,5 +1,7 @@
 import bpy
 from .. utils import itools as itools
+from .. utils import mesh as mesh
+from .. utils import user_prefs as up
 from .. utils import dictionaries as dic
 from .. op.super_smart_create import SuperSmartCreate
 from .. op import selection as sel
@@ -25,5 +27,46 @@ class DebugOp(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        print("Debug")
+        prop = up.get_enable_sticky_selection()
+        print("Preference Settings : ", prop)
         return {'FINISHED'}
+
+
+class DebugOpModal(bpy.types.Operator):
+    bl_idname = "itools.debug_modal"
+    bl_label = "Debug Modal"
+    bl_description = "Debug Button Modal"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    mode = 0
+
+    def __init__(self):
+        print("Start")
+
+    def __del__(self):
+        print("End")
+
+    def execute(self, context):
+        context.object.location.x = self.value / 100.0
+        return {'FINISHED'}
+
+    def modal(self, context, event):
+        value = get_property("activate_debug")
+        if value:
+            print("Option Active")
+        else:
+            print("Option Not Active")
+        return {'FINISHED'}
+        if event.type == 'MOUSEMOVE':  # Apply
+            self.value = event.mouse_x
+            self.execute(context)
+        elif event.type == 'LEFTMOUSE':  # Confirm
+            return {'FINISHED'}
+        elif event.type in {'RIGHTMOUSE', 'ESC'}:  # Cancel
+            context.object.location.x = self.init_loc_x
+            return {'CANCELLED'}
+
+        return {'RUNNING_MODAL'}
+
+    def invoke(self, context, event):
+        return {'RUNNING_MODAL'}

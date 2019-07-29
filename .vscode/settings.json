@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "C:\\Users\\Maxi\\AppData\\Local\\Programs\\Python\\Python37\\python.exe",
+    "python.pythonPath": "/usr/bin/python3",
     "python.linting.pylintEnabled": false,
     "python.linting.pep8Enabled": true,
     "python.linting.enabled": true

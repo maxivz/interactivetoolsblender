@@ -8,7 +8,7 @@ from mathutils import Vector
 
 class SmartExtrude(bpy.types.Operator):
     bl_idname = "mesh.smart_extrude_modal"
-    bl_label = "Smart Extrude Modal"
+    bl_label = "Smart Extrude"
     bl_description = "Context Sensitive Extrude operation"
     bl_options = {'REGISTER', 'UNDO'}
 
