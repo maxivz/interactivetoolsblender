@@ -1,7 +1,7 @@
 import bpy
 from ..utils import itools as itools
 from ..utils import mesh as mesh
-from ..utils.user_prefs import loop_tools_active, set_flow_active
+from ..utils.user_prefs import get_loop_tools_active, get_set_flow_active
 
 
 class SmartModify(bpy.types.Operator):
@@ -13,7 +13,7 @@ class SmartModify(bpy.types.Operator):
     def smart_modify(self):
         mode = itools.get_mode()
 
-        if loop_tools_active():
+        if get_loop_tools_active():
             if mode == 'OBJECT':
                 if len(itools.get_selected()) > 0:
                     bpy.ops.wm.call_menu_pie(name="mesh.ssc_duplicate_menu")
@@ -37,8 +37,11 @@ class SmartModify(bpy.types.Operator):
                     bpy.ops.mesh.looptools_circle()
 
                 else:
-                    if set_flow_active():
+                    if get_set_flow_active():
                         bpy.ops.mesh.set_edge_flow(tension=180, iterations=1)
+                    else:
+                        bpy.ops.mesh.looptools_space(influence=100, input='selected', interpolation='cubic', lock_x=False, lock_y=False, lock_z=False)
+
 
             # if Face is selected
             elif mode == 'FACE':
@@ -46,7 +49,7 @@ class SmartModify(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return loop_tools_active()
+        return get_loop_tools_active()
 
     def execute(self, context):
         self.smart_modify()
