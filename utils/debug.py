@@ -27,7 +27,7 @@ class DebugOp(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        prop = up.get_enable_sticky_selection()
+        prop = up.get_keymaps_by_key()
         print("Preference Settings : ", prop)
         return {'FINISHED'}
 

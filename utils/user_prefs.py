@@ -87,6 +87,24 @@ def get_property(target):
     return value
 
 
+def get_keymaps_by_key():
+    wm = bpy.context.window_manager
+    for km in wm.keyconfigs.addon.keymaps:
+        print("Keymap :", km)
+        for kmi in km:
+            print("Keymap Item :", kmi)
+    """
+    wm = bpy.context.window_manager
+    kc = wm.keyconfigs.addon
+    if '3D View Generic' in kc.keymaps:
+        km = kc.keymaps['3D View Generic']
+        for km, kmi in addon_keymaps:
+            km.keymap_items.remove(kmi)
+            wm.keyconfigs.addon.keymaps.remove(km)
+    addon_keymaps.clear()
+    """
+
+
 def get_keymap(name):
     print("Get keymap")
 
@@ -158,17 +176,11 @@ def get_enable_dissolve_faces():
 
 
 def unregister_keymaps():
-    ''' clears all addon level keymap hotkeys stored in addon_keymaps '''
-    wm = bpy.context.window_manager
-    kc = wm.keyconfigs.addon
-
-    if '3D View Generic' in kc.keymaps:
-        km = kc.keymaps['3D View Generic']
-        for km, kmi in addon_keymaps:
-            km.keymap_items.remove(kmi)
-            wm.keyconfigs.addon.keymaps.remove(km)
+    # wm = bpy.context.window_manager
+    for km, kmi in addon_keymaps:
+        km.keymap_items.remove(kmi)
+        # wm.keyconfigs.addon.keymaps.remove(km)
     addon_keymaps.clear()
-
 
 # Store keymaps to access after registration
 addon_keymaps = []
@@ -199,8 +211,7 @@ class AddonPreferences(AddonPreferences):
     # Properties
     cateogries: EnumProperty(name="Categories",
                              items=[("GENERAL", "General Settings", ""),
-                                    ("KEYMAPS", "Keymaps", ""),
-                                    ("MISC", "Misc", "")],
+                                    ("KEYMAPS", "Keymaps", ""), ],
                              default="GENERAL")
 
     ssc_switch_modes: BoolProperty(name="Super Smart Create Switch Modes",
@@ -241,9 +252,6 @@ class AddonPreferences(AddonPreferences):
 
         elif self.cateogries == "KEYMAPS":
             self.draw_keymaps(box)
-
-        elif self.cateogries == "MISC":
-            self.draw_misc(box)
 
     def draw_general(self, context):
         column = context.column()
@@ -370,6 +378,10 @@ class AddonPreferences(AddonPreferences):
         row = layout.row(align=True)
         add_hotkey_ui('mesh.smart_extrude_modal', km, kc, row)
 
+        # Smart Extrude:
+        row = layout.row(align=True)
+        add_hotkey_ui('mesh.smart_modify', km, kc, row)
+
         # Smart Translate:
         row = layout.row(align=True)
         add_hotkey_ui('mesh.smart_translate_modal', km, kc, row)
@@ -457,7 +469,7 @@ class AddonPreferences(AddonPreferences):
 
     def draw_misc(self, context):
         layout = self.layout
-        layout.label(text="This is the misc category")
+        layout.label(text="This is still work in progress")
         layout.prop(self, "boolean")
 
 

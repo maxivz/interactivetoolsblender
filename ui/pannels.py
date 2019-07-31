@@ -33,6 +33,8 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row.operator('mesh.super_smart_create', text="Super Smart Create", icon="PLUS")
         row = layout.row()
         row.operator('mesh.smart_delete', text="Smart Delete", icon="TRASH")
+        row = layout.row()
+        row.operator('mesh.smart_modify', text="Smart Modify")
         row = layout.row(align=True)
         row.operator('mesh.smart_extrude_modal', text="Smart Extrude")
         row.operator('mesh.smart_translate_modal', text="Smart Translate")

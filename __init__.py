@@ -10,6 +10,7 @@ from . op.smart_extrude import SmartExtrude
 from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace
 from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate
 from . op.smart_delete import SmartDelete
+from . op.smart_modify import SmartModify
 from . op.selection import SmartSelectLoop, SmartSelectRing
 from . op.smart_transform import SmartTranslate
 from . op.quick_lattice import QuickLattice
@@ -39,7 +40,7 @@ classes = (MaxivzTools_PT_Panel, SSC_Duplicate_Menu, SSC_New_Obj_Menu, RebaseCyl
            SmartSelectLoop, SmartSelectRing, SmartTranslate,
            QuickLattice, SmartExtrude, SeamsFromSharps,
            QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,
-           MaxivzToolsDebug_PT_Panel, DebugOp, MenuPlaceholder)
+           MenuPlaceholder, SmartModify)
 
 
 def register():
