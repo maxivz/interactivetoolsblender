@@ -141,7 +141,7 @@ These modes work with multiple selections at the same time:
 
 Support for vertex and face mode is limited, but some modes work.
 
-Future Updates:
+#### Future Updates
 * Ring selection algorithm improvements
 * Performance improvements to reduce slowdowns
 * Better vertex and face mode support
@@ -168,24 +168,32 @@ If you select the lattice and run the script the lattice will be applied and the
 Select an object and run the script a radial symmetry will be created using the object's pivot point as the center point.
 Move the mouse to the left and the right the amount of iterations will increase and decrease.
 Control + mouse movement to change the symmetry axis.
+![Quick Radial Symmetry](./images/quickradialsymmetry_01.gif)
 
 Select an object that already had radial symmetry to continue editing it.
+![Quick Radial Symmetry editing](./images/quickradialsymmetry_02.gif)
 
 Unhide the Symmetry Pivot and move it around to further modify the radial symmetry.
+![Quick Radial Symmetry pivot object](./images/quickradialsymmetry_pivot.png)
 
 
 ### Quick Pivot
 Centers the pivot on selection for vert, edge and face mode.
+![Quick Pivot center in component selection modes](./images/quickpivot_01.gif)
 
-Works as well for object mode, centering the pivot on the object.
+This works for object mode too, centering the pivot on the object.
+![Quick Pivot center in object mode](./images/quickpivot_02.gif)
 
 
 ### Quick Edit Pivot
 Select an object and run the script, a helper will be made, you can move this helper to your desired pivot position.
+![Quick Edit Pivot in object mode](./images/quickeditpivot_01.gif)
 
 If you select the object and run the script, but a helper already existed in the scene, the existing helper will be selected.
+![Quick Edit Pivot selects pivot helper if it already existed](./images/quickeditpivot_02.gif)
 
 Run the script again with the helper selected to move the pivot point of the object to the position of the helper. The helper will be deleted.
+![Quick Edit Pivot with helper selected moves the pivot and deletes the helper](./images/quickeditpivot_03.gif)
 
 
 ### Quick Delete
