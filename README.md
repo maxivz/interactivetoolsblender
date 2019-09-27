@@ -27,12 +27,12 @@ To install the tools inside Blender, follow these steps:
 1. In Blender's top menu, go to *Edit -> Preferences*, choose the **Add-ons** section in the Preferences panel and click the **Install** button
    ![Preferences window Add-ons section](./images/installation_01.png)
 1. In the browser window that appears, select the location of the addon and click **Install**
-   ![Browse for, and install, the add-on file](images/installation_02.png)
+   ![Browse for, and install, the add-on file](./images/installation_02.png)
 1. Now search for the Interactive Tools add-on in the list, and enable it using the checkbox
-   ![Enable the add-on](images/installation_03.png)
+   ![Enable the add-on](./images/installation_03.png)
 
 Once enabled, the tools can be found in the *Maxivz Interactive Tools* on the right side menu in Blender:
-![Interactive Tools panel in Blender](images/interactivetools_panel.png)
+![Interactive Tools panel in Blender](./images/interactivetools_panel.png)
 
 
 ## Tools
@@ -44,56 +44,65 @@ These tools work best when assigned to hotkeys.
 This tool does many things depending on the context and selection:
 
 * Connects verts that belong to the same face
-  ![Connect verts](images/supersmartcreate_01.gif)
+  ![Connect verts](./images/supersmartcreate_01.gif)
 * If you select one vert or two verts that share the same edge and are on a border it will invoke f2 (make sure you have f2 enabled)
-  ![Create faces](images/supersmartcreate_02.gif)
+  ![Create faces](./images/supersmartcreate_02.gif)
 * If you select multiple verts that belong to the same face, they will all be connected to the last selected vert
-  ![Connect multiple verts to last selected vert](images/supersmartcreate_03.gif)
+  ![Connect multiple verts to last selected vert](./images/supersmartcreate_03.gif)
 * If you select an edge it will divide it in 2, putting a vert in the middle of the edge
-  ![Add vert to edge](images/supersmartcreate_04.gif)
+  ![Add vert to edge](./images/supersmartcreate_04.gif)
 * Connects the selected edges if they are part of a ring
-  ![Connect ring edges](images/supersmartcreate_05.gif)
+  ![Connect ring edges](./images/supersmartcreate_05.gif)
   * There are still some problems with the selection when two edge rings meet in a corner
 * Caps selected borders
-  ![Cap selected borders](images/supersmartcreate_06.gif)
+  ![Cap selected borders](./images/supersmartcreate_06.gif)
 * Bridges selected edges if possible - when you select 2 adjacent edges it creates a face
-  ![Bridge selected edges](images/supersmartcreate_07.gif)
-  ![Bridge selected edges](images/supersmartcreate_08.gif)
+  ![Bridge selected edges](./images/supersmartcreate_07.gif)
+  ![Bridge selected edges](./images/supersmartcreate_08.gif)
 * Bridges selected polys
-  ![Bridge selected polys](images/supersmartcreate_09.gif)
+  ![Bridge selected polys](./images/supersmartcreate_09.gif)
 * If a single face is selected it will try to make quads on it
-  ![Make quads from selected face](images/supersmartcreate_10.gif)
+  ![Make quads from selected face](./images/supersmartcreate_10.gif)
   * This feature works pretty well if you select a border, run the script to make a face and then run the script again to make quads out of it:
-  ![Make face, then make quads from selected face](images/supersmartcreate_11.gif)
+  ![Make face, then make quads from selected face](./images/supersmartcreate_11.gif)
 
 
 ### Set Cylindrical Obj Sides
-Select the loop in a cylindrical object and run the script to make a copy of the shape with customizable number of sides.
+Select the loop in a cylindrical object and run the script to make a copy of the shape with customizable number of sides:
+![Set number of sides on a cylindrical object](./images/setcylindricalobjsides_01.gif)
 
-Select the created object again and run the script again to continue editing the number of sides.
+Select the created object again and run the script again to continue editing the number of sides:
+![Set number of sides on a cylindrical object again](./images/setcylindricalobjsides_02.gif)
 
 
 ### Smart Extrude
 Inspired by 3dsmax shift+drag behavior.
 
 * If in object mode it will duplicate the object and move, trying to predict the axis based in the direction you drag from
+   ![Duplicate and move object](./images/smartextrude_01.gif)
 * If in edge selection mode it will extend and move, trying to predict the axis based in the direction you drag from
+   ![Extend and move edges](./images/smartextrude_02.gif)
 * If in vert or face selection mode it will duplicate and move, trying to predict the axis based in the direction you drag from
+   ![Duplicate and move verts and faces](./images/smartextrude_03.gif)
 * If you are in edit mode of a curve, it will extend the curve and move, trying to predict the axis based in the direction you drag from
+   ![Extend and move curve](./images/smartextrude_04.gif)
 
 Setup a new hotkey for each 3D View tool like this, make sure to disable the default duplicate objects.
+![Smart Extrude hotkey setup](./images/smartextrude_hotkeys.gif)
 
-Future Updates:
+#### Future Updates
 * Improve the axis detection
 * Similar behaviour for rotate and scale
 * Add more modifier keys (snapping, freeform, 2 axis constraint)
 
 
 ### Smart Translate
-A tool to quickly move objects around, it tries to predict the axis of the movement based on mouse movement.
+A tool to quickly move objects around, it tries to predict the axis of the movement based on mouse movement:
+![Smart Translate](./images/smarttranslate_01.gif)
+   
 It's pretty simple for now and only works when assigned to the middle mouse button, a setting for this will be made in the next update.
 
-Future Updates:
+#### Future Updates
 * Improve the axis detection
 * Similar behaviour for rotate and scale
 * Add more modifier keys (snapping, freeform, 2 axis constraint)
@@ -102,24 +111,33 @@ Future Updates:
 
 ### Smart Loop
 * If two continuous edges or one edge is selected, the edge loop is going to be selected
+   ![Smart select edge loop](./images/smartloop_01.gif)
 * If two edges are selected, it's going to get the edge loop between them
+   ![Select edge loop between two edges](./images/smartloop_02.gif)
 * If three edges are selected, and they have the same space between them a step selection will be made
+   ![Select edge loop with spacing pattern from 3 edges](./images/smartloop_03.gif)
 
-These modes work with multiple selections at the same time.
+These modes work with multiple selections at the same time:
+![Smart Loop with multiple selections](./images/smartloop_04.gif)
 
 Support for vertex and face mode is limited, but some modes work.
 
-Future Updates:
+#### Future Updates
 * Loop selection algorithm improvements
 * Performance improvements to reduce slowdowns
 * Better vertex and face mode support
 
 
 ### Smart Ring
-If two continuous edges or one edge is selected, the edge ring is going to be selected.
-If two edges are selected, it's going to get the edge ring between them
-If three edges are selected, and they have the same space between them a step selection will be made.
+* If two continuous edges or one edge is selected, the edge ring is going to be selected
+   ![Smart select edge ring](./images/smartring_01.gif)
+* If two edges are selected, it's going to get the edge ring between them
+   ![Select edge ring between two edges](./images/smartring_02.gif)
+* If three edges are selected, and they have the same space between them a step selection will be made
+   ![Select edge ring with spacing pattern from 3 edges](./images/smartring_03.gif)
+
 These modes work with multiple selections at the same time:
+![Smart Ring with multiple selections](./images/smartring_04.gif)
 
 Support for vertex and face mode is limited, but some modes work.
 
@@ -131,13 +149,17 @@ Future Updates:
 
 ### Quick FFD/Lattice
 Simple, quick lattice tool that works with one hotkey.
-Make a selection and run the tool. A lattice will be created and try to fit the selection. Only the selected area is affected by the lattice.
 
-If you select the object and a lattice already exists the existing lattice will be selected.
+Make a selection and run the tool. A lattice will be created and try to fit the selection. Only the selected area is affected by the lattice:
+![Quick FFD from selection](./images/quickffd_01.gif)
 
-If you select the lattice and run the script the lattice will be applied and the object will be selected. The original selection is selected.
+If you select the object and a lattice already exists the existing lattice will be selected:
+![Quick FFD with existing lattice](./images/quickffd_02.gif)
 
-Future Improvements:
+If you select the lattice and run the script the lattice will be applied and the object will be selected. The original selection is selected:
+![Selecting the object from the lattice](./images/quickffd_03.gif)
+
+#### Future Updates
 * Change FFD presets (3x3x3 and 4x4x4)
 * Better support for rotations
 
