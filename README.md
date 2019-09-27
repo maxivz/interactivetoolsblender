@@ -1,6 +1,6 @@
-# Interactive Tools for Blender
+# Maxivz's Interactive Tools for Blender
 
-This is a collection of intuitive, context sensitive tools to improve productivity that I did to improve my workflow as I transitioned into Blender.
+This is a free collection of intuitive, context sensitive tools to improve productivity that I did to improve my workflow as I transitioned into Blender.
 
 They are designed to be used as hotkeys, removing the amount of interaction with the menus and allowing for a less interrupted modeling experience.
 
@@ -24,11 +24,15 @@ If this add-on is not working, please update to the [latest version of Blender 2
 ### Installation
 To install the tools inside Blender, follow these steps:
 
-1. In Blender's top menu, go to *Edit -> Preferences* and choose the **Add-ons** tab in the Preferences panel
-1. Click the **Install** button - in the browser window that appears, select the location of the addon and click **Install**
+1. In Blender's top menu, go to *Edit -> Preferences*, choose the **Add-ons** section in the Preferences panel and click the **Install** button
+   ![Preferences window Add-ons section](./images/installation_01.png)
+1. In the browser window that appears, select the location of the addon and click **Install**
+   ![Browse for, and install, the add-on file](images/installation_02.png)
 1. Now search for the Interactive Tools add-on in the list, and enable it using the checkbox
+   ![Enable the add-on](images/installation_03.png)
 
-Once enabled, the tools can be found in the *Maxivz Interactive Tools* on the right side menu in Blender.
+Once enabled, the tools can be found in the *Maxivz Interactive Tools* on the right side menu in Blender:
+![Interactive Tools panel in Blender](images/interactivetools_panel.png)
 
 
 ## Tools
@@ -39,18 +43,28 @@ These tools work best when assigned to hotkeys.
 ### Super Smart Create
 This tool does many things depending on the context and selection:
 
-* Connects verts that belong to the same face 
-* If you select one vert or two verts that share the same edge and are on a border it will invoke f2(make sure you have f2 enabled)
+* Connects verts that belong to the same face
+  ![Connect verts](images/supersmartcreate_01.gif)
+* If you select one vert or two verts that share the same edge and are on a border it will invoke f2 (make sure you have f2 enabled)
+  ![Create faces](images/supersmartcreate_02.gif)
 * If you select multiple verts that belong to the same face, they will all be connected to the last selected vert
+  ![Connect multiple verts to last selected vert](images/supersmartcreate_03.gif)
 * If you select an edge it will divide it in 2, putting a vert in the middle of the edge
+  ![Add vert to edge](images/supersmartcreate_04.gif)
 * Connects the selected edges if they are part of a ring
- * There are still some problems with the selection when two edge rings meet in a corner
+  ![Connect ring edges](images/supersmartcreate_05.gif)
+  * There are still some problems with the selection when two edge rings meet in a corner
 * Caps selected borders
+  ![Cap selected borders](images/supersmartcreate_06.gif)
 * Bridges selected edges if possible - when you select 2 adjacent edges it creates a face
+  ![Bridge selected edges](images/supersmartcreate_07.gif)
+  ![Bridge selected edges](images/supersmartcreate_08.gif)
 * Bridges selected polys
+  ![Bridge selected polys](images/supersmartcreate_09.gif)
 * If a single face is selected it will try to make quads on it
-
-This last feature works pretty well if you select a border, run the script to make a face and then run the script again to make quads out of it.
+  ![Make quads from selected face](images/supersmartcreate_10.gif)
+  * This feature works pretty well if you select a border, run the script to make a face and then run the script again to make quads out of it:
+  ![Make face, then make quads from selected face](images/supersmartcreate_11.gif)
 
 
 ### Set Cylindrical Obj Sides
