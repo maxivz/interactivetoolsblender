@@ -276,3 +276,8 @@ Rotates the UV selection 90 degrees.
 
 ### UV Rotate 90 neg
 Rotates the UV selection -90 degrees.
+
+
+### UVs From Sharps
+Applies seams from sharp edges and unwraps everything.
+![UV unwrap from sharp edges](./images/uvs_from_sharps_01.gif)
