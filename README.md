@@ -199,10 +199,15 @@ Run the script again with the helper selected to move the pivot point of the obj
 ### Quick Delete
 Context-sensitive deletion methods:
 * If you select a vert the vert will be deleted with all the connected faces
+  ![Quick Delete vertex and connected faces](./images/quickdelete_01.gif)
 * If you select an edge the edge will be dissolved
+  ![Quick Delete edge dissolve](./images/quickdelete_02.gif)
 * If you select a border the border and the connected faces will be deleted
+  ![Quick Delete border and connected faces](./images/quickdelete_03.gif)
 * If you select a face the face will be deleted
+  ![Quick Delete face](./images/quickdelete_04.gif)
 * If you select an object, the object will be deleted
+  ![Quick Delete object](./images/quickdelete_05.gif)
 
 
 ### Quick Vert Mode
@@ -232,8 +237,11 @@ Context-sensitive deletion methods:
 ### CS Bevel
 Context sensitive bevel:
 * If vertex mode is selected it will execute the vertex chamfering tool
+  ![CS Bevel in vertex mode chamfers vertices](./images/csbevel_01.gif)
 * If edge mode is selected it will execute the edge bevel tool
+  ![CS Bevel in edge mode bevels edges](./images/csbevel_02.gif)
 * If face mode is selected it will execute the extrude faces tool - this replicates 3ds Max face bevel behaviour
+  ![CS Bevel in face mode extrudes faces](./images/csbevel_03.gif)
 
 
 ### CS Slide
@@ -244,14 +252,17 @@ Simple context sensitive slide:
 
 ### Modifier Toggle
 Toggles on and off all the modifiers of the selected object.
+![Modifier Toggle](./images/modifiertoggle_01.gif)
 
 
 ### Wireframe Toggle
 Toggles the wireframe rendering on and off.
+![Wireframe Toggle](./images/wireframetoggle_01.gif)
 
 
 ### Wire Shaded Toggle
 Toggles between the shaded and the wireframe mode.
+![Wire Shaded Toggle](./images/wireshadedtoggle_01.gif)
 
 
 ### Target Weld Toggle
