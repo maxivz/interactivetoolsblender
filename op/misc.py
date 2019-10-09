@@ -1,5 +1,6 @@
 import bpy
 from ..utils import itools as itools
+from .. utils import dictionaries as dic
 
 
 class TransformModeCycle(bpy.types.Operator):
@@ -30,6 +31,38 @@ class TransformModeCycle(bpy.types.Operator):
                         space.show_gizmo_object_translate = True
 
         return{'FINISHED'}
+
+
+class TransformOrientationCycle(bpy.types.Operator):
+    bl_idname = "mesh.transform_orientation_cycle"
+    bl_label = "Transform Orientation Cycle"
+    bl_description = "Cycles trough transform orientation modes"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        space = bpy.context.scene.transform_orientation_slots[0].type
+
+        if space == 'GLOBAL':
+            new_space = 'LOCAL'
+
+        elif space == 'LOCAL':
+            new_space = 'NORMAL'
+
+        elif space == 'NORMAL':
+            new_space = 'GIMBAL'
+
+        elif space == 'GIMBAL':
+            new_space = 'VIEW'
+
+        elif space == 'VIEW':
+            new_space = 'CURSOR'
+
+        elif space == 'CURSOR':
+            new_space = 'GLOBAL'
+
+        bpy.context.scene.transform_orientation_slots[0].type = new_space
+
+        return {'FINISHED'}
 
 
 class CSBevel(bpy.types.Operator):
@@ -145,6 +178,32 @@ class QuickWireToggle(bpy.types.Operator):
         return{'FINISHED'}
 
 
+class QuickTransformOrientation(bpy.types.Operator):
+    bl_idname = "mesh.quick_transform_orientation"
+    bl_label = "Quick Transform Orientation"
+    bl_description = "Sets up a transform orientation from selected"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def make_orientation(self, context):
+        space = bpy.context.scene.transform_orientation_slots[0].type
+        selection = itools.get_selected()
+
+        if space != 'Custom':
+            dic.write("stored_transform_orientation", space)
+            bpy.ops.transform.create_orientation(name="Custom", use=True, overwrite=True)
+
+        else:
+            if len(selection) < 1:
+                new_space = dic.read("stored_transform_orientation")
+                bpy.context.scene.transform_orientation_slots[0].type = new_space
+            else:
+                bpy.ops.transform.create_orientation(name="Custom", use=True, overwrite=True)
+        
+    def execute(self, context):
+        self.make_orientation(context)
+        return{'FINISHED'}
+
+
 class WireShadedToggle(bpy.types.Operator):
     bl_idname = "mesh.wire_shaded_toggle"
     bl_label = "Wireframe / Shaded Toggle"
@@ -157,8 +216,9 @@ class WireShadedToggle(bpy.types.Operator):
             for space in area.spaces:
                 if space.type == 'VIEW_3D':
                     if space.shading.type == 'WIREFRAME':
-                        space.shading.type = 'SOLID'
+                        space.shading.type = dic.read("shading_mode")
                     else:
+                        dic.write("shading_mode", space.shading.type)
                         space.shading.type = 'WIREFRAME'
 
     def execute(self, context):

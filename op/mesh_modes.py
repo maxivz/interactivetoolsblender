@@ -60,7 +60,7 @@ def quick_selection(target_mode, safe_mode=False):
 class SelectionModeCycle(bpy.types.Operator):
     bl_idname = "mesh.selection_mode_cycle"
     bl_label = "Selection Mode Cycle"
-    bl_description = "Set selection modes quickly"
+    bl_description = "Cycles trough selection modes"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):

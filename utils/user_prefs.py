@@ -332,6 +332,10 @@ class AddonPreferences(AddonPreferences):
         row = layout.row(align=True)
         add_hotkey_ui('mesh.transform_mode_cycle', km, kc, row)
 
+        # Transform Orientation Cycle:
+        row = layout.row(align=True)
+        add_hotkey_ui('mesh.transform_orientation_cycle', km, kc, row)
+
         #
         # Selection, double space:
         #
@@ -401,9 +405,17 @@ class AddonPreferences(AddonPreferences):
         row = layout.row(align=True)
         add_hotkey_ui('mesh.simple_edit_pivot', km, kc, row)
 
+        # Quick Transform Orientation
+        row = layout.row(align=True)
+        add_hotkey_ui('mesh.quick_transform_orientation', km, kc, row)
+
         # Quick Align
         row = layout.row(align=True)
         add_hotkey_ui('mesh.quick_align', km, kc, row)
+
+        # Quick Lattice
+        row = layout.row(align=True)
+        add_hotkey_ui('mesh.quick_lattice', km, kc, row)
 
         # Rebase Cylinder
         row = layout.row(align=True)

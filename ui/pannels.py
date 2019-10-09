@@ -17,6 +17,8 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row.operator('mesh.selection_mode_cycle', text="Selection Mode Cycle", icon="RESTRICT_SELECT_OFF")
         row = layout.row()
         row.operator('mesh.transform_mode_cycle', text="Transform Mode Cycle", icon="OUTLINER_OB_EMPTY")
+        row = layout.row()
+        row.operator('mesh.transform_orientation_cycle', text="Transform Orientation Cycle", icon="OBJECT_ORIGIN")
 
         layout.label(text="Selection")
         row = layout.row(align=True)
@@ -43,6 +45,8 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row = layout.row(align=True)
         row.operator('mesh.quick_pivot', text="Quick Origin")
         row.operator('mesh.simple_edit_pivot', text="Edit Origin")
+        row = layout.row()
+        row.operator('mesh.quick_transform_orientation', text="Quick Transform Orientation")
         row = layout.row()
         row.operator('mesh.quick_align', text="Quick Align")
         row = layout.row()

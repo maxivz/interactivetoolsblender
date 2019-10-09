@@ -8,7 +8,7 @@ from . op.quick_align import QuickAlign
 from . op.pivot import QuickPivot, QuickEditPivot
 from . op.smart_extrude import SmartExtrude
 from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace
-from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate
+from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, QuickTransformOrientation
 from . op.smart_delete import SmartDelete
 from . op.smart_modify import SmartModify
 from . op.selection import SmartSelectLoop, SmartSelectRing
@@ -25,6 +25,9 @@ bl_info = {
     "description": "Collection of context sensitive and time saving tools",
     "blender": (2, 80, 0),
     "location": "View3D",
+    "version": (1, 0),
+    "tracker_url": "https://blenderartists.org/t/interactive-tools-for-blender-2-8/1164932",
+    "wiki_url": "https://github.com/maxivz/interactivetoolsblender",
     "warning": "",
     "category": "Generic"
 }
@@ -35,8 +38,8 @@ classes = (MaxivzTools_PT_Panel, SSC_Duplicate_Menu, SSC_New_Obj_Menu, RebaseCyl
            QuickPivot, QuickEditPivot, SelectionModeCycle,
            QuickSelectionEdge, QuickSelectionVert, QuickSelectionFace,
            FlexiBezierToolsCreate, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle,
-           QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete,
-           AddonPreferences, OBJECT_OT_addon_prefs_example,
+           QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete, TransformOrientationCycle,
+           AddonPreferences, OBJECT_OT_addon_prefs_example, QuickTransformOrientation,
            SmartSelectLoop, SmartSelectRing, SmartTranslate,
            QuickLattice, SmartExtrude, SeamsFromSharps,
            QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,

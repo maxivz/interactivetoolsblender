@@ -150,6 +150,9 @@ class QuickAlign(bpy.types.Operator):
             if 'Z' in self.scale_axis:
                 bpy.data.objects[obj].scale.z = target_scale.z
 
+        # Deselect Target
+        itools.select(self.target, item=False, deselect=True)
+
         return {'FINISHED'}
 
     def invoke(self, context, event):

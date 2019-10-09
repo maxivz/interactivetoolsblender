@@ -7,7 +7,7 @@ import datetime
 
 class QuickRadialSymmetry(bpy.types.Operator):
     bl_idname = "mesh.radial_symmetry"
-    bl_label = "Quick Radial Symmetry"
+    bl_label = "Radial Symmetry"
     bl_description = "Setup a Quick Radial Symmetry"
     bl_options = {'REGISTER', 'UNDO', 'GRAB_CURSOR'}
 

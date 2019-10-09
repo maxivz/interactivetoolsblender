@@ -6,7 +6,7 @@ from ..utils import itools as itools
 
 class QuickPivot(bpy.types.Operator):
     bl_idname = "mesh.quick_pivot"
-    bl_label = "Quick Pivot Setup"
+    bl_label = "Quick Origin"
     bl_description = "Quick Pivot Setup based on selection"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -29,7 +29,7 @@ class QuickPivot(bpy.types.Operator):
 
 class QuickEditPivot(bpy.types.Operator):
     bl_idname = "mesh.simple_edit_pivot"
-    bl_label = "Simple Edit Pivot"
+    bl_label = "Edit Origin"
     bl_description = "Edit pivot position and scale"
     bl_options = {'REGISTER', 'UNDO'}
 

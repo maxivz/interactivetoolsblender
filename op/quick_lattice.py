@@ -51,15 +51,15 @@ class QuickLattice(bpy.types.Operator):
                     verts = [vert for vert_pair in verts for vert in vert_pair]
                     verts = list(set(verts))
 
-                vert_indexes = [vert.index for vert in verts]
-                vert_positions = [(selection.matrix_world @ vert.co) for vert in verts]
+            vert_indexes = [vert.index for vert in verts]
+            vert_positions = [(selection.matrix_world @ vert.co) for vert in verts]
 
-                # Make vertex group, assign verts and update viewlayer
-                itools.set_mode('OBJECT')
-                vg = selection.vertex_groups.new(name="lattice_group")
-                vg.add(vert_indexes, 1.0, 'ADD')
-                bpy.context.view_layer.update()
-                rotation = Vector()
+            # Make vertex group, assign verts and update viewlayer
+            itools.set_mode('OBJECT')
+            vg = selection.vertex_groups.new(name="lattice_group")
+            vg.add(vert_indexes, 1.0, 'ADD')
+            bpy.context.view_layer.update()
+            rotation = Vector()
 
             # Calculate positions
             minimum = Vector()
@@ -112,7 +112,7 @@ class QuickLattice(bpy.types.Operator):
         bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Lattice")
 
         # Delete vertex group
-        vg = obj.vertex_groups.get("lattice")
+        vg = obj.vertex_groups.get("lattice_group")
         if vg is not None:
             obj.vertex_groups.remove(vg)
 
