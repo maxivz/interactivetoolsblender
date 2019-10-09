@@ -16,7 +16,7 @@ You can either clone this repository, or [download the addon from Gumroad](https
 
 
 ### Prerequisites
-These scripts were tested and work with Blender 2.8 build 749d53effd58 (8 June 2019).
+These scripts were tested and work with the release version of Blender 2.8.
 
 If this add-on is not working, please update to the [latest version of Blender 2.8](https://www.blender.org/download/releases/2-80/) and try again, then report an Issue on this repository if problems persist.
 
