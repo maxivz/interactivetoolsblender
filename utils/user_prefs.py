@@ -174,6 +174,9 @@ def get_enable_dissolve_faces():
     prefs = get_addon_preferences()
     return prefs.enable_dissolve_faces
 
+def get_radsym_hide_pivot():
+    prefs = get_addon_preferences()
+    return prefs.radsym_hide_pivot
 
 def unregister_keymaps():
     # wm = bpy.context.window_manager
@@ -238,6 +241,10 @@ class AddonPreferences(AddonPreferences):
                                         description="Non-border edges will be dissolved, if disabled they will be deleted",
                                         default=True)
 
+    radsym_hide_pivot: BoolProperty(name="Hide Radial Symmetry Pivot",
+                                    description="Hide Radial Symmetry Pivot on symmetry creation",
+                                    default=True)
+
     def draw(self, context):
         layout = self.layout
 
@@ -286,6 +293,9 @@ class AddonPreferences(AddonPreferences):
 
         row = layout.row(align=True)
         row.prop(self, "enable_dissolve_faces", toggle=False)
+
+        row = layout.row(align=True)
+        row.prop(self, "radsym_hide_pivot", toggle=False)
 
         #
         # Recommended Addons::

@@ -1,6 +1,7 @@
 import bpy
 import math
 from bpy_extras.view3d_utils import region_2d_to_vector_3d, region_2d_to_origin_3d
+from ..utils.user_prefs import get_radsym_hide_pivot
 from bpy.props import EnumProperty, IntProperty
 import datetime
 
@@ -57,6 +58,10 @@ class QuickRadialSymmetry(bpy.types.Operator):
             self.symmetry_center.rotation_euler = (0, 0, math.radians(120))
             self.symmetry_center.name = selection.name + ".SymmetryPivot"
             self.symmetry_center.select_set(False)
+
+            #Parent the pivot to the object and manage visibility
+            self.symmetry_center.parent = selection
+            self.symmetry_center.hide_viewport = get_radsym_hide_pivot()
             selection.select_set(True)
 
             # Create modifier and assign name
