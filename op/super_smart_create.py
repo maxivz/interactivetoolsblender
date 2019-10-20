@@ -140,10 +140,7 @@ class SuperSmartCreate(bpy.types.Operator):
         elif mode == 'EDIT_CURVE':
             selection = itools.get_selected()
 
-            if len(selection) == 0:
-                bpy.ops.curve.draw()
-
-            elif len(selection) == 1:
+            if len(selection) == 1:
                 bpy.ops.curve.extrude_move(TRANSFORM_OT_translate={"value": (0, 0, 0)})
 
             elif len(selection) == 2:

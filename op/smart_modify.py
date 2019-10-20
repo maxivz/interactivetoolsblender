@@ -14,16 +14,8 @@ class SmartModify(bpy.types.Operator):
         mode = itools.get_mode()
 
         if get_loop_tools_active():
-            if mode == 'OBJECT':
-                if len(itools.get_selected()) > 0:
-                    bpy.ops.wm.call_menu_pie(name="mesh.ssc_duplicate_menu")
-
-                else:
-                    if set_flow_active():
-                        bpy.ops.wm.call_menu_pie(name="mesh.ssc_new_obj_menu")
-
             # if Vertex is selected
-            elif mode == 'VERT':
+            if mode == 'VERT':
                 bm = itools.get_bmesh()
                 selection = itools.get_selected()
                 bpy.ops.mesh.looptools_relax()
