@@ -1,6 +1,7 @@
 import bpy
 from ..utils import itools as itools
 from .. utils import dictionaries as dic
+from .. utils.user_prefs import get_quickhplp_hp_suffix, get_quickhplp_lp_suffix
 
 
 class TransformModeCycle(bpy.types.Operator):
@@ -15,6 +16,12 @@ class TransformModeCycle(bpy.types.Operator):
         for area in areas:
             for space in area.spaces:
                 if space.type == 'VIEW_3D':
+                    # Make active tool is set to select
+                    override = bpy.context.copy()
+                    override["space_data"] = area.spaces[0]
+                    override["area"] = area
+                    bpy.ops.wm.tool_set_by_id(override, name="builtin.select_box")
+
                     if space.show_gizmo_object_translate:
                         space.show_gizmo_object_translate = False
                         space.show_gizmo_object_rotate = True
@@ -198,7 +205,7 @@ class QuickTransformOrientation(bpy.types.Operator):
                 bpy.context.scene.transform_orientation_slots[0].type = new_space
             else:
                 bpy.ops.transform.create_orientation(name="Custom", use=True, overwrite=True)
-        
+   
     def execute(self, context):
         self.make_orientation(context)
         return{'FINISHED'}
@@ -236,4 +243,32 @@ class FlexiBezierToolsCreate(bpy.types.Operator):
         for area in bpy.context.screen.areas:
             if area.type == "VIEW_3D":
                 bpy.ops.wm.tool_set_by_id(name='flexi_bezier.draw_tool')
+        return{'FINISHED'}
+
+class QuickHpLpNamer(bpy.types.Operator):
+    bl_idname = "mesh.quick_hplp_namer"
+    bl_label = "Quick HP Lp Namer"
+    bl_description = "Helps with naming the hp and lp for name matching baking"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        selection = []
+        selection = itools.get_selected()
+        lp_suffix = get_quickhplp_lp_suffix()
+        hp_suffix = get_quickhplp_hp_suffix()
+
+        lp = [obj for obj in selection if obj.name.endswith(lp_suffix)]
+        if len(lp) != 1:
+            polycount_list = [len(obj.data.polygons) for obj in selection]
+            lowest_index = polycount_list.index(min(polycount_list))
+            lp = selection[lowest_index]
+            lp.name = lp.name + lp_suffix
+
+        elif lp[0].name.endswith(lp_suffix):
+            lp = lp[0]
+
+        for obj in selection:
+            if obj is not lp:
+                obj.name = lp.name[:-len(lp_suffix)] + hp_suffix
+
         return{'FINISHED'}

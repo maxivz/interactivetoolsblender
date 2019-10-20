@@ -57,6 +57,8 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row = layout.row(align=True)
         row.operator('mesh.context_sensitive_slide', text="CS Slide")
         row.operator('mesh.context_sensitive_bevel', text="CS Bevel")
+        row = layout.row(align=True)
+        row.operator('mesh.quick_hplp_namer', text="Quick Hp Lp Namer")
 
         layout.label(text="Toggles")
         row = layout.row()

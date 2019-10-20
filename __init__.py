@@ -9,7 +9,7 @@ from . op.quick_align import QuickAlign
 from . op.pivot import QuickPivot, QuickEditPivot
 from . op.smart_extrude import SmartExtrude
 from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace
-from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, QuickTransformOrientation
+from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, QuickTransformOrientation, QuickHpLpNamer
 from . op.smart_delete import SmartDelete
 from . op.smart_modify import SmartModify
 from . op.selection import SmartSelectLoop, SmartSelectRing
@@ -45,7 +45,7 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            QuickLattice, SmartExtrude, SeamsFromSharps,
            QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,
            MenuPlaceholder, SmartModify, LatticeResolution2x2x2,
-           LatticeResolution3x3x3, LatticeResolution4x4x4)
+           LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer)
 
 
 def register():

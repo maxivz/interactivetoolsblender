@@ -178,6 +178,14 @@ def get_radsym_hide_pivot():
     prefs = get_addon_preferences()
     return prefs.radsym_hide_pivot
 
+def get_quickhplp_lp_suffix():
+    prefs = get_addon_preferences()
+    return prefs.quickhplp_lp_suffix
+
+def get_quickhplp_hp_suffix():
+    prefs = get_addon_preferences()
+    return prefs.quickhplp_hp_suffix
+
 def unregister_keymaps():
     # wm = bpy.context.window_manager
     for km, kmi in addon_keymaps:
@@ -245,6 +253,14 @@ class AddonPreferences(AddonPreferences):
                                     description="Hide Radial Symmetry Pivot on symmetry creation",
                                     default=True)
 
+    quickhplp_lp_suffix: StringProperty(name="Low Poly suffix",
+                                      description="Suffix to use for Low Poly Meshes",
+                                      default="_low")
+
+    quickhplp_hp_suffix: StringProperty(name="High Poly suffix",
+                                    description="Suffix to use for High Poly Meshes",
+                                    default="_high")
+
     def draw(self, context):
         layout = self.layout
 
@@ -296,6 +312,12 @@ class AddonPreferences(AddonPreferences):
 
         row = layout.row(align=True)
         row.prop(self, "radsym_hide_pivot", toggle=False)
+
+        row = layout.row(align=True)
+        row.prop(self, "quickhplp_lp_suffix", toggle=False)
+
+        row = layout.row(align=True)
+        row.prop(self, "quickhplp_hp_suffix", toggle=False)
 
         #
         # Recommended Addons::
