@@ -68,10 +68,10 @@ class SuperSmartCreate(bpy.types.Operator):
 
         if mode == 'OBJECT':
             if len(itools.get_selected()) > 0:
-                bpy.ops.wm.call_menu_pie(name="mesh.ssc_duplicate_menu")
+                bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_SSC_Duplicate")
 
             else:
-                bpy.ops.wm.call_menu_pie(name="mesh.ssc_new_obj_menu")
+                bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_SSC_New_Obj")
 
         # if Vertex is selected
         elif mode == 'VERT':

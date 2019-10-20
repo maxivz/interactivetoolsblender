@@ -5,6 +5,12 @@ from mathutils import Vector
 from .. utils import itools as itools
 
 
+def set_lattice_resolution(resolution):
+    bpy.context.object.data.points_u = resolution
+    bpy.context.object.data.points_v = resolution
+    bpy.context.object.data.points_w = resolution
+
+
 class QuickLattice(bpy.types.Operator):
     bl_idname = "mesh.quick_lattice"
     bl_label = "Quick Lattice"
@@ -156,4 +162,37 @@ class QuickLattice(bpy.types.Operator):
             lattice = bpy.context.active_object
         else:
             self.setup_lattice(context, selection)
+        return{'FINISHED'}
+
+
+class LatticeResolution2x2x2(bpy.types.Operator):
+    bl_idname = "mesh.lattice_resolution_2x2x2"
+    bl_label = "Lattice Resolution 2x2x2"
+    bl_description = "Set Latice Resolution to 2x2x2"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        set_lattice_resolution(2)
+        return{'FINISHED'}
+
+
+class LatticeResolution3x3x3(bpy.types.Operator):
+    bl_idname = "mesh.lattice_resolution_3x3x3"
+    bl_label = "Lattice Resolution 3x3x3"
+    bl_description = "Set Latice Resolution to 3x3x3"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        set_lattice_resolution(3)
+        return{'FINISHED'}
+
+
+class LatticeResolution4x4x4(bpy.types.Operator):
+    bl_idname = "mesh.lattice_resolution_4x4x4"
+    bl_label = "Lattice Resolution 4x4x4"
+    bl_description = "Set Latice Resolution to 4x4x4"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        set_lattice_resolution(4)
         return{'FINISHED'}

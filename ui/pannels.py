@@ -2,8 +2,8 @@ import bpy
 from bpy.utils import register_class, unregister_class
 
 
-class MaxivzTools_PT_Panel(bpy.types.Panel):
-    bl_idname = "MaxivzTools_PT_Panel"
+class VIEW3D_PT_Itools(bpy.types.Panel):
+    bl_idname = "VIEW3D_PT_Itools"
     bl_label = "Maxivz Interactive Tools"
     bl_category = "Maxivz Tools"
     bl_space_type = "VIEW_3D"
@@ -71,6 +71,8 @@ class MaxivzTools_PT_Panel(bpy.types.Panel):
         row = layout.row()
         row.operator('uv.rotate_90_pos', text="Rotate 90 +", icon="LOOP_FORWARDS")
         row.operator('uv.rotate_90_neg', text="Rotate 90 -", icon="LOOP_BACK")
+        row = layout.row()
+        row.operator('uv.seams_from_islands', text="Seams From Islands")
         row = layout.row()
         row.operator('uv.seams_from_sharps', text="Seams From Sharps")
         row = layout.row()

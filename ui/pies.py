@@ -3,8 +3,8 @@ from bpy.types import Menu
 from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_bezierutilities_active
 
 
-class SSC_Duplicate_Menu(Menu):
-    bl_idname = "mesh.ssc_duplicate_menu"
+class VIEW3D_MT_PIE_SSC_Duplicate(Menu):
+    # bl_idname = "mesh.ssc_duplicate_menu"
     bl_label = "Object Duplication"
 
     def draw(self, context):
@@ -28,8 +28,8 @@ class SSC_Duplicate_Menu(Menu):
         # 3 - BOTTOM - RIGHT
 
 
-class SSC_New_Obj_Menu(Menu):
-    bl_idname = "mesh.ssc_new_obj_menu"
+class VIEW3D_MT_PIE_SSC_New_Obj(Menu):
+    # bl_idname = "mesh.ssc_new_obj_menu"
     bl_label = "Object Creation"
 
     def draw(self, context):
