@@ -62,7 +62,7 @@ class VIEW3D_MT_PIE_SSC_New_Obj(Menu):
 
         # 8 - TOP
         if qblocker:
-            pie.operator("object.sphere_create", text="Add Sphere", icon="MESH_CYLINDER")
+            pie.operator("object.sphere_create", text="Add Sphere", icon="MESH_UVSPHERE")
 
         else:
             pie.operator("mesh.primitive_uv_sphere_add", text="Add Sphere", icon="MESH_UVSPHERE")
