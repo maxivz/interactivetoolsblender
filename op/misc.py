@@ -1,7 +1,7 @@
 import bpy
 from ..utils import itools as itools
 from .. utils import dictionaries as dic
-from .. utils.user_prefs import get_quickhplp_hp_suffix, get_quickhplp_lp_suffix
+from .. utils.user_prefs import get_quickhplp_hp_suffix, get_quickhplp_lp_suffix, get_enable_wireshaded_cs
 
 
 class TransformModeCycle(bpy.types.Operator):
@@ -205,7 +205,7 @@ class QuickTransformOrientation(bpy.types.Operator):
                 bpy.context.scene.transform_orientation_slots[0].type = new_space
             else:
                 bpy.ops.transform.create_orientation(name="Custom", use=True, overwrite=True)
-   
+
     def execute(self, context):
         self.make_orientation(context)
         return{'FINISHED'}
@@ -218,15 +218,27 @@ class WireShadedToggle(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def wire_shaded_toggle(self, context):
-        areas = context.workspace.screens[0].areas
-        for area in areas:
-            for space in area.spaces:
-                if space.type == 'VIEW_3D':
-                    if space.shading.type == 'WIREFRAME':
-                        space.shading.type = dic.read("shading_mode")
-                    else:
-                        dic.write("shading_mode", space.shading.type)
-                        space.shading.type = 'WIREFRAME'
+        selection = itools.get_selected('OBJECT')
+
+        if len(selection) > 0 and get_enable_wireshaded_cs():
+            if all(obj.display_type == 'WIRE' for obj in selection):
+                for obj in selection:
+                    obj.display_type = 'TEXTURED'
+
+            else:
+                for obj in selection:
+                    obj.display_type = 'WIRE'
+
+        else:
+            areas = context.workspace.screens[0].areas
+            for area in areas:
+                for space in area.spaces:
+                    if space.type == 'VIEW_3D':
+                        if space.shading.type == 'WIREFRAME':
+                            space.shading.type = dic.read("shading_mode")
+                        else:
+                            dic.write("shading_mode", space.shading.type)
+                            space.shading.type = 'WIREFRAME'
 
     def execute(self, context):
         self.wire_shaded_toggle(context)

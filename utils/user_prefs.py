@@ -186,6 +186,10 @@ def get_quickhplp_hp_suffix():
     prefs = get_addon_preferences()
     return prefs.quickhplp_hp_suffix
 
+def get_enable_wireshaded_cs():
+    prefs = get_addon_preferences()
+    return prefs.enable_wireshaded_cs
+
 def unregister_keymaps():
     # wm = bpy.context.window_manager
     for km, kmi in addon_keymaps:
@@ -261,6 +265,10 @@ class AddonPreferences(AddonPreferences):
                                     description="Suffix to use for High Poly Meshes",
                                     default="_high")
 
+    enable_wireshaded_cs: BoolProperty(name="Wireframe / Shaded Context Sensitive Mode",
+                                       description="Enables context sensitive mode for the Wireframe / Shaded Tool",
+                                       default=True)
+
     def draw(self, context):
         layout = self.layout
 
@@ -318,6 +326,10 @@ class AddonPreferences(AddonPreferences):
 
         row = layout.row(align=True)
         row.prop(self, "quickhplp_hp_suffix", toggle=False)
+
+        row = layout.row(align=True)
+        row.prop(self, "enable_wireshaded_cs", toggle=False)
+        
 
         #
         # Recommended Addons::
