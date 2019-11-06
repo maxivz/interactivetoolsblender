@@ -11,6 +11,7 @@ class SmartModify(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def smart_modify(self):
+        """
         mode = itools.get_mode()
 
         if get_loop_tools_active():
@@ -38,6 +39,14 @@ class SmartModify(bpy.types.Operator):
             # if Face is selected
             elif mode == 'FACE':
                 bpy.ops.mesh.looptools_flatten()
+        """
+        mode = itools.get_mode()
+        if mode == 'OBJECT':
+            bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_SM_object")
+        else:
+            bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_SM_mesh")
+        
+
 
     @classmethod
     def poll(cls, context):

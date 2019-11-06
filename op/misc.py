@@ -191,6 +191,10 @@ class QuickTransformOrientation(bpy.types.Operator):
     bl_description = "Sets up a transform orientation from selected"
     bl_options = {'REGISTER', 'UNDO'}
 
+    # Mode 1 - make orientation
+    # Mode 2 - reset orientation
+    mode = bpy.props.IntProperty(default=0)
+
     def make_orientation(self, context):
         space = bpy.context.scene.transform_orientation_slots[0].type
         selection = itools.get_selected()
@@ -206,8 +210,30 @@ class QuickTransformOrientation(bpy.types.Operator):
             else:
                 bpy.ops.transform.create_orientation(name="Custom", use=True, overwrite=True)
 
+    def reset_orientation(self, context):
+        space = bpy.context.scene.transform_orientation_slots[0].type
+
+        new_space = dic.read("stored_transform_orientation")
+        if new_space != '':
+            bpy.context.scene.transform_orientation_slots[0].type = new_space
+        else:
+            bpy.context.scene.transform_orientation_slots[0].type = 'GLOBAL'
+
     def execute(self, context):
-        self.make_orientation(context)
+        if self.mode == 0:
+            self.make_orientation(context)
+        elif self.mode == 1:
+            self.reset_orientation(context)
+        return{'FINISHED'}
+
+class QuickTransformOrientationPie(bpy.types.Operator):
+    bl_idname = "mesh.quick_transform_orientation_pie"
+    bl_label = "Quick Transform Orientation Pie"
+    bl_description = "Sets up a transform orientation from selected"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_QTO")
         return{'FINISHED'}
 
 

@@ -1,6 +1,6 @@
 import bpy
 from . ui.menus import load_menus_itools, unload_menus_itools, VIEW3D_MT_object_mode_itools, VIEW3D_MT_edit_mesh_itools, VIEW3D_MT_edit_lattice_itools, VIEW3D_MT_edit_uvs_itools
-from . ui.pies import VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_Obj
+from . ui.pies import VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_Obj, VIEW3D_MT_PIE_QTO, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh
 from . ui.pannels import VIEW3D_PT_Itools
 # from . utils.debug import MaxivzToolsDebug_PT_Panel, DebugOp
 from . op.super_smart_create import SuperSmartCreate
@@ -9,7 +9,7 @@ from . op.quick_align import QuickAlign
 from . op.pivot import QuickPivot, QuickEditPivot
 from . op.smart_extrude import SmartExtrude
 from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace
-from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, QuickTransformOrientation, QuickHpLpNamer
+from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, QuickTransformOrientation, QuickHpLpNamer, QuickTransformOrientationPie
 from . op.smart_delete import SmartDelete
 from . op.smart_modify import SmartModify
 from . op.selection import SmartSelectLoop, SmartSelectRing
@@ -35,7 +35,8 @@ bl_info = {
 
 classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_Obj, RebaseCylinder,
            VIEW3D_MT_object_mode_itools, VIEW3D_MT_edit_mesh_itools, VIEW3D_MT_edit_lattice_itools,
-           VIEW3D_MT_edit_uvs_itools, SuperSmartCreate, TransformModeCycle, QuickAlign,
+            VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, QuickTransformOrientationPie,
+           VIEW3D_MT_edit_uvs_itools, VIEW3D_MT_PIE_QTO, SuperSmartCreate, TransformModeCycle, QuickAlign,
            QuickRadialSymmetry,QuickPivot, QuickEditPivot, SelectionModeCycle,
            QuickSelectionEdge, QuickSelectionVert, QuickSelectionFace,
            FlexiBezierToolsCreate, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle,
