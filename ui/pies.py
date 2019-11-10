@@ -130,6 +130,26 @@ class VIEW3D_MT_PIE_SM_object(Menu):
 
         # 3 - BOTTOM - RIGHT
 
+class VIEW3D_MT_PIE_SM_lattice(Menu):
+    # bl_idname = "mesh.ssc_new_obj_menu"
+    bl_label = "Smart Modify"
+
+    def draw(self, context):
+        layout = self.layout
+        pie = layout.menu_pie()
+
+        # 4 - LEFT
+        pie.operator("mesh.quick_lattice", text="Quick Lattice")
+
+        # 6 - RIGHT
+        pie.operator("mesh.radial_symmetry", text="Radial Symmetry")
+
+        # 2 - BOTTOM
+        pie.operator("mesh.rebase_cylinder", text="Rebase Cylinder")
+
+        # 8 - TOP
+        pie.operator("object.sphere_create", text="Add Sphere")
+
 class VIEW3D_MT_PIE_SM_mesh(Menu):
     # bl_idname = "mesh.ssc_new_obj_menu"
     bl_label = "Smart Modify"
@@ -162,7 +182,6 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         # 3 - BOTTOM - RIGHT
 
 class VIEW3D_MT_PIE_QTO(Menu):
-    # bl_idname = "mesh.quick_transform_orientation_pie"
     bl_label = "Transform Orientation"
 
     def draw(self, context):
@@ -170,19 +189,68 @@ class VIEW3D_MT_PIE_QTO(Menu):
         pie = layout.menu_pie()
 
         # 4 - LEFT
-        pie.operator("mesh.quick_transform_orientation", text="Set Working Pivot").mode = 0
+        pie.operator("mesh.quick_transform_orientation", text="Set Custom 2", icon = 'TRIA_DOWN').mode = 2
 
         # 6 - RIGHT
-        pie.operator("mesh.quick_transform_orientation", text="Reset Working Pivot").mode = 1
+        pie.operator("mesh.quick_transform_orientation", text="Use Custom 2", icon = 'TRIA_UP').mode = 5
 
         # 2 - BOTTOM
-
+        pie.operator("mesh.quick_transform_orientation", text="Reset Working Pivot", icon = 'FILE_REFRESH').mode = 7
         # 8 - TOP
+        pie.operator("wm.call_menu_pie", text = "Default Orientations...", icon = "RIGHTARROW_THIN").name="VIEW3D_MT_PIE_DefaultOrientations"
 
         # 7 - TOP - LEFT
+        pie.operator("mesh.quick_transform_orientation", text="Set Custom 1", icon = 'TRIA_DOWN').mode = 1
 
         # 9 - TOP - RIGHT
+        pie.operator("mesh.quick_transform_orientation", text="Use Custom 1", icon = 'TRIA_UP').mode = 4
 
         # 1 - BOTTOM - LEFT
+        pie.operator("mesh.quick_transform_orientation", text="Set Custom 3", icon = 'TRIA_DOWN').mode = 3
 
         # 3 - BOTTOM - RIGHT
+        pie.operator("mesh.quick_transform_orientation", text="Use Custom 3", icon = 'TRIA_UP').mode = 6
+
+class VIEW3D_MT_PIE_DefaultOrientations(Menu):
+    bl_label = "Transform Orientation"
+
+    def draw(self, context):
+        layout = self.layout
+        pie = layout.menu_pie()
+
+        # 4 - LEFT
+        pie.operator("mesh.quick_transform_orientation", text="Global", icon = "ORIENTATION_GLOBAL").mode = 8
+
+        # 6 - RIGHT
+        pie.operator("mesh.quick_transform_orientation", text="Local", icon = "ORIENTATION_LOCAL").mode = 9
+
+        # 2 - BOTTOM
+        pie.operator("mesh.quick_transform_orientation", text="Cursor", icon = "ORIENTATION_CURSOR").mode = 13
+
+        # 8 - TOP
+        pie.operator("mesh.quick_transform_orientation", text="Normal", icon = "ORIENTATION_NORMAL").mode = 10
+
+        # 7 - TOP - LEFT
+        pie.operator("mesh.quick_transform_orientation", text="View", icon = "ORIENTATION_VIEW").mode = 12
+        
+        # 9 - TOP - RIGHT
+        pie.operator("mesh.quick_transform_orientation", text="Gimbal", icon = "ORIENTATION_GIMBAL").mode = 11
+
+class VIEW3D_MT_PIE_TransformOptions(Menu):
+    bl_label = "Transform Orientation"
+
+    def draw(self, context):
+        layout = self.layout
+        pie = layout.menu_pie()
+
+        # 4 - LEFT
+        pie.operator("mesh.quick_transform_orientation", text="Orientations").mode = 2
+
+        # 6 - RIGHT
+        pie.operator("mesh.quick_transform_orientation", text="Pivot").mode = 5
+
+        # 2 - BOTTOM
+        pie.operator("mesh.quick_transform_orientation", text="Snap").mode = 7
+
+        # 8 - TOP
+        pie.operator("mesh.quick_transform_orientation", text="Proportional Editing").mode = 7

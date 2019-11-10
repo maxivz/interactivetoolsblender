@@ -1,6 +1,6 @@
 import bpy
 from . ui.menus import load_menus_itools, unload_menus_itools, VIEW3D_MT_object_mode_itools, VIEW3D_MT_edit_mesh_itools, VIEW3D_MT_edit_lattice_itools, VIEW3D_MT_edit_uvs_itools
-from . ui.pies import VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_Obj, VIEW3D_MT_PIE_QTO, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh
+from . ui.pies import VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_DefaultOrientations,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_QTO, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh
 from . ui.pannels import VIEW3D_PT_Itools
 # from . utils.debug import MaxivzToolsDebug_PT_Panel, DebugOp
 from . op.super_smart_create import SuperSmartCreate
@@ -23,7 +23,7 @@ bl_info = {
     "name": "MaxivzsTools",
     "author": "Maxi Vazquez",
     "description": "Collection of context sensitive and time saving tools",
-    "blender": (2, 80, 0),
+    "blender": (2, 81, 0),
     "location": "View3D",
     "version": (1, 0),
     "tracker_url": "https://blenderartists.org/t/interactive-tools-for-blender-2-8/1164932",
@@ -37,8 +37,8 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            VIEW3D_MT_object_mode_itools, VIEW3D_MT_edit_mesh_itools, VIEW3D_MT_edit_lattice_itools,
             VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, QuickTransformOrientationPie,
            VIEW3D_MT_edit_uvs_itools, VIEW3D_MT_PIE_QTO, SuperSmartCreate, TransformModeCycle, QuickAlign,
-           QuickRadialSymmetry,QuickPivot, QuickEditPivot, SelectionModeCycle,
-           QuickSelectionEdge, QuickSelectionVert, QuickSelectionFace,
+           QuickRadialSymmetry,QuickPivot, QuickEditPivot, SelectionModeCycle,VIEW3D_MT_PIE_TransformOptions,
+           QuickSelectionEdge, QuickSelectionVert, QuickSelectionFace,VIEW3D_MT_PIE_DefaultOrientations,
            FlexiBezierToolsCreate, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle,
            QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete, TransformOrientationCycle,
            AddonPreferences, OBJECT_OT_addon_prefs_example, QuickTransformOrientation,

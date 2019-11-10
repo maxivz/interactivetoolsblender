@@ -191,39 +191,79 @@ class QuickTransformOrientation(bpy.types.Operator):
     bl_description = "Sets up a transform orientation from selected"
     bl_options = {'REGISTER', 'UNDO'}
 
-    # Mode 1 - make orientation
-    # Mode 2 - reset orientation
+    # Mode 1 - Set Orientation 1
+    # Mode 2 - Set Orientation 2
+    # Mode 3 - Set Orientation 3
+    # Mode 4 - Use Orientation 1
+    # Mode 5 - Use Orientation 2
+    # Mode 6 - Use Orientation 3
+    # Mode 7 - Reset Orientation
+
     mode = bpy.props.IntProperty(default=0)
+    target_space = 'NONE'
+
+    def set_target_space(self, context):
+        if self.mode in [1, 4]:
+            self.target_space = 'Custom 1'
+
+        elif self.mode in [2, 5]:
+            self.target_space = 'Custom 2'
+
+        elif self.mode in [3, 6]:
+            self.target_space = 'Custom 3'
 
     def make_orientation(self, context):
         space = bpy.context.scene.transform_orientation_slots[0].type
         selection = itools.get_selected()
 
-        if space != 'Custom':
+        if space in ['GLOBAL', 'LOCAL', 'NORMAL', 'GIMBAL', 'VIEW', 'CURSOR']:
             dic.write("stored_transform_orientation", space)
-            bpy.ops.transform.create_orientation(name="Custom", use=True, overwrite=True)
+
+        bpy.ops.transform.create_orientation(name=self.target_space, use=True, overwrite=True)
+
+    def set_orientation(self, context):
+        if self.mode in [4,5,6]:
+            try:
+                bpy.context.scene.transform_orientation_slots[0].type = self.target_space
+
+            except:
+                self.make_orientation(context)
 
         else:
-            if len(selection) < 1:
-                new_space = dic.read("stored_transform_orientation")
-                bpy.context.scene.transform_orientation_slots[0].type = new_space
-            else:
-                bpy.ops.transform.create_orientation(name="Custom", use=True, overwrite=True)
+            if self.mode == 8:
+                bpy.context.scene.transform_orientation_slots[0].type = 'GLOBAL'
+            elif self.mode == 9:
+                bpy.context.scene.transform_orientation_slots[0].type = 'LOCAL'
+            elif self.mode == 10:
+                bpy.context.scene.transform_orientation_slots[0].type = 'NORMAL'
+            elif self.mode == 11:
+                bpy.context.scene.transform_orientation_slots[0].type = 'GIMBAL'
+            elif self.mode == 12:
+                bpy.context.scene.transform_orientation_slots[0].type = 'VIEW'
+            elif self.mode == 13:
+                bpy.context.scene.transform_orientation_slots[0].type = 'CURSOR'
 
     def reset_orientation(self, context):
         space = bpy.context.scene.transform_orientation_slots[0].type
-
         new_space = dic.read("stored_transform_orientation")
+
         if new_space != '':
             bpy.context.scene.transform_orientation_slots[0].type = new_space
         else:
             bpy.context.scene.transform_orientation_slots[0].type = 'GLOBAL'
 
     def execute(self, context):
-        if self.mode == 0:
+        self.set_target_space(context)
+
+        if self.mode in [1, 2, 3]:
             self.make_orientation(context)
-        elif self.mode == 1:
+
+        elif self.mode in [4, 5, 6, 8, 9, 10, 11, 12, 13]:
+            self.set_orientation(context)
+
+        elif self.mode == 7:
             self.reset_orientation(context)
+
         return{'FINISHED'}
 
 class QuickTransformOrientationPie(bpy.types.Operator):
