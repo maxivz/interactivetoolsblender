@@ -64,6 +64,9 @@ class QuickRadialSymmetry(bpy.types.Operator):
             self.symmetry_center.hide_viewport = get_radsym_hide_pivot()
             selection.select_set(True)
 
+            #Clear Pivot Transform
+            self.symmetry_center.location = (0,0,0)
+
             # Create modifier and assign name
             mod = selection.modifiers.new(name="Radial Symmetry", type='ARRAY')
             mod.relative_offset_displace[0] = 0
