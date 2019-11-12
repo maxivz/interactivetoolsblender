@@ -3,7 +3,6 @@ from ..utils import itools as itools
 from .. utils import dictionaries as dic
 from .. utils.user_prefs import get_quickhplp_hp_suffix, get_quickhplp_lp_suffix, get_enable_wireshaded_cs
 
-
 class TransformModeCycle(bpy.types.Operator):
     bl_idname = "mesh.transform_mode_cycle"
     bl_label = "Transform Mode Cycle"
@@ -348,5 +347,54 @@ class QuickHpLpNamer(bpy.types.Operator):
         for obj in selection:
             if obj is not lp:
                 obj.name = lp.name[:-len(lp_suffix)] + hp_suffix
+
+        return{'FINISHED'}
+
+class QuickVisualGeoToMesh(bpy.types.Operator):
+    bl_idname = "mesh.quick_visual_geo_to_mesh"
+    bl_label = "Quick Visual Geo To Mesh"
+    bl_description = "Visual Geo To Mesh that also workds from edit mode"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        mode = itools.get_mode()
+        if mode in ['VERT', 'EDGE', 'FACE']:
+            itools.set_mode('OBJECT')
+            bpy.ops.object.convert(target='MESH')
+            itools.set_mode(mode)
+
+        else:
+            bpy.ops.object.convert(target='MESH')
+
+        return{'FINISHED'}
+
+class QuickFlattenAxis(bpy.types.Operator):
+    # Add support for local aligns
+
+    bl_idname = "mesh.quick_flatten"
+    bl_label = "Quick Flatten"
+    bl_description = "Quick Flatten with axis options"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    # Mode 1 - Global
+    # Mode 2 - Flatten X
+    # Mode 3 - Flatten Y
+    # Mode 4 - Flatten Z
+
+    mode = bpy.props.IntProperty(default=0)
+
+    def execute(self, context):
+        if self.mode == 1:
+            bpy.ops.mesh.looptools_flatten()
+
+        else:
+            if self.mode == 2:
+                axis_transform = (0, 1, 1)
+            elif self.mode == 3:
+                axis_transform = (1, 0, 1)
+            elif self.mode == 4:
+                axis_transform = (1, 1, 0)
+
+            bpy.ops.transform.resize(value=axis_transform, orient_type='GLOBAL', mirror=True, use_proportional_edit=False, release_confirm=True)
 
         return{'FINISHED'}

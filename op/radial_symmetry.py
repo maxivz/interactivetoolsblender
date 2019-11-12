@@ -93,7 +93,6 @@ class QuickRadialSymmetry(bpy.types.Operator):
                 self.sym_count = 1
                 self.initial_pos_x = self.mouse_x
 
-            # selection.modifiers["Radial Symmetry"].count = self.sym_count
             bpy.context.view_layer.objects.active = selection
 
             selection.modifiers["Radial Symmetry"].count = self.sym_count

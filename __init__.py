@@ -9,7 +9,7 @@ from . op.quick_align import QuickAlign
 from . op.pivot import QuickPivot, QuickEditPivot
 from . op.smart_extrude import SmartExtrude
 from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace
-from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, QuickTransformOrientation, QuickHpLpNamer, QuickTransformOrientationPie
+from . op.misc import TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, QuickTransformOrientation, QuickHpLpNamer, QuickTransformOrientationPie, QuickVisualGeoToMesh
 from . op.smart_delete import SmartDelete
 from . op.smart_modify import SmartModify
 from . op.selection import SmartSelectLoop, SmartSelectRing
@@ -41,9 +41,9 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            QuickSelectionEdge, QuickSelectionVert, QuickSelectionFace,VIEW3D_MT_PIE_DefaultOrientations, VIEW3D_MT_PIE_SM_lattice,
            FlexiBezierToolsCreate, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle,
            QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete, TransformOrientationCycle,
-           AddonPreferences, OBJECT_OT_addon_prefs_example, QuickTransformOrientation,
+           AddonPreferences, OBJECT_OT_addon_prefs_example, QuickTransformOrientation, QuickFlattenAxis,
            SmartSelectLoop, SmartSelectRing, SmartTranslate,VIEW3D_MT_PIE_SM_looptools,
-           QuickLattice, SmartExtrude, SeamsFromSharps,
+           QuickLattice, SmartExtrude, SeamsFromSharps, QuickVisualGeoToMesh,
            QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,
            MenuPlaceholder, SmartModify, LatticeResolution2x2x2,
            LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer)

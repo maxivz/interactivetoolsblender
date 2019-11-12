@@ -96,6 +96,27 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         pie.operator("object.convert", text="Visual Geo To Mesh").target = 'MESH'
 
         # 7 - TOP - LEFT
+        # Align World Submenu
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+        row = column.row(align = True)
+        op = row.operator("mesh.quick_align", text = "Align World")
+        op.relative_to = 'OPT_1'
+        op.align_axis = {'X', 'Y', 'Z'}
+
+        row = column.row(align = True)
+        op = row.operator("mesh.quick_align", text = "X")
+        op.relative_to = 'OPT_1'
+        op.align_axis = {'X'}
+
+        op = row.operator("mesh.quick_align", text = "Y")
+        op.relative_to = 'OPT_1'
+        op.align_axis = {'Y'}
+
+        op = row.operator("mesh.quick_align", text = "Z")
+        op.relative_to = 'OPT_1'
+        op.align_axis = {'Z'}
 
         # 9 - TOP - RIGHT
 
@@ -160,7 +181,7 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
 
 
         # 8 - TOP
-        pie.operator("object.convert", text="Visual Geo To Mesh").target = 'MESH'
+        pie.operator("mesh.quick_visual_geo_to_mesh", text="Visual Geo To Mesh")
 
         # 7 - TOP - LEFT
         pie.operator("mesh.quick_lattice", text="Symmetrize")
@@ -182,22 +203,41 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         container = submenu.box()
         column = container.column()
         row = column.row(align = True)
-        row.operator("mesh.primitive_cube_add", text = "Align World")
+        op = row.operator("mesh.quick_align", text = "Align World")
+        op.relative_to = 'OPT_1'
+        op.align_axis = {'X', 'Y', 'Z'}
+
         row = column.row(align = True)
-        row.operator("mesh.primitive_cube_add", text = "X")
-        row.operator("mesh.primitive_cube_add", text = "Y")
-        row.operator("mesh.primitive_cube_add", text = "Z")
+        op = row.operator("mesh.quick_align", text = "X")
+        op.relative_to = 'OPT_1'
+        op.align_axis = {'X'}
+
+        op = row.operator("mesh.quick_align", text = "Y")
+        op.relative_to = 'OPT_1'
+        op.align_axis = {'Y'}
+
+        op = row.operator("mesh.quick_align", text = "Z")
+        op.relative_to = 'OPT_1'
+        op.align_axis = {'Z'}
 
         # Flatten Submenu
         submenu = pie.column()
         container = submenu.box()
         column = container.column()
         row = column.row(align = True)
-        row.operator("mesh.primitive_cube_add", text = "Flatten")
+        row.operator("mesh.quick_flatten", text = "Flatten Avg Normal").mode = 1
+
         row = column.row(align = True)
-        row.operator("transform.resize", text = "X")
-        row.operator("transform.resize", text = "Y")
-        row.operator("transform.resize", text = "Z")
+        row.label(text="Global")
+        row.operator("mesh.quick_flatten", text = "X").mode = 2
+        row.operator("mesh.quick_flatten", text = "Y").mode = 3
+        row.operator("mesh.quick_flatten", text = "Z").mode = 4
+
+        row = column.row(align = True)
+        row.label(text="Local  ")
+        row.operator("mesh.quick_flatten", text = "X").mode = 2
+        row.operator("mesh.quick_flatten", text = "Y").mode = 3
+        row.operator("mesh.quick_flatten", text = "Z").mode = 4
 
         # Flow Submenu
         submenu = pie.column()
