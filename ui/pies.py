@@ -191,7 +191,7 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
 
 
         # 1 - BOTTOM - LEFT
-        pie.operator("mesh.quick_lattice", text="Quick Pipe(TODO)")
+        pie.operator("mesh.quick_pipe", text="Quick Pipe")
 
         # 3 - BOTTOM - RIGHT
         pie.operator("mesh.quick_lattice", text="Quick Lattice")

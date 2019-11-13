@@ -15,6 +15,7 @@ from . op.smart_modify import SmartModify
 from . op.selection import SmartSelectLoop, SmartSelectRing
 from . op.smart_transform import SmartTranslate
 from . op.quick_lattice import QuickLattice, LatticeResolution2x2x2, LatticeResolution3x3x3, LatticeResolution4x4x4
+from . op.quick_pipe import QuickPipe
 from . op.rebase_cylinder import RebaseCylinder
 from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromSharps, UvsFromSharps
 from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps
@@ -44,7 +45,7 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            AddonPreferences, OBJECT_OT_addon_prefs_example, QuickTransformOrientation, QuickFlattenAxis,
            SmartSelectLoop, SmartSelectRing, SmartTranslate,VIEW3D_MT_PIE_SM_looptools,
            QuickLattice, SmartExtrude, SeamsFromSharps, QuickVisualGeoToMesh,
-           QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,
+           QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,QuickPipe,
            MenuPlaceholder, SmartModify, LatticeResolution2x2x2,
            LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer)
 
