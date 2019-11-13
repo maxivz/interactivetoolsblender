@@ -187,7 +187,7 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         pie.operator("mesh.quick_lattice", text="Symmetrize")
 
         # 9 - TOP - RIGHT
-        pie.operator("mesh.quick_lattice", text="Rebase Cylinder")
+        pie.operator("mesh.rebase_cylinder", text="Rebase Cylinder")
 
 
         # 1 - BOTTOM - LEFT
