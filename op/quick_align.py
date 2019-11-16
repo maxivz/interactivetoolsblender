@@ -155,6 +155,10 @@ class QuickAlign(bpy.types.Operator):
         if self.target != 'World':
             itools.select(self.target, item=False, deselect=True)
 
+            # Make first selected object active again
+            for obj in self.selected:
+                itools.active_set(obj, item=False)
+
         return {'FINISHED'}
 
     def invoke(self, context, event):
