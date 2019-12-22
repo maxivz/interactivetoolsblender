@@ -252,7 +252,8 @@ class QuickTransformOrientation(bpy.types.Operator):
             bpy.context.scene.transform_orientation_slots[0].type = 'GLOBAL'
 
     def execute(self, context):
-        self.set_target_space(context)
+        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_QTO")
+        #self.set_target_space(context)
 
         if self.mode in [1, 2, 3]:
             self.make_orientation(context)
@@ -264,6 +265,7 @@ class QuickTransformOrientation(bpy.types.Operator):
             self.reset_orientation(context)
 
         return{'FINISHED'}
+
 
 class QuickTransformOrientationPie(bpy.types.Operator):
     bl_idname = "mesh.quick_transform_orientation_pie"
@@ -321,6 +323,7 @@ class FlexiBezierToolsCreate(bpy.types.Operator):
             if area.type == "VIEW_3D":
                 bpy.ops.wm.tool_set_by_id(name='flexi_bezier.draw_tool')
         return{'FINISHED'}
+
 
 class QuickHpLpNamer(bpy.types.Operator):
     bl_idname = "mesh.quick_hplp_namer"
