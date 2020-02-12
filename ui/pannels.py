@@ -30,6 +30,12 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row.operator('mesh.smart_select_loop', text="Smart Loop")
         row.operator('mesh.smart_select_ring', text="Smart Ring")
 
+        layout.label(text="Transform")
+        row = layout.row(align=True)
+        row.operator('mesh.cs_move', text="CS Move", icon="ORIENTATION_VIEW")
+        row.operator('mesh.cs_rotate', text="CS Rotate", icon="ORIENTATION_GIMBAL")
+        row.operator('mesh.cs_scale', text="CS Scale", icon="OBJECT_DATAMODE")
+
         layout.label(text="Smart Tools")
         row = layout.row()
         row.operator('mesh.super_smart_create', text="Super Smart Create", icon="PLUS")

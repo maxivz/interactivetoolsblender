@@ -13,7 +13,7 @@ from . op.misc import TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSens
 from . op.smart_delete import SmartDelete
 from . op.smart_modify import SmartModify
 from . op.selection import SmartSelectLoop, SmartSelectRing
-from . op.smart_transform import SmartTranslate
+from . op.smart_transform import SmartTranslate, CSMove, CSRotate, CSScale
 from . op.quick_lattice import QuickLattice, LatticeResolution2x2x2, LatticeResolution3x3x3, LatticeResolution4x4x4
 from . op.quick_pipe import QuickPipe
 from . op.rebase_cylinder import RebaseCylinder
@@ -43,7 +43,8 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            FlexiBezierToolsCreate, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle,
            QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete, TransformOrientationCycle,
            AddonPreferences, OBJECT_OT_addon_prefs_example, QuickTransformOrientation, QuickFlattenAxis,
-           SmartSelectLoop, SmartSelectRing, SmartTranslate,VIEW3D_MT_PIE_SM_looptools,
+           SmartSelectLoop, SmartSelectRing, SmartTranslate, CSMove, CSRotate, CSScale,
+           VIEW3D_MT_PIE_SM_looptools,
            QuickLattice, SmartExtrude, SeamsFromSharps, QuickVisualGeoToMesh,
            QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,QuickPipe,
            MenuPlaceholder, SmartModify, LatticeResolution2x2x2,
