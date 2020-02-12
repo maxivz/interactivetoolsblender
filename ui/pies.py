@@ -41,31 +41,51 @@ class VIEW3D_MT_PIE_SSC_New_Obj(Menu):
 
         # 4 - LEFT
         if bezierutils:
-            pie.operator("curve.flexitool_create", text="Add Curve", icon="IPO_EASE_IN")
+            submenu = pie.column()
+            container = submenu.box()
+            column = container.column()
+            row = column.row(align = True)
+            row.operator("curve.primitive_bezier_curve_add", text="Curve", icon="IPO_EASE_IN")
+            row.operator("curve.flexitool_create", text="Curve Flexitools", icon="IPO_EASE_IN")
 
         else:
             pie.operator("curve.primitive_bezier_curve_add", text="Add Curve", icon="IPO_EASE_IN")
         # 6 - RIGHT
 
         if qblocker:
-            pie.operator("object.box_create", text="Add Cube", icon="MESH_CUBE")
+            submenu = pie.column()
+            container = submenu.box()
+            column = container.column()
+            row = column.row(align = True)
+            row.operator("mesh.primitive_cube_add", text="Cube", icon="MESH_CUBE")
+            row.operator("object.box_create", text="Cube QBlocker", icon="MESH_CUBE")
 
         else:
-            pie.operator("mesh.primitive_cube_add", text="Add Cube", icon="MESH_CUBE")
+            pie.operator("mesh.primitive_cube_add", text="Cube", icon="MESH_CUBE")
 
         # 2 - BOTTOM
         if qblocker:
-            pie.operator("object.cylinder_create", text="Add Cylinder", icon="MESH_CYLINDER")
+            submenu = pie.column()
+            container = submenu.box()
+            column = container.column()
+            row = column.row(align = True)
+            row.operator("mesh.primitive_cylinder_add", text="Cylinder", icon="MESH_CYLINDER")
+            row.operator("object.cylinder_create", text="Cylinder QBlocker", icon="MESH_CYLINDER")
 
         else:
-            pie.operator("mesh.primitive_cylinder_add", text="Add Cylinder", icon="MESH_CYLINDER")
+            pie.operator("mesh.primitive_cylinder_add", text="Cylinder", icon="MESH_CYLINDER")
 
         # 8 - TOP
         if qblocker:
-            pie.operator("object.sphere_create", text="Add Sphere", icon="MESH_UVSPHERE")
+            submenu = pie.column()
+            container = submenu.box()
+            column = container.column()
+            row = column.row(align = True)
+            row.operator("mesh.primitive_uv_sphere_add", text="Sphere", icon="MESH_UVSPHERE")
+            row.operator("object.sphere_create", text="Sphere QBlocker", icon="MESH_UVSPHERE")
 
         else:
-            pie.operator("mesh.primitive_uv_sphere_add", text="Add Sphere", icon="MESH_UVSPHERE")
+            pie.operator("mesh.primitive_uv_sphere_add", text="Sphere", icon="MESH_UVSPHERE")
         # 7 - TOP - LEFT
 
         # 9 - TOP - RIGHT
@@ -175,7 +195,6 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         # 4 - LEFT
 
         # 6 - RIGHT
-
 
         # 2 - BOTTOM
         pie.operator("mesh.", text="Flip Normal")
