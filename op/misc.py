@@ -370,6 +370,7 @@ class QuickVisualGeoToMesh(bpy.types.Operator):
 
         return{'FINISHED'}
 
+
 class QuickFlattenAxis(bpy.types.Operator):
     # Add support for local aligns
 

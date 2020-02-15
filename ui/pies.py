@@ -56,7 +56,7 @@ class VIEW3D_MT_PIE_SSC_New_Obj(Menu):
             submenu = pie.column()
             container = submenu.box()
             column = container.column()
-            row = column.row(align = True)
+            row = column.row(align=True)
             row.operator("mesh.primitive_cube_add", text="Cube", icon="MESH_CUBE")
             row.operator("object.box_create", text="Cube QBlocker", icon="MESH_CUBE")
 
@@ -68,7 +68,7 @@ class VIEW3D_MT_PIE_SSC_New_Obj(Menu):
             submenu = pie.column()
             container = submenu.box()
             column = container.column()
-            row = column.row(align = True)
+            row = column.row(align=True)
             row.operator("mesh.primitive_cylinder_add", text="Cylinder", icon="MESH_CYLINDER")
             row.operator("object.cylinder_create", text="Cylinder QBlocker", icon="MESH_CYLINDER")
 
@@ -80,19 +80,26 @@ class VIEW3D_MT_PIE_SSC_New_Obj(Menu):
             submenu = pie.column()
             container = submenu.box()
             column = container.column()
-            row = column.row(align = True)
+            row = column.row(align=True)
             row.operator("mesh.primitive_uv_sphere_add", text="Sphere", icon="MESH_UVSPHERE")
             row.operator("object.sphere_create", text="Sphere QBlocker", icon="MESH_UVSPHERE")
 
         else:
             pie.operator("mesh.primitive_uv_sphere_add", text="Sphere", icon="MESH_UVSPHERE")
+
         # 7 - TOP - LEFT
+            op = pie.operator("object.light_add", text="Light", icon="OUTLINER_OB_LIGHT")
+            op.type = 'POINT'
 
         # 9 - TOP - RIGHT
-
+            pie.operator("object.camera_add", text="Camera", icon="OUTLINER_OB_CAMERA")
         # 1 - BOTTOM - LEFT
+            op = pie.operator("object.gpencil_add", text="Gpencil", icon="OUTLINER_OB_GREASEPENCIL")
+            op.type = 'EMPTY'
 
         # 3 - BOTTOM - RIGHT
+            op = pie.operator("object.empty_add", text="Empty", icon="OUTLINER_OB_EMPTY")
+            op.type = 'PLAIN_AXES'
 
 
 class VIEW3D_MT_PIE_SM_object(Menu):
