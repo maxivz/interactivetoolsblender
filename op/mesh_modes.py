@@ -19,7 +19,7 @@ def quick_selection(target_mode, safe_mode=False):
     other_modes = itools.list_difference(['VERT', 'EDGE', 'FACE', 'OBJECT'], [target_mode])
     sticky = get_enable_sticky_selection()
 
-    if current_mode in other_modes and current_object.type != 'CURVE':
+    if current_mode in other_modes and current_object.type == 'MESH':
         if current_mode != 'OBJECT' and sticky:
             itools.update_indexes()
             store_sel_data(current_mode)
@@ -44,16 +44,16 @@ def quick_selection(target_mode, safe_mode=False):
                 else:
                     itools.select(indexes, item=False, replace=True)
 
-    elif current_mode == target_mode and current_object.type != 'CURVE':
+    elif current_mode == target_mode and current_object.type == 'MESH':
         if sticky:
             itools.update_indexes()
             store_sel_data(current_mode)
         itools.set_mode('OBJECT')
 
-    elif current_object.type == 'CURVE':
-        bpy.ops.object.editmode_toggle()
+    elif current_object.type == 'GPENCIL':
+        bpy.ops.gpencil.paintmode_toggle()
 
-    elif current_object.type == 'LATTICE':
+    else:
         bpy.ops.object.editmode_toggle()
 
 
