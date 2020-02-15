@@ -8,7 +8,7 @@ from bpy.props import EnumProperty, IntProperty
 class QuickPipe(bpy.types.Operator):
     bl_idname = "mesh.quick_pipe"
     bl_label = "Quick Pipe"
-    bl_description = "Setup a Quick Pie"
+    bl_description = "Generates a Pipe from selection"
     bl_options = {'REGISTER', 'UNDO', 'GRAB_CURSOR'}
 
     mouse_x = 0.0
