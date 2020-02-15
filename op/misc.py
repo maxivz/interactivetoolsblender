@@ -252,8 +252,7 @@ class QuickTransformOrientation(bpy.types.Operator):
             bpy.context.scene.transform_orientation_slots[0].type = 'GLOBAL'
 
     def execute(self, context):
-        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_QTO")
-        #self.set_target_space(context)
+        self.set_target_space(context)
 
         if self.mode in [1, 2, 3]:
             self.make_orientation(context)

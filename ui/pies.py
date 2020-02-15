@@ -1,6 +1,6 @@
 import bpy
 from bpy.types import Menu
-from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_bezierutilities_active
+from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_set_flow_active, get_bezierutilities_active
 
 
 class VIEW3D_MT_PIE_SSC_Duplicate(Menu):
@@ -245,16 +245,20 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         row.operator("mesh.quick_flatten", text = "Flatten Avg Normal").mode = 1
 
         row = column.row(align = True)
-        row.label(text="Global")
+        # row.label(text="Global")
         row.operator("mesh.quick_flatten", text = "X").mode = 2
         row.operator("mesh.quick_flatten", text = "Y").mode = 3
         row.operator("mesh.quick_flatten", text = "Z").mode = 4
+
+        '''
+        TO Do: Local Alignment
 
         row = column.row(align = True)
         row.label(text="Local  ")
         row.operator("mesh.quick_flatten", text = "X").mode = 2
         row.operator("mesh.quick_flatten", text = "Y").mode = 3
         row.operator("mesh.quick_flatten", text = "Z").mode = 4
+        '''
 
         # Flow Submenu
         submenu = pie.column()
@@ -262,9 +266,11 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         column = container.column()
         row = column.row(align = True)
         row.operator("mesh.looptools_circle", text="Make Circle")
-        op = row.operator("mesh.set_edge_flow", text="Set Flow")
-        op.tension = 180
-        op.iterations = 1
+
+        if get_set_flow_active():
+            op = row.operator("mesh.set_edge_flow", text="Set Flow")
+            op.tension = 180
+            op.iterations = 1
         row.operator("mesh.looptools_space", text="Space")
         row = column.row(align = True)
 
@@ -288,15 +294,17 @@ class VIEW3D_MT_PIE_SM_looptools(Menu):
         pie.operator("mesh.looptools_curve", text="Make Curve")
 
         # 8 - TOP
-        op4 = pie.operator("mesh.set_edge_flow", text="Set Flow")
-        op4.tension = 180
-        op4.iterations = 1
+        if get_set_flow_active():
+            op4 = pie.operator("mesh.set_edge_flow", text="Set Flow")
+            op4.tension = 180
+            op4.iterations = 1
 
         # 7 - TOP - LEFT
         pie.operator("mesh.looptools_relax", text="Relax")
 
         # 9 - TOP - RIGHT
         pie.operator("mesh.looptools_space", text="Space")
+
 
 class VIEW3D_MT_PIE_QTO(Menu):
     bl_label = "Transform Orientation"

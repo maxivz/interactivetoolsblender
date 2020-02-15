@@ -52,7 +52,7 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row.operator('mesh.quick_pivot', text="Quick Origin")
         row.operator('mesh.simple_edit_pivot', text="Edit Origin")
         row = layout.row()
-        row.operator('mesh.quick_transform_orientation', text="Quick Transform Orientation")
+        row.operator('mesh.quick_transform_orientation_pie', text="Quick Transform Orientation")
         row = layout.row()
         row.operator('mesh.quick_align', text="Quick Align")
         row = layout.row()

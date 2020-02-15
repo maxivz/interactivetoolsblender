@@ -13,7 +13,7 @@ class VIEW3D_MT_object_mode_itools(bpy.types.Menu):
         layout.separator()
         layout.operator("mesh.quick_pivot", text="Quick Origin")
         layout.operator("mesh.simple_edit_pivot", text="Edit Origin")
-        layout.operator("mesh.quick_transform_orientation", text="Quick Transform Orientation")
+        layout.operator("mesh.quick_transform_orientation_pie", text="Quick Transform Orientation")
         layout.operator('mesh.quick_align', text="Quick Align")
         layout.operator('mesh.quick_lattice', text="Quick Lattice")
         layout.operator('mesh.rebase_cylinder', text="Edit Rebased Cylinder")
@@ -40,7 +40,7 @@ class VIEW3D_MT_edit_mesh_itools(bpy.types.Menu):
 
         layout.separator()
         layout.operator("mesh.quick_pivot", text="Quick Origin")
-        layout.operator("mesh.quick_transform_orientation", text="Quick Transform Orientation")
+        layout.operator("mesh.quick_transform_orientation_pie", text="Quick Transform Orientation")
         layout.operator('mesh.quick_lattice', text="Quick Lattice")
         layout.operator('mesh.rebase_cylinder', text="Rebase Cylinder")
 
