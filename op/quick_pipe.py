@@ -28,7 +28,9 @@ class QuickPipe(bpy.types.Operator):
 
         #Separate edge:
         itools.set_mode('EDGE')
+        bpy.ops.mesh.duplicate_move()
         bpy.ops.mesh.separate(type='SELECTED')
+        bpy.ops.mesh.delete(type='EDGE')
         itools.set_mode('OBJECT')
         new_sel = itools.get_selected('OBJECT')
         pipe_obj = new_sel[1]
