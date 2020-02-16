@@ -97,16 +97,6 @@ def get_keymaps_by_key():
         print("Keymap :", km)
         for kmi in km:
             print("Keymap Item :", kmi)
-    """
-    wm = bpy.context.window_manager
-    kc = wm.keyconfigs.addon
-    if '3D View Generic' in kc.keymaps:
-        km = kc.keymaps['3D View Generic']
-        for km, kmi in addon_keymaps:
-            km.keymap_items.remove(kmi)
-            wm.keyconfigs.addon.keymaps.remove(km)
-    addon_keymaps.clear()
-    """
 
 
 def get_keymap(name):
@@ -230,7 +220,7 @@ class AddonPreferences(AddonPreferences):
     # Properties
     cateogries: EnumProperty(name="Categories",
                              items=[("GENERAL", "General Settings", ""),
-                                    ("KEYMAPS", "Keymaps", ""), ],
+                                    ("KEYMAPS", "Keymaps (BETA)", ""), ],
                              default="GENERAL")
 
     ssc_switch_modes: BoolProperty(name="Super Smart Create Switch Modes",
@@ -365,7 +355,12 @@ class AddonPreferences(AddonPreferences):
         km = kc.keymaps['3D View Generic']
 
         row = layout.row(align=True)
-        row.label(text="Dont remove keymaps, disable or modify them.")
+        row.label(text="This pannel is a Beta feature, use at own risk.")
+        row = layout.row(align=True)
+        row.label(text="This pannel needs to be opened every time Blender is run for it to enable the set hotkeys")
+        row = layout.row(align=True)
+        row.label(text="Dont remove keymaps, disable or modify them instead.")
+
 
         #
         # Modes Cycling, double space:
