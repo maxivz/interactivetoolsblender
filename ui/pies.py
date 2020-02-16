@@ -1,6 +1,6 @@
 import bpy
 from bpy.types import Menu
-from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_set_flow_active, get_bezierutilities_active
+from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_set_flow_active, get_bezierutilities_active, get_loop_tools_active
 
 
 class VIEW3D_MT_PIE_SSC_Duplicate(Menu):
@@ -151,6 +151,7 @@ class VIEW3D_MT_PIE_SM_object(Menu):
 
         # 3 - BOTTOM - RIGHT
 
+
 class VIEW3D_MT_PIE_SM_lattice(Menu):
     # bl_idname = "mesh.ssc_new_obj_menu"
     bl_label = "Smart Modify"
@@ -171,6 +172,7 @@ class VIEW3D_MT_PIE_SM_lattice(Menu):
         # 8 - TOP
         pie.operator("mesh.quick_lattice", text="Apply Lattice")
 
+
 class VIEW3D_MT_PIE_SM_curve(Menu):
     # bl_idname = "mesh.ssc_new_obj_menu"
     bl_label = "Smart Modify"
@@ -190,6 +192,7 @@ class VIEW3D_MT_PIE_SM_curve(Menu):
 
         # 8 - TOP
         pie.operator("mesh.lattice_resolution_3x3x3", text="Resolution 3x3x3")
+
 
 class VIEW3D_MT_PIE_SM_mesh(Menu):
     # bl_idname = "mesh.ssc_new_obj_menu"
@@ -214,7 +217,6 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
 
         # 9 - TOP - RIGHT
         pie.operator("mesh.rebase_cylinder", text="Rebase Cylinder")
-
 
         # 1 - BOTTOM - LEFT
         pie.operator("mesh.quick_pipe", text="Quick Pipe")
@@ -248,10 +250,10 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         submenu = pie.column()
         container = submenu.box()
         column = container.column()
-        row = column.row(align = True)
+        row = column.row(align=True)
         row.operator("mesh.quick_flatten", text = "Flatten Avg Normal").mode = 1
 
-        row = column.row(align = True)
+        row = column.row(align=True)
         # row.label(text="Global")
         row.operator("mesh.quick_flatten", text = "X").mode = 2
         row.operator("mesh.quick_flatten", text = "Y").mode = 3
@@ -271,18 +273,22 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         submenu = pie.column()
         container = submenu.box()
         column = container.column()
-        row = column.row(align = True)
-        row.operator("mesh.looptools_circle", text="Make Circle")
+        if get_loop_tools_active():
+            row = column.row(align=True)
+            row.operator("mesh.looptools_circle", text="Make Circle")
 
         if get_set_flow_active():
             op = row.operator("mesh.set_edge_flow", text="Set Flow")
             op.tension = 180
             op.iterations = 1
-        row.operator("mesh.looptools_space", text="Space")
-        row = column.row(align = True)
 
-        row.operator("mesh.looptools_curve", text="Make Curve")
-        row.operator("mesh.looptools_relax", text="Relax")
+        if get_loop_tools_active():
+            row.operator("mesh.looptools_space", text="Space")
+            row = column.row(align=True)
+
+            row.operator("mesh.looptools_curve", text="Make Curve")
+            row.operator("mesh.looptools_relax", text="Relax")
+
 
 class VIEW3D_MT_PIE_SM_looptools(Menu):
     # bl_idname = "mesh.ssc_new_obj_menu"
@@ -370,32 +376,34 @@ def draw_orientations_submenu(ui_space):
     container = submenu.box()
     column = container.column()
 
-    row = column.row(align = True)
+    row = column.row(align=True)
     row.label(text="Default Orientations")
-    row = column.row(align = True)
-    row.operator("mesh.quick_transform_orientation", text="Global", icon = "ORIENTATION_GLOBAL").mode = 8
-    row.operator("mesh.quick_transform_orientation", text="Local", icon = "ORIENTATION_LOCAL").mode = 9
-    row.operator("mesh.quick_transform_orientation", text="Cursor", icon = "ORIENTATION_CURSOR").mode = 13
+    row = column.row(align=True)
+    row.operator("mesh.quick_transform_orientation", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
+    row.operator("mesh.quick_transform_orientation", text="Local", icon="ORIENTATION_LOCAL").mode = 9
+    row.operator("mesh.quick_transform_orientation", text="Cursor", icon="ORIENTATION_CURSOR").mode = 13
 
-    row = column.row(align = True)
-    row.operator("mesh.quick_transform_orientation", text="Normal", icon = "ORIENTATION_NORMAL").mode = 10
-    row.operator("mesh.quick_transform_orientation", text="View", icon = "ORIENTATION_VIEW").mode = 12
-    row.operator("mesh.quick_transform_orientation", text="Gimbal", icon = "ORIENTATION_GIMBAL").mode = 11
+    row = column.row(align=True)
+    row.operator("mesh.quick_transform_orientation", text="Normal", icon="ORIENTATION_NORMAL").mode = 10
+    row.operator("mesh.quick_transform_orientation", text="View", icon="ORIENTATION_VIEW").mode = 12
+    row.operator("mesh.quick_transform_orientation", text="Gimbal", icon="ORIENTATION_GIMBAL").mode = 11
+
 
 def draw_snap_submenu(ui_space):
     submenu = ui_space.column()
     container = submenu.box()
     column = container.column()
 
-    row = column.row(align = True)
+    row = column.row(align=True)
     row.label(text="Default Orientations")
-    row = column.row(align = True)
-    row.operator("mesh.quick_transform_orientation", text="Global", icon = "ORIENTATION_GLOBAL").mode = 8
-    row.operator("mesh.quick_transform_orientation", text="Local", icon = "ORIENTATION_LOCAL").mode = 9
+    row = column.row(align=True)
+    row.operator("mesh.quick_transform_orientation", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
+    row.operator("mesh.quick_transform_orientation", text="Local", icon="ORIENTATION_LOCAL").mode = 9
 
-    row = column.row(align = True)
-    row.operator("mesh.quick_transform_orientation", text="Global", icon = "ORIENTATION_GLOBAL").mode = 8
-    row.operator("mesh.quick_transform_orientation", text="Local", icon = "ORIENTATION_LOCAL").mode = 9
+    row = column.row(align=True)
+    row.operator("mesh.quick_transform_orientation", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
+    row.operator("mesh.quick_transform_orientation", text="Local", icon="ORIENTATION_LOCAL").mode = 9
+
 
 class VIEW3D_MT_PIE_TransformOptions(Menu):
     bl_label = "Transform Orientation"
@@ -415,3 +423,24 @@ class VIEW3D_MT_PIE_TransformOptions(Menu):
 
         # 8 - TOP
         pie.operator("mesh.quick_transform_orientation", text="Proportional Editing").mode = 7
+
+
+class VIEW3D_MT_PIE_QSP(Menu):
+    bl_label = "Snap Presets"
+
+    def draw(self, context):
+        layout = self.layout
+        pie = layout.menu_pie()
+
+        # 4 - LEFT
+        op = pie.operator("mesh.quick_snap_presets", text="Vert Closest").mode = 3
+
+        # 6 - RIGHT
+        pie.operator("mesh.quick_snap_presets", text="Vert Center").mode = 2
+
+        # 2 - BOTTOM
+        pie.operator("mesh.quick_snap_presets", text="Face Normal").mode = 4
+
+        # 8 - TOP
+        pie.operator("mesh.quick_snap_presets", text="Grid Absolute").mode = 1
+

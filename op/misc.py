@@ -198,7 +198,7 @@ class QuickTransformOrientation(bpy.types.Operator):
     # Mode 6 - Use Orientation 3
     # Mode 7 - Reset Orientation
 
-    mode = bpy.props.IntProperty(default=0)
+    mode: bpy.props.IntProperty(default=0)
     target_space = 'NONE'
 
     def set_target_space(self, context):
@@ -277,6 +277,57 @@ class QuickTransformOrientationPie(bpy.types.Operator):
         return{'FINISHED'}
 
 
+class QuickSnapPresets(bpy.types.Operator):
+    bl_idname = "mesh.quick_snap_presets"
+    bl_label = "Quick Snap Presets"
+    bl_description = "Sets up snapping settings based on presets"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    # Mode 1 - Grid Absolute
+    # Mode 2 - Vert Center
+    # Mode 3 - Vert Closest
+    # Mode 4 - Face Normal
+
+    mode: bpy.props.IntProperty(default=0)
+
+    def set_preset(self, context):
+        bpy.context.scene.tool_settings.use_snap_translate = True
+        bpy.context.scene.tool_settings.use_snap_rotate = True
+        bpy.context.scene.tool_settings.use_snap_scale = True
+
+        if self.mode == 1:
+            bpy.context.scene.tool_settings.snap_elements = {'INCREMENT'}
+            bpy.context.scene.tool_settings.use_snap_grid_absolute = True
+
+        elif self.mode == 2:
+            bpy.context.scene.tool_settings.snap_elements = {'VERTEX'}
+            bpy.context.scene.tool_settings.snap_target = 'CENTER'
+
+        elif self.mode == 3:
+            bpy.context.scene.tool_settings.snap_elements = {'VERTEX'}
+            bpy.context.scene.tool_settings.snap_target = 'CLOSEST'
+
+        elif self.mode == 4:
+            bpy.context.scene.tool_settings.snap_elements = {'FACE'}
+            bpy.context.scene.tool_settings.use_snap_align_rotation = True
+            bpy.context.scene.tool_settings.use_snap_project = True
+
+    def execute(self, context):
+        self.set_preset(context)
+        return{'FINISHED'}
+
+
+class QuickSnapPresetsPie(bpy.types.Operator):
+    bl_idname = "mesh.quick_snap_presets_pie"
+    bl_label = "Quick Snap Presets Pie"
+    bl_description = "Sets up snapping settings based on presets"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_QSP")
+        return{'FINISHED'}
+
+
 class WireShadedToggle(bpy.types.Operator):
     bl_idname = "mesh.wire_shaded_toggle"
     bl_label = "Wireframe / Shaded Toggle"
@@ -352,6 +403,7 @@ class QuickHpLpNamer(bpy.types.Operator):
 
         return{'FINISHED'}
 
+
 class QuickVisualGeoToMesh(bpy.types.Operator):
     bl_idname = "mesh.quick_visual_geo_to_mesh"
     bl_label = "Quick Visual Geo To Mesh"
@@ -384,7 +436,7 @@ class QuickFlattenAxis(bpy.types.Operator):
     # Mode 3 - Flatten Y
     # Mode 4 - Flatten Z
 
-    mode = bpy.props.IntProperty(default=0)
+    mode: bpy.props.IntProperty(default=0)
 
     def execute(self, context):
         if self.mode == 1:

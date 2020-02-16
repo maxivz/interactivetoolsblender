@@ -54,6 +54,8 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row = layout.row()
         row.operator('mesh.quick_transform_orientation_pie', text="Quick Transform Orientation")
         row = layout.row()
+        row.operator('mesh.quick_snap_presets_pie', text="Quick Snap Presets")
+        row = layout.row()
         row.operator('mesh.quick_align', text="Quick Align")
         row = layout.row(align=True)
         row.operator('mesh.quick_pipe', text="Quick Pipe")

@@ -1,7 +1,7 @@
 import bpy
 from ..utils import itools as itools
 from ..utils import mesh as mesh
-from ..utils.user_prefs import get_loop_tools_active, get_set_flow_active
+
 
 
 class SmartModify(bpy.types.Operator):
@@ -20,10 +20,6 @@ class SmartModify(bpy.types.Operator):
             bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_SM_curve")
         elif mode == 'EDIT_LATTICE':
             bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_SM_lattice")
-
-    @classmethod
-    def poll(cls, context):
-        return get_loop_tools_active()
 
     def execute(self, context):
         self.smart_modify()
