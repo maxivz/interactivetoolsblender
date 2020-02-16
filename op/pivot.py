@@ -69,21 +69,34 @@ class QuickEditPivot(bpy.types.Operator):
         bpy.data.objects[obj.name].select_set(True)
         context.view_layer.objects.active = obj
 
+    """
     @classmethod
     def poll(cls, context):
         mode = itools.get_mode()
         return mode not in ['VERT', 'EDGE', 'FACE']
+    """
 
     def execute(self, context):
-        obj = bpy.context.active_object
-        if obj.name.endswith(".PivotHelper"):
-            self.apply_pivot(context, obj)
-        elif self.get_pivot(context, obj):
-            piv = bpy.context.active_object
-        else:
+        if float(bpy.app.version_string[:4]) >= 2.82:
             mode = itools.get_mode()
             if mode in ['VERT', 'EDGE', 'FACE']:
                 itools.set_mode('OBJECT')
 
-            self.create_pivot(context, obj)
+            if bpy.context.scene.tool_settings.use_transform_data_origin:
+                bpy.context.scene.tool_settings.use_transform_data_origin = False
+            else:
+                bpy.context.scene.tool_settings.use_transform_data_origin = True
+
+        else:
+            obj = bpy.context.active_object
+            if obj.name.endswith(".PivotHelper"):
+                self.apply_pivot(context, obj)
+            elif self.get_pivot(context, obj):
+                piv = bpy.context.active_object
+            else:
+                mode = itools.get_mode()
+                if mode in ['VERT', 'EDGE', 'FACE']:
+                    itools.set_mode('OBJECT')
+
+                self.create_pivot(context, obj)
         return{'FINISHED'}
