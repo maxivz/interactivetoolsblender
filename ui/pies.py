@@ -495,13 +495,13 @@ class VIEW3D_MT_PIE_QSP(Menu):
         pie = layout.menu_pie()
 
         # 4 - LEFT
-        op = pie.operator("mesh.quick_snap_presets", text="Vert Closest").mode = 3
+        op = pie.operator("mesh.quick_snap_presets", text="Vert Closest", icon="SNAP_VERTEX").mode = 3
 
         # 6 - RIGHT
-        pie.operator("mesh.quick_snap_presets", text="Vert Center").mode = 2
+        pie.operator("mesh.quick_snap_presets", text="Vert Center", icon="SNAP_VERTEX").mode = 2
 
         # 2 - BOTTOM
-        pie.operator("mesh.quick_snap_presets", text="Face Normal").mode = 4
+        pie.operator("mesh.quick_snap_presets", text="Face Normal", icon="SNAP_FACE").mode = 4
 
         # 8 - TOP
-        pie.operator("mesh.quick_snap_presets", text="Grid Absolute").mode = 1
+        pie.operator("mesh.quick_snap_presets", text="Grid Absolute", icon="SNAP_INCREMENT").mode = 1
