@@ -5,6 +5,7 @@ from ..utils.user_prefs import get_radsym_hide_pivot
 from ..utils import itools as itools
 from bpy.props import EnumProperty, IntProperty
 
+
 class QuickPipe(bpy.types.Operator):
     bl_idname = "mesh.quick_pipe"
     bl_label = "Quick Pipe"
@@ -37,12 +38,17 @@ class QuickPipe(bpy.types.Operator):
         print([pipe_obj])
 
         #Convert to curve
-        itools.select(pipe_obj.name, mode='OBJECT',item=False, replace=True)
+        itools.select(pipe_obj.name, mode='OBJECT', item=False, replace=True)
         context.view_layer.objects.active = pipe_obj
         bpy.ops.object.convert(target='CURVE')
         pipe_obj.data.bevel_depth = 0.5
         bpy.ops.object.shade_smooth()
-        pipe_obj.name= 'Pipe'
+        pipe_obj.name = 'Pipe'
+        bpy.ops.wm.context_modal_mouse('INVOKE_DEFAULT',
+                                           data_path_iter='selected_editable_objects',
+                                           data_path_item='data.bevel_depth',
+                                           input_scale=0.050000000149011612,
+                                           header_text='Pipe Thickness %.f')
 
     def __init__(self):
         print("Start")
