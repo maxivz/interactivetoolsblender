@@ -58,12 +58,16 @@ def activate_keymap(key):
     print("Get keymap")
 
 
-def addon_active_prop(addon_active, addon, row):
+def addon_active_prop(addon_active, addon, row, url='none'):
     if addon_active:
         row.operator('menu.placeholder', text=addon)
 
     else:
-        row.operator('menu.placeholder', text=addon, icon="ERROR")
+        if url != 'none':
+            row.operator("wm.url_open", text='Get '+addon, icon="ERROR").url = url
+
+        else:
+            row.operator('menu.placeholder', text=addon, icon="ERROR")
 
 
 def get_addon_name():
@@ -211,7 +215,7 @@ set_flow_active = addon_installed("EdgeFlow-master")
 class MenuPlaceholder(bpy.types.Operator):
     bl_idname = "menu.placeholder"
     bl_label = ""
-    bl_description = ""
+    bl_description = "Please enable this addon manually"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
@@ -313,9 +317,6 @@ class AddonPreferences(AddonPreferences):
             row.prop(self, "ssc_bezierutilities_integration", toggle=False)
 
         row = layout.row(align=True)
-        row.prop(self, "ssc_flexibezier_integration", toggle=False)
-
-        row = layout.row(align=True)
         row.prop(self, "enable_dissolve_faces", toggle=False)
 
         row = layout.row(align=True)
@@ -329,7 +330,7 @@ class AddonPreferences(AddonPreferences):
 
         row = layout.row(align=True)
         row.prop(self, "enable_wireshaded_cs", toggle=False)
-        
+    
 
         #
         # Recommended Addons::
@@ -341,10 +342,15 @@ class AddonPreferences(AddonPreferences):
         row = layout.row(align=True)
         addon_active_prop(f2_active, "F2", row)
         addon_active_prop(loop_tools_active, "Loop Tools", row)
-        addon_active_prop(set_flow_active, "Set Flow", row)
+        addon_active_prop(set_flow_active, "Set Flow", row,
+                          url='https://github.com/BenjaminSauder/EdgeFlow')
         row = layout.row(align=True)
-        addon_active_prop(qblocker_active, "QBlocker", row)
-        addon_active_prop(bezierutilities_active, "Bezier Utilities", row)
+        addon_active_prop(qblocker_active, "QBlocker", row,
+                          url='https://gumroad.com/l/gOEV')
+        addon_active_prop(bezierutilities_active, "Bezier Utilities", row,
+                          url='https://github.com/Shriinivas/blenderbezierutils')
+        addon_active_prop(bezierutilities_active, "TexTools", row,
+                          url='https://github.com/SavMartin/TexTools-Blender')
 
         row = layout.row(align=True)
         row.label(text="To take full advantage of this addon make sure the following addons are enabled.")
