@@ -120,7 +120,7 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         pie.operator("mesh.rebase_cylinder", text="Rebase Cylinder")
 
         # 8 - TOP
-        pie.operator("object.convert", text="Visual Geo To Mesh").target = 'MESH'
+        pie.operator("object.convert", text="Visual Geo To Mesh").target='MESH'
 
         # 7 - TOP - LEFT
         # Align World Submenu
@@ -128,20 +128,20 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         container = submenu.box()
         column = container.column()
         row = column.row(align = True)
-        op = row.operator("mesh.quick_align", text = "Align World")
+        op = row.operator("mesh.quick_align", text="Align World")
         op.relative_to = 'OPT_1'
         op.align_axis = {'X', 'Y', 'Z'}
 
         row = column.row(align = True)
-        op = row.operator("mesh.quick_align", text = "X")
+        op = row.operator("mesh.quick_align", text="X")
         op.relative_to = 'OPT_1'
         op.align_axis = {'X'}
 
-        op = row.operator("mesh.quick_align", text = "Y")
+        op = row.operator("mesh.quick_align", text="Y")
         op.relative_to = 'OPT_1'
         op.align_axis = {'Y'}
 
-        op = row.operator("mesh.quick_align", text = "Z")
+        op = row.operator("mesh.quick_align", text="Z")
         op.relative_to = 'OPT_1'
         op.align_axis = {'Z'}
 
@@ -229,20 +229,20 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         container = submenu.box()
         column = container.column()
         row = column.row(align = True)
-        op = row.operator("mesh.quick_align", text = "Align World")
+        op = row.operator("mesh.quick_align", text="Align World")
         op.relative_to = 'OPT_1'
         op.align_axis = {'X', 'Y', 'Z'}
 
         row = column.row(align = True)
-        op = row.operator("mesh.quick_align", text = "X")
+        op = row.operator("mesh.quick_align", text="X")
         op.relative_to = 'OPT_1'
         op.align_axis = {'X'}
 
-        op = row.operator("mesh.quick_align", text = "Y")
+        op = row.operator("mesh.quick_align", text="Y")
         op.relative_to = 'OPT_1'
         op.align_axis = {'Y'}
 
-        op = row.operator("mesh.quick_align", text = "Z")
+        op = row.operator("mesh.quick_align", text="Z")
         op.relative_to = 'OPT_1'
         op.align_axis = {'Z'}
 
@@ -251,13 +251,13 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         container = submenu.box()
         column = container.column()
         row = column.row(align=True)
-        row.operator("mesh.quick_flatten", text = "Flatten Avg Normal").mode = 1
+        row.operator("mesh.quick_flatten", text="Flatten Avg Normal").mode = 1
 
         row = column.row(align=True)
         # row.label(text="Global")
-        row.operator("mesh.quick_flatten", text = "X").mode = 2
-        row.operator("mesh.quick_flatten", text = "Y").mode = 3
-        row.operator("mesh.quick_flatten", text = "Z").mode = 4
+        row.operator("mesh.quick_flatten", text="X").mode = 2
+        row.operator("mesh.quick_flatten", text="Y").mode = 3
+        row.operator("mesh.quick_flatten", text="Z").mode = 4
 
         '''
         TO Do: Local Alignment
@@ -327,28 +327,28 @@ class VIEW3D_MT_PIE_QTO(Menu):
         pie = layout.menu_pie()
 
         # 4 - LEFT
-        pie.operator("mesh.quick_transform_orientation", text="Set Custom 2", icon = 'TRIA_DOWN').mode = 2
+        pie.operator("mesh.quick_transform_orientation", text="Set Custom 2", icon='TRIA_DOWN').mode = 2
 
         # 6 - RIGHT
-        pie.operator("mesh.quick_transform_orientation", text="Use Custom 2", icon = 'TRIA_UP').mode = 5
+        pie.operator("mesh.quick_transform_orientation", text="Use Custom 2", icon='TRIA_UP').mode = 5
 
         # 2 - BOTTOM
-        pie.operator("mesh.quick_transform_orientation", text="Reset Working Pivot", icon = 'FILE_REFRESH').mode = 7
+        pie.operator("mesh.quick_transform_orientation", text="Reset Working Pivot", icon='FILE_REFRESH').mode = 7
         # 8 - TOP
         menu = pie.row()
         draw_orientations_submenu(menu)
 
         # 7 - TOP - LEFT
-        pie.operator("mesh.quick_transform_orientation", text="Set Custom 1", icon = 'TRIA_DOWN').mode = 1
+        pie.operator("mesh.quick_transform_orientation", text="Set Custom 1", icon='TRIA_DOWN').mode = 1
 
         # 9 - TOP - RIGHT
-        pie.operator("mesh.quick_transform_orientation", text="Use Custom 1", icon = 'TRIA_UP').mode = 4
+        pie.operator("mesh.quick_transform_orientation", text="Use Custom 1", icon='TRIA_UP').mode = 4
 
         # 1 - BOTTOM - LEFT
-        pie.operator("mesh.quick_transform_orientation", text="Set Custom 3", icon = 'TRIA_DOWN').mode = 3
+        pie.operator("mesh.quick_transform_orientation", text="Set Custom 3", icon='TRIA_DOWN').mode = 3
 
         # 3 - BOTTOM - RIGHT
-        pie.operator("mesh.quick_transform_orientation", text="Use Custom 3", icon = 'TRIA_UP').mode = 6
+        pie.operator("mesh.quick_transform_orientation", text="Use Custom 3", icon='TRIA_UP').mode = 6
 
 
 class VIEW3D_MT_PIE_SnapPresets(Menu):
@@ -443,4 +443,3 @@ class VIEW3D_MT_PIE_QSP(Menu):
 
         # 8 - TOP
         pie.operator("mesh.quick_snap_presets", text="Grid Absolute").mode = 1
-

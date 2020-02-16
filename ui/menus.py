@@ -9,6 +9,7 @@ class VIEW3D_MT_object_mode_itools(bpy.types.Menu):
 
         layout.operator("mesh.super_smart_create", text="Super Smart Create")
         layout.operator("mesh.smart_delete", text="Smart Delete")
+        layout.operator("mesh.smart_modify", text="Smart Modify")
 
         layout.separator()
         layout.operator("mesh.quick_pivot", text="Quick Origin")
@@ -20,8 +21,8 @@ class VIEW3D_MT_object_mode_itools(bpy.types.Menu):
         layout.operator('mesh.radial_symmetry', text="Radial Symmetry")
 
         layout.separator()
-        layout.operator('mesh.seams_from_sharps', text="Seams From Sharps")
-        layout.operator('mesh.uvs_from_sharps', text="Uvs From Sharps")
+        layout.operator('uv.seams_from_sharps', text="Seams From Sharps")
+        layout.operator('uv.uvs_from_sharps', text="Uvs From Sharps")
 
         layout.separator()
         layout.operator("object.transform_apply", text="Apply Transforms")
@@ -37,6 +38,7 @@ class VIEW3D_MT_edit_mesh_itools(bpy.types.Menu):
 
         layout.operator("mesh.super_smart_create", text="Super Smart Create")
         layout.operator("mesh.smart_delete", text="Smart Delete")
+        layout.operator("mesh.smart_modify", text="Smart Modify")
 
         layout.separator()
         layout.operator("mesh.quick_pivot", text="Quick Origin")
