@@ -207,13 +207,13 @@ class VIEW3D_MT_PIE_SM_uv(Menu):
 
         column = container.column()
         row = column.row(align=True)
-        row.operator("uv.textools_island_align_edge", text="Align Edge")
+        row.operator("uv.textools_island_align_edge", text="Align Edge", icon="MOD_EDGESPLIT")
         row = column.row(align=True)
-        row.operator("uv.textools_island_align_world", text="Align World")
+        row.operator("uv.textools_island_align_world", text="Align World", icon="WORLD_DATA")
 
 
         # 6 - RIGHT
-        pie.operator("uv.textools_rectify", text="Rectify")
+        pie.operator("uv.textools_rectify", text="Rectify", icon="UV_FACESEL")
 
         # 2 - BOTTOM
         submenu = pie.column()
@@ -234,18 +234,18 @@ class VIEW3D_MT_PIE_SM_uv(Menu):
         column = container.column()
 
         row = column.row(align=True)
-        row.operator("uv.textools_island_rotate_90", text="Rotate -90").angle = -1.5708
+        row.operator("uv.textools_island_rotate_90", text="Rotate -90", icon="LOOP_BACK").angle = -1.5708
 
-        row.operator("uv.textools_align", text="Align Top").direction = "top"
+        row.operator("uv.textools_align", text="Align Top", icon="TRIA_UP").direction = "top"
 
-        row.operator("uv.textools_island_rotate_90", text="Rotate +90").angle = 1.5708
+        row.operator("uv.textools_island_rotate_90", text="Rotate +90", icon="LOOP_FORWARDS").angle = 1.5708
 
         row = column.row(align=True)
-        row.operator("uv.textools_align", text="Align Left").direction = "left"
+        row.operator("uv.textools_align", text="Align Left", icon="TRIA_LEFT").direction = "left"
 
-        row.operator("uv.textools_align", text="Align Bottom").direction = "bottom"
+        row.operator("uv.textools_align", text="Align Bottom", icon="TRIA_DOWN").direction = "bottom"
 
-        row.operator("uv.textools_align", text="Align Right").direction = "right"
+        row.operator("uv.textools_align", text="Align Right", icon="TRIA_RIGHT").direction = "right"
 
         # 7 - TOP - LEFT
 
