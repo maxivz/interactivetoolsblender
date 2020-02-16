@@ -2,6 +2,7 @@ import bpy
 from bpy.types import Menu
 from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_set_flow_active, get_bezierutilities_active, get_loop_tools_active, get_textools_active
 
+
 class VIEW3D_MT_PIE_SSC_Duplicate(Menu):
     # bl_idname = "mesh.ssc_duplicate_menu"
     bl_label = "Object Duplication"
@@ -123,12 +124,12 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         submenu = pie.column()
         container = submenu.box()
         column = container.column()
-        row = column.row(align = True)
+        row = column.row(align=True)
         op = row.operator("mesh.quick_align", text="Align World")
         op.relative_to = 'OPT_1'
         op.align_axis = {'X', 'Y', 'Z'}
 
-        row = column.row(align = True)
+        row = column.row(align=True)
         op = row.operator("mesh.quick_align", text="X")
         op.relative_to = 'OPT_1'
         op.align_axis = {'X'}
@@ -178,16 +179,43 @@ class VIEW3D_MT_PIE_SM_curve(Menu):
         pie = layout.menu_pie()
 
         # 4 - LEFT
-        pie.operator("mesh.lattice_resolution_2x2x2", text="Resolution 2x2x2")
+        pie.operator("curve.normals_make_consistent", text="Recalc Normal")
 
         # 6 - RIGHT
-        pie.operator("mesh.lattice_resolution_4x4x4", text="Resolution 4x4x4")
+        pie.operator("curve.subdivide", text="Subdivide")
 
         # 2 - BOTTOM
-        pie.operator("mesh.quick_lattice", text="Apply Lattice")
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+
+        row = column.row(align=True)
+        row.label(text="Set Spline Type...")
+        row = column.row(align=True)
+
+        row.operator("curve.handle_type_set", text="Automatic").type = 'AUTOMATIC'
+        row.operator("curve.handle_type_set", text="Vector").type = 'VECTOR'
+
+        row = column.row(align=True)
+        row.operator("curve.handle_type_set", text="Aligned").type = 'ALIGNED'
+        row.operator("curve.handle_type_set", text="Free Align").type = 'FREE_ALIGN'
+
+        row = column.row(align=True)
+        row.operator("curve.handle_type_set", text="Toggle Free/Align").type = 'TOGGLE_FREE_ALIGN'
 
         # 8 - TOP
-        pie.operator("mesh.lattice_resolution_3x3x3", text="Resolution 3x3x3")
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+
+        row = column.row(align=True)
+        row.label(text="Set Spline Type...")
+        row = column.row(align=True)
+
+        row.operator("curve.spline_type_set", text="Poly").type = 'POLY'
+        row.operator("curve.spline_type_set", text="Bezier").type = 'BEZIER'
+        row.operator("curve.spline_type_set", text="Nurbs").type = 'NURBS'
+
 
 
 class VIEW3D_MT_PIE_SM_uv(Menu):
@@ -232,16 +260,12 @@ class VIEW3D_MT_PIE_SM_uv(Menu):
 
         row = column.row(align=True)
         row.operator("uv.textools_island_rotate_90", text="Rotate -90", icon="LOOP_BACK").angle = -1.5708
-
         row.operator("uv.textools_align", text="Align Top", icon="TRIA_UP").direction = "top"
-
         row.operator("uv.textools_island_rotate_90", text="Rotate +90", icon="LOOP_FORWARDS").angle = 1.5708
 
         row = column.row(align=True)
         row.operator("uv.textools_align", text="Align Left", icon="TRIA_LEFT").direction = "left"
-
         row.operator("uv.textools_align", text="Align Bottom", icon="TRIA_DOWN").direction = "bottom"
-
         row.operator("uv.textools_align", text="Align Right", icon="TRIA_RIGHT").direction = "right"
 
         # 7 - TOP - LEFT
@@ -266,13 +290,12 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         # 6 - RIGHT
 
         # 2 - BOTTOM
-        pie.operator("mesh.", text="Flip Normal")
 
         # 8 - TOP
         pie.operator("mesh.quick_visual_geo_to_mesh", text="Visual Geo To Mesh")
 
         # 7 - TOP - LEFT
-        pie.operator("mesh.quick_lattice", text="Symmetrize")
+        pie.operator("mesh.flip_normals", text="Flip Normal")
 
         # 9 - TOP - RIGHT
         pie.operator("mesh.rebase_cylinder", text="Rebase Cylinder")
