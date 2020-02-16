@@ -139,6 +139,10 @@ def get_bezierutilities_active():
     return bezierutilities_active
 
 
+def get_textools_active():
+    return textools_active
+
+
 def get_ssc_switch_modes():
     prefs = get_addon_preferences()
     return prefs.ssc_switch_modes
@@ -199,6 +203,7 @@ f2_active = addon_installed("mesh_f2")
 loop_tools_active = addon_installed("mesh_looptools")
 qblocker_active = addon_installed("QBlocker")
 bezierutilities_active = addon_installed("blenderbezierutils")
+textools_active = addon_installed("TexTools")
 set_flow_active = addon_installed("EdgeFlow-master")
 
 

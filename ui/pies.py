@@ -1,7 +1,6 @@
 import bpy
 from bpy.types import Menu
-from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_set_flow_active, get_bezierutilities_active, get_loop_tools_active
-
+from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_set_flow_active, get_bezierutilities_active, get_loop_tools_active, get_textools_active
 
 class VIEW3D_MT_PIE_SSC_Duplicate(Menu):
     # bl_idname = "mesh.ssc_duplicate_menu"
@@ -192,6 +191,69 @@ class VIEW3D_MT_PIE_SM_curve(Menu):
 
         # 8 - TOP
         pie.operator("mesh.lattice_resolution_3x3x3", text="Resolution 3x3x3")
+
+
+class VIEW3D_MT_PIE_SM_uv(Menu):
+    # bl_idname = "mesh.ssc_new_obj_menu"
+    bl_label = "Smart Modify"
+
+    def draw(self, context):
+        layout = self.layout
+        pie = layout.menu_pie()
+
+        # 4 - LEFT
+        submenu = pie.column()
+        container = submenu.box()
+
+        column = container.column()
+        row = column.row(align=True)
+        row.operator("uv.textools_island_align_edge", text="Align Edge")
+        row = column.row(align=True)
+        row.operator("uv.textools_island_align_world", text="Align World")
+
+
+        # 6 - RIGHT
+        pie.operator("uv.textools_rectify", text="Rectify")
+
+        # 2 - BOTTOM
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+
+        row = column.row(align=True)
+        row.label(text="Seams From...")
+
+        row = column.row(align=True)
+        row.operator("uv.seams_from_islands", text="Islands")
+
+        row.operator("uv.seams_from_sharps", text="Sharps")
+
+        # 8 - TOP
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+
+        row = column.row(align=True)
+        row.operator("uv.textools_island_rotate_90", text="Rotate -90").angle = -1.5708
+
+        row.operator("uv.textools_align", text="Align Top").direction = "top"
+
+        row.operator("uv.textools_island_rotate_90", text="Rotate +90").angle = 1.5708
+
+        row = column.row(align=True)
+        row.operator("uv.textools_align", text="Align Left").direction = "left"
+
+        row.operator("uv.textools_align", text="Align Bottom").direction = "bottom"
+
+        row.operator("uv.textools_align", text="Align Right").direction = "right"
+
+        # 7 - TOP - LEFT
+
+        # 9 - TOP - RIGHT
+
+        # 1 - BOTTOM - LEFT
+
+        # 3 - BOTTOM - RIGHT
 
 
 class VIEW3D_MT_PIE_SM_mesh(Menu):

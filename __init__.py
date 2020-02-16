@@ -1,6 +1,6 @@
 import bpy
 from . ui.menus import load_menus_itools, unload_menus_itools, VIEW3D_MT_object_mode_itools, VIEW3D_MT_edit_mesh_itools, VIEW3D_MT_edit_lattice_itools, VIEW3D_MT_edit_uvs_itools
-from . ui.pies import VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_QTO, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_QSP
+from . ui.pies import VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_QTO, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_QSP
 from . ui.pannels import VIEW3D_PT_Itools
 #from . utils.debug import MaxivzToolsDebug_PT_Panel, DebugOp
 from . op.super_smart_create import SuperSmartCreate
@@ -44,7 +44,7 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete, TransformOrientationCycle,
            AddonPreferences, OBJECT_OT_addon_prefs_example, QuickTransformOrientation, QuickFlattenAxis,
            SmartSelectLoop, SmartSelectRing, SmartTranslate, CSMove, CSRotate, CSScale,
-           VIEW3D_MT_PIE_SM_looptools,
+           VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_uv,
            QuickLattice, SmartExtrude, SeamsFromSharps, QuickVisualGeoToMesh,
            QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,QuickPipe,
            MenuPlaceholder, SmartModify, LatticeResolution2x2x2,

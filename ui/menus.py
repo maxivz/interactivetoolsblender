@@ -72,6 +72,7 @@ class VIEW3D_MT_edit_uvs_itools(bpy.types.Menu):
         layout.operator('uv.seams_from_islands', text="Seams From Islands")
         layout.operator('uv.seams_from_sharps', text="Seams From Sharps")
         layout.operator('uv.uvs_from_sharps', text="UVs From Sharps")
+        layout.operator("mesh.smart_modify", text="Smart Modify")
 
 
 def menu_object_mode_itools(self, context):
