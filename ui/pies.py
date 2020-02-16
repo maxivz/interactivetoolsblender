@@ -87,18 +87,15 @@ class VIEW3D_MT_PIE_SSC_New_Obj(Menu):
             pie.operator("mesh.primitive_uv_sphere_add", text="Sphere", icon="MESH_UVSPHERE")
 
         # 7 - TOP - LEFT
-            op = pie.operator("object.light_add", text="Light", icon="OUTLINER_OB_LIGHT")
-            op.type = 'POINT'
+        pie.operator("object.light_add", text="Light", icon="OUTLINER_OB_LIGHT").type = 'POINT'
 
         # 9 - TOP - RIGHT
-            pie.operator("object.camera_add", text="Camera", icon="OUTLINER_OB_CAMERA")
+        pie.operator("object.camera_add", text="Camera", icon="OUTLINER_OB_CAMERA")
         # 1 - BOTTOM - LEFT
-            op = pie.operator("object.gpencil_add", text="Gpencil", icon="OUTLINER_OB_GREASEPENCIL")
-            op.type = 'EMPTY'
+        pie.operator("object.gpencil_add", text="Gpencil", icon="OUTLINER_OB_GREASEPENCIL").type = 'EMPTY'
 
         # 3 - BOTTOM - RIGHT
-            op = pie.operator("object.empty_add", text="Empty", icon="OUTLINER_OB_EMPTY")
-            op.type = 'PLAIN_AXES'
+        pie.operator("object.empty_add", text="Empty", icon="OUTLINER_OB_EMPTY").type = 'PLAIN_AXES'
 
 
 class VIEW3D_MT_PIE_SM_object(Menu):
