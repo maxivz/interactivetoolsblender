@@ -172,21 +172,26 @@ def get_enable_dissolve_faces():
     prefs = get_addon_preferences()
     return prefs.enable_dissolve_faces
 
+
 def get_radsym_hide_pivot():
     prefs = get_addon_preferences()
     return prefs.radsym_hide_pivot
+
 
 def get_quickhplp_lp_suffix():
     prefs = get_addon_preferences()
     return prefs.quickhplp_lp_suffix
 
+
 def get_quickhplp_hp_suffix():
     prefs = get_addon_preferences()
     return prefs.quickhplp_hp_suffix
 
+
 def get_enable_wireshaded_cs():
     prefs = get_addon_preferences()
     return prefs.enable_wireshaded_cs
+
 
 def unregister_keymaps():
     # wm = bpy.context.window_manager
@@ -195,10 +200,15 @@ def unregister_keymaps():
         # wm.keyconfigs.addon.keymaps.remove(km)
     addon_keymaps.clear()
 
+
 def get_enable_legacy_origin():
     prefs = get_addon_preferences()
     return prefs.enable_legacy_origin
 
+
+def get_enable_legacy_tools():
+    prefs = get_addon_preferences()
+    return prefs.enable_legacy_tools
 
 # Store keymaps to access after registration
 addon_keymaps = []
@@ -277,6 +287,10 @@ class AddonPreferences(AddonPreferences):
                                         description="Enable Legacy Origin Edit Mode",
                                         default=False)
 
+    enable_legacy_tools:  BoolProperty(name="Enable Legacy Tools",
+                                       description="Enable Legacy Tools that are no longer in active development or supported",
+                                       default=False)
+
 
     def draw(self, context):
         layout = self.layout
@@ -339,6 +353,9 @@ class AddonPreferences(AddonPreferences):
         if float(bpy.app.version_string[:4]) >= 2.82:
             row = layout.row(align=True)
             row.prop(self, "enable_legacy_origin", toggle=False)
+
+        row = layout.row(align=True)
+        row.prop(self, "enable_legacy_tools", toggle=False)
 
 
         #

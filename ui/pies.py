@@ -217,7 +217,6 @@ class VIEW3D_MT_PIE_SM_curve(Menu):
         row.operator("curve.spline_type_set", text="Nurbs").type = 'NURBS'
 
 
-
 class VIEW3D_MT_PIE_SM_uv(Menu):
     # bl_idname = "mesh.ssc_new_obj_menu"
     bl_label = "Smart Modify"
