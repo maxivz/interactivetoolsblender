@@ -1,6 +1,6 @@
 import bpy
 from ..utils import itools as itools
-
+from ..utils.user_prefs import get_enable_legacy_origin
 # Needs optimization pass, possibly merge both into one. Make them proper operators
 
 
@@ -77,7 +77,7 @@ class QuickEditPivot(bpy.types.Operator):
     """
 
     def execute(self, context):
-        if float(bpy.app.version_string[:4]) >= 2.82:
+        if float(bpy.app.version_string[:4]) >= 2.82 and not get_enable_legacy_origin():
             mode = itools.get_mode()
             if mode in ['VERT', 'EDGE', 'FACE']:
                 itools.set_mode('OBJECT')

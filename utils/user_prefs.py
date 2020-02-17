@@ -195,6 +195,11 @@ def unregister_keymaps():
         # wm.keyconfigs.addon.keymaps.remove(km)
     addon_keymaps.clear()
 
+def get_enable_legacy_origin():
+    prefs = get_addon_preferences()
+    return prefs.enable_legacy_origin
+
+
 # Store keymaps to access after registration
 addon_keymaps = []
 
@@ -268,6 +273,11 @@ class AddonPreferences(AddonPreferences):
                                        description="Enables context sensitive mode for the Wireframe / Shaded Tool",
                                        default=True)
 
+    enable_legacy_origin:  BoolProperty(name="Legacy Origin Edit Mode",
+                                        description="Enable Legacy Origin Edit Mode",
+                                        default=False)
+
+
     def draw(self, context):
         layout = self.layout
 
@@ -325,7 +335,11 @@ class AddonPreferences(AddonPreferences):
 
         row = layout.row(align=True)
         row.prop(self, "enable_wireshaded_cs", toggle=False)
-    
+
+        if float(bpy.app.version_string[:4]) >= 2.82:
+            row = layout.row(align=True)
+            row.prop(self, "enable_legacy_origin", toggle=False)
+
 
         #
         # Recommended Addons::
