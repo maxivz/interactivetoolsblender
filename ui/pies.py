@@ -286,10 +286,50 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         pie = layout.menu_pie()
 
         # 4 - LEFT
+        
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+        row = column.row(align=True)
+        row.operator("mesh.quick_flatten", text="Flatten Avg Normal").mode = 1
+
+        row = column.row(align=True)
+        # row.label(text="Global")
+        row.operator("mesh.quick_flatten", text="X").mode = 2
+        row.operator("mesh.quick_flatten", text="Y").mode = 3
+        row.operator("mesh.quick_flatten", text="Z").mode = 4
 
         # 6 - RIGHT
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+        row = column.row(align=True)
+        row.operator("mesh.quick_lattice", text="Quick Lattice")
+
+        row = column.row(align=True)
+        row.operator("mesh.quick_pipe", text="Quick Pipe")
+
 
         # 2 - BOTTOM
+        # Flow Submenu
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+        if get_loop_tools_active():
+            row = column.row(align=True)
+            row.operator("mesh.looptools_circle", text="Make Circle")
+
+        if get_set_flow_active():
+            op = row.operator("mesh.set_edge_flow", text="Set Flow")
+            op.tension = 180
+            op.iterations = 1
+
+        if get_loop_tools_active():
+            row.operator("mesh.looptools_space", text="Space")
+            row = column.row(align=True)
+
+            row.operator("mesh.looptools_curve", text="Make Curve")
+            row.operator("mesh.looptools_relax", text="Relax")
 
         # 8 - TOP
         pie.operator("mesh.quick_visual_geo_to_mesh", text="Visual Geo To Mesh")
@@ -299,14 +339,12 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
 
         # 9 - TOP - RIGHT
         pie.operator("mesh.rebase_cylinder", text="Rebase Cylinder")
-
         # 1 - BOTTOM - LEFT
-        pie.operator("mesh.quick_pipe", text="Quick Pipe")
 
         # 3 - BOTTOM - RIGHT
-        pie.operator("mesh.quick_lattice", text="Quick Lattice")
 
         # Align World Submenu
+        """
         submenu = pie.column()
         container = submenu.box()
         column = container.column()
@@ -327,19 +365,9 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         op = row.operator("mesh.quick_align", text="Z")
         op.relative_to = 'OPT_1'
         op.align_axis = {'Z'}
-
+        """
         # Flatten Submenu
-        submenu = pie.column()
-        container = submenu.box()
-        column = container.column()
-        row = column.row(align=True)
-        row.operator("mesh.quick_flatten", text="Flatten Avg Normal").mode = 1
 
-        row = column.row(align=True)
-        # row.label(text="Global")
-        row.operator("mesh.quick_flatten", text="X").mode = 2
-        row.operator("mesh.quick_flatten", text="Y").mode = 3
-        row.operator("mesh.quick_flatten", text="Z").mode = 4
 
         '''
         TO Do: Local Alignment
@@ -351,25 +379,7 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         row.operator("mesh.quick_flatten", text = "Z").mode = 4
         '''
 
-        # Flow Submenu
-        submenu = pie.column()
-        container = submenu.box()
-        column = container.column()
-        if get_loop_tools_active():
-            row = column.row(align=True)
-            row.operator("mesh.looptools_circle", text="Make Circle")
-
-        if get_set_flow_active():
-            op = row.operator("mesh.set_edge_flow", text="Set Flow")
-            op.tension = 180
-            op.iterations = 1
-
-        if get_loop_tools_active():
-            row.operator("mesh.looptools_space", text="Space")
-            row = column.row(align=True)
-
-            row.operator("mesh.looptools_curve", text="Make Curve")
-            row.operator("mesh.looptools_relax", text="Relax")
+        
 
 
 class VIEW3D_MT_PIE_SM_looptools(Menu):
