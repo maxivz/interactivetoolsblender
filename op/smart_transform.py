@@ -101,8 +101,8 @@ class CSScale(bpy.types.Operator):
 
 class SmartTranslate(bpy.types.Operator):
     bl_idname = "mesh.smart_translate_modal"
-    bl_label = "Smart Translate"
-    bl_description = "Smart Translate Tool"
+    bl_label = "Smart Translate Legacy"
+    bl_description = "Smart Translate Tool, Legacy feature use at own risk"
     bl_options = {'REGISTER', 'UNDO'}
 
     initial_mouse_pos = Vector((0, 0, 0))

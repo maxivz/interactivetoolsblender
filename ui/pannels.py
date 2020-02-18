@@ -44,6 +44,8 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row.operator('mesh.smart_delete', text="Smart Delete", icon="TRASH")
         row = layout.row()
         row.operator('mesh.smart_modify', text="Smart Modify")
+        row = layout.row()
+        row.operator('mesh.smart_extrude', text="Smart Extrude")
 
         layout.label(text="Utilities")
         row = layout.row(align=True)
@@ -87,9 +89,9 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row = layout.row()
         row.operator('uv.uvs_from_sharps', text="Uvs From Sharps")
 
-
         if get_enable_legacy_tools():
             layout.label(text="Legacy Tools")
-            row = layout.row(align=True)
-            row.operator('mesh.smart_extrude_modal', text="Smart Extrude")
-            row.operator('mesh.smart_translate_modal', text="Smart Translate")
+            row = layout.row()
+            row.operator('mesh.smart_extrude_modal', text="Smart Extrude Legacy")
+            row = layout.row()
+            row.operator('mesh.smart_translate_modal', text="Smart Translate Legacy")

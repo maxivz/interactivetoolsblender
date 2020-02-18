@@ -288,7 +288,7 @@ class AddonPreferences(AddonPreferences):
                                         default=False)
 
     enable_legacy_tools:  BoolProperty(name="Enable Legacy Tools",
-                                       description="Enable Legacy Tools that are no longer in active development or supported",
+                                       description="Enable Legacy Tools that are no longer in active development or supported. Use at own risk",
                                        default=False)
 
 
@@ -350,12 +350,13 @@ class AddonPreferences(AddonPreferences):
         row = layout.row(align=True)
         row.prop(self, "enable_wireshaded_cs", toggle=False)
 
+        row = layout.row(align=True)
+        row.prop(self, "enable_legacy_tools", toggle=False)
+
         if float(bpy.app.version_string[:4]) >= 2.82:
             row = layout.row(align=True)
             row.prop(self, "enable_legacy_origin", toggle=False)
 
-        row = layout.row(align=True)
-        row.prop(self, "enable_legacy_tools", toggle=False)
 
 
         #

@@ -7,7 +7,7 @@ from . op.super_smart_create import SuperSmartCreate
 from . op.radial_symmetry import QuickRadialSymmetry
 from . op.quick_align import QuickAlign
 from . op.pivot import QuickPivot, QuickEditPivot
-from . op.smart_extrude import SmartExtrude
+from . op.smart_extrude import SmartExtrude, SmartExtrudeModal
 from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace
 from . op.misc import TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, QuickTransformOrientation, QuickHpLpNamer, QuickTransformOrientationPie, QuickVisualGeoToMesh, QuickSnapPresets, QuickSnapPresetsPie
 from . op.smart_delete import SmartDelete
@@ -18,7 +18,7 @@ from . op.quick_lattice import QuickLattice, LatticeResolution2x2x2, LatticeReso
 from . op.quick_pipe import QuickPipe
 from . op.rebase_cylinder import RebaseCylinder
 from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromSharps, UvsFromSharps
-from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps
+from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps, get_enable_legacy_tools
 
 bl_info = {
     "name": "MaxivzsTools",
@@ -43,14 +43,17 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            FlexiBezierToolsCreate, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle,
            QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete, TransformOrientationCycle,
            AddonPreferences, OBJECT_OT_addon_prefs_example, QuickTransformOrientation, QuickFlattenAxis,
-           SmartSelectLoop, SmartSelectRing, SmartTranslate, CSMove, CSRotate, CSScale,
+           SmartSelectLoop, SmartSelectRing, CSMove, CSRotate, CSScale,
            VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_uv, VIEW3D_MT_PIE_SM_curve,
-           QuickLattice, SmartExtrude, SeamsFromSharps, QuickVisualGeoToMesh,
+           QuickLattice,SmartExtrude , SeamsFromSharps, QuickVisualGeoToMesh,
            QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,QuickPipe,
            MenuPlaceholder, SmartModify, LatticeResolution2x2x2,
            LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer,
            VIEW3D_MT_PIE_QSP, QuickSnapPresetsPie, QuickSnapPresets)
 
+legacy_classes = (SmartExtrudeModal, SmartTranslate)
+
+classes += legacy_classes
 
 def register():
     from bpy.utils import register_class
@@ -61,6 +64,7 @@ def register():
     load_menus_itools()
 
     # Keymapping
+
     # register_keymaps()
 
 
