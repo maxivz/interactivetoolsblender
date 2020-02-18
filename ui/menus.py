@@ -10,6 +10,7 @@ class VIEW3D_MT_object_mode_itools(bpy.types.Menu):
         layout.operator("mesh.super_smart_create", text="Super Smart Create")
         layout.operator("mesh.smart_delete", text="Smart Delete")
         layout.operator("mesh.smart_modify", text="Smart Modify")
+        layout.operator("mesh.smart_extrude", text="Smart Extrude")
 
         layout.separator()
         layout.operator("mesh.quick_pivot", text="Quick Origin")
@@ -39,6 +40,7 @@ class VIEW3D_MT_edit_mesh_itools(bpy.types.Menu):
         layout.operator("mesh.super_smart_create", text="Super Smart Create")
         layout.operator("mesh.smart_delete", text="Smart Delete")
         layout.operator("mesh.smart_modify", text="Smart Modify")
+        layout.operator("mesh.smart_extrude", text="Smart Extrude")
 
         layout.separator()
         layout.operator("mesh.quick_pivot", text="Quick Origin")

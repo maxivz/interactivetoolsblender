@@ -120,8 +120,6 @@ class SmartExtrude(bpy.types.Operator):
             if len(context.selected_objects) > 0:
                 initial_pos = context.selected_objects[0].location
                 bpy.ops.object.duplicate()
-            else:
-                return {'FINISHED'}
 
         elif context.mode == 'EDIT_MESH':
             bm = itools.get_bmesh()
