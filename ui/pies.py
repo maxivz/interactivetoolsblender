@@ -489,22 +489,6 @@ def draw_orientations_submenu(ui_space):
         row.operator("mesh.transform_orientation_op", text="Gimbal", icon="ORIENTATION_GIMBAL").mode = 11
 
 
-def draw_snap_submenu(ui_space):
-    submenu = ui_space.column()
-    container = submenu.box()
-    column = container.column()
-
-    row = column.row(align=True)
-    row.label(text="Default Orientations")
-    row = column.row(align=True)
-    row.operator("mesh.transform_orientation_pie", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
-    row.operator("mesh.transform_orientation_pie", text="Local", icon="ORIENTATION_LOCAL").mode = 9
-
-    row = column.row(align=True)
-    row.operator("mesh.transform_orientation_pie", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
-    row.operator("mesh.transform_orientation_pie", text="Local", icon="ORIENTATION_LOCAL").mode = 9
-
-
 class VIEW3D_MT_PIE_TransformOptions(Menu):
     bl_label = "Transform Orientation"
 
@@ -533,16 +517,33 @@ class VIEW3D_MT_PIE_QSP(Menu):
         pie = layout.menu_pie()
 
         # 4 - LEFT
-        op = pie.operator("mesh.snap_presets_op", text="Vert Closest", icon="SNAP_VERTEX").mode = 3
+        if (bpy.context.scene.tool_settings.snap_elements == {'VERTEX'} and
+            bpy.context.scene.tool_settings.snap_target == 'CLOSEST'):
+            op = pie.operator("mesh.snap_presets_op", text="Vert Closest", icon="SNAP_VERTEX", depress=True).mode = 3
+        else:
+            op = pie.operator("mesh.snap_presets_op", text="Vert Closest", icon="SNAP_VERTEX").mode = 3
 
         # 6 - RIGHT
-        pie.operator("mesh.snap_presets_op", text="Vert Center", icon="SNAP_VERTEX").mode = 2
+        if(bpy.context.scene.tool_settings.snap_elements == {'VERTEX'} and
+            bpy.context.scene.tool_settings.snap_target == 'CENTER'):
+            pie.operator("mesh.snap_presets_op", text="Vert Center", icon="SNAP_VERTEX", depress=True).mode = 2
+        else:
+            pie.operator("mesh.snap_presets_op", text="Vert Center", icon="SNAP_VERTEX").mode = 2
 
         # 2 - BOTTOM
-        pie.operator("mesh.snap_presets_op", text="Face Normal", icon="SNAP_FACE").mode = 4
+        if(bpy.context.scene.tool_settings.snap_elements == {'FACE'} and
+            bpy.context.scene.tool_settings.use_snap_align_rotation == True and
+            bpy.context.scene.tool_settings.use_snap_project == True):
+            pie.operator("mesh.snap_presets_op", text="Face Normal", icon="SNAP_FACE",depress=True).mode = 4
+        else:
+            pie.operator("mesh.snap_presets_op", text="Face Normal", icon="SNAP_FACE").mode = 4
 
         # 8 - TOP
-        pie.operator("mesh.snap_presets_op", text="Grid Absolute", icon="SNAP_INCREMENT").mode = 1
+        if (bpy.context.scene.tool_settings.snap_elements == {'INCREMENT'} and
+            bpy.context.scene.tool_settings.use_snap_grid_absolute == True):
+            pie.operator("mesh.snap_presets_op", text="Grid Absolute", icon="SNAP_INCREMENT",depress=True).mode = 1
+        else:
+            pie.operator("mesh.snap_presets_op", text="Grid Absolute", icon="SNAP_INCREMENT").mode = 1
 
 
 class VIEW_MT_PIE_PropEdit(Menu):
@@ -615,4 +616,3 @@ class VIEW_MT_PIE_PropEdit(Menu):
             row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE", depress=True).mode = 8
         else:
             row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE").mode = 8
-
