@@ -361,7 +361,7 @@ class PropEditOp(bpy.types.Operator):
 
         elif self.mode == 8:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'RANDOM'
-        
+
         elif self.mode == 9:
             if bpy.context.scene.tool_settings.use_proportional_edit:
                 bpy.context.scene.tool_settings.use_proportional_edit = False

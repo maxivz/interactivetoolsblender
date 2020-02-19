@@ -544,15 +544,45 @@ class VIEW_MT_PIE_PropEdit(Menu):
         row = column.row(align=False)
         row.label(text="Falloffs")
         row = column.row(align=True)
-        row.operator("mesh.prop_edit_op", text="Smooth", icon = "SMOOTHCURVE").mode = 1
-        row.operator("mesh.prop_edit_op", text="Sphere", icon = "SPHERECURVE").mode = 2
-        row.operator("mesh.prop_edit_op", text="Root", icon = "ROOTCURVE").mode = 3
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'SMOOTH':
+            row.operator("mesh.prop_edit_op", text="Smooth", icon = "SMOOTHCURVE", depress=True).mode = 1
+        else:
+            row.operator("mesh.prop_edit_op", text="Smooth", icon = "SMOOTHCURVE").mode = 1
+
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'SPHERE':
+            row.operator("mesh.prop_edit_op", text="Sphere", icon = "SPHERECURVE", depress=True).mode = 2
+        else:
+            row.operator("mesh.prop_edit_op", text="Sphere", icon = "SPHERECURVE").mode = 2
+
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'ROOT':
+            row.operator("mesh.prop_edit_op", text="Root", icon = "ROOTCURVE", depress=True).mode = 3
+        else:
+            row.operator("mesh.prop_edit_op", text="Root", icon = "ROOTCURVE").mode = 3
 
         row = column.row(align=True)
-        row.operator("mesh.prop_edit_op", text="Inverse Square", icon = "INVERSESQUARECURVE").mode = 4
-        row.operator("mesh.prop_edit_op", text="Sharp", icon = "SHARPCURVE").mode = 5
-        row.operator("mesh.prop_edit_op", text="Linear", icon = "LINCURVE").mode = 6
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'INVERSE_SQUARE':
+            row.operator("mesh.prop_edit_op", text="Inverse Square", icon = "INVERSESQUARECURVE", depress=True).mode = 4
+        else:
+            row.operator("mesh.prop_edit_op", text="Inverse", icon = "INVERSESQUARECURVE").mode = 4
+        
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'SHARP':
+            row.operator("mesh.prop_edit_op", text="Sharp", icon = "SHARPCURVE", depress=True).mode = 5
+        else:
+            row.operator("mesh.prop_edit_op", text="Sharp", icon = "SHARPCURVE").mode = 5
+        
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'LINEAR':
+            row.operator("mesh.prop_edit_op", text="Linear", icon = "LINCURVE", depress=True).mode = 6
+        else:
+            row.operator("mesh.prop_edit_op", text="Linear", icon = "LINCURVE").mode = 6
 
         row = column.row(align=True)
-        row.operator("mesh.prop_edit_op", text="Constant", icon = "NOCURVE").mode = 7
-        row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE").mode = 8
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'CONSTANT':
+            row.operator("mesh.prop_edit_op", text="Constant", icon = "NOCURVE", depress=True).mode = 7
+        else:
+            row.operator("mesh.prop_edit_op", text="Constant", icon = "NOCURVE").mode = 7
+        
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'RANDOM':
+            row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE", depress=True).mode = 8
+        else:
+            row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE").mode = 8
+
