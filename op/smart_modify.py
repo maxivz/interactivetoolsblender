@@ -5,7 +5,7 @@ from ..utils import mesh as mesh
 
 class SmartModify(bpy.types.Operator):
     bl_idname = "mesh.smart_modify"
-    bl_label = "Smart Modify"
+    bl_label = "Smart Modify Pie"
     bl_description = "Context sensitive modification pie menu"
     bl_options = {'REGISTER', 'UNDO'}
 

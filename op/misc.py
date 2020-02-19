@@ -184,9 +184,9 @@ class QuickWireToggle(bpy.types.Operator):
         return{'FINISHED'}
 
 
-class QuickTransformOrientation(bpy.types.Operator):
-    bl_idname = "mesh.quick_transform_orientation"
-    bl_label = "Quick Transform Orientation"
+class TransformOrientationOp(bpy.types.Operator):
+    bl_idname = "mesh.transform_orientation_op"
+    bl_label = "Transform Orientation Operator"
     bl_description = "Sets up a transform orientation from selected"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -266,9 +266,9 @@ class QuickTransformOrientation(bpy.types.Operator):
         return{'FINISHED'}
 
 
-class QuickTransformOrientationPie(bpy.types.Operator):
-    bl_idname = "mesh.quick_transform_orientation_pie"
-    bl_label = "Quick Transform Orientation Pie"
+class TransformOrientationOpPie(bpy.types.Operator):
+    bl_idname = "mesh.transform_orientation_pie"
+    bl_label = "Transform Orientation Pie"
     bl_description = "Sets up a transform orientation from selected"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -277,8 +277,8 @@ class QuickTransformOrientationPie(bpy.types.Operator):
         return{'FINISHED'}
 
 
-class QuickSnapPresets(bpy.types.Operator):
-    bl_idname = "mesh.quick_snap_presets"
+class SnapPresetsOp(bpy.types.Operator):
+    bl_idname = "mesh.snap_presets_op"
     bl_label = "Quick Snap Presets"
     bl_description = "Sets up snapping settings based on presets"
     bl_options = {'REGISTER', 'UNDO'}
@@ -317,9 +317,9 @@ class QuickSnapPresets(bpy.types.Operator):
         return{'FINISHED'}
 
 
-class QuickSnapPresetsPie(bpy.types.Operator):
-    bl_idname = "mesh.quick_snap_presets_pie"
-    bl_label = "Quick Snap Presets Pie"
+class SnapPresetsOpPie(bpy.types.Operator):
+    bl_idname = "mesh.snap_presets_pie"
+    bl_label = "Snap Presets Pie"
     bl_description = "Sets up snapping settings based on presets"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -328,9 +328,9 @@ class QuickSnapPresetsPie(bpy.types.Operator):
         return{'FINISHED'}
 
 
-class QuickPropEdit(bpy.types.Operator):
-    bl_idname = "mesh.quick_prop_edit"
-    bl_label = "Proportional Editing Set"
+class PropEditOp(bpy.types.Operator):
+    bl_idname = "mesh.prop_edit_op"
+    bl_label = "Proportional Editing Op"
     bl_description = "Sets up Proportional Editing Falloffs"
     bl_options = {'REGISTER', 'UNDO'}
 
@@ -385,15 +385,16 @@ class QuickPropEdit(bpy.types.Operator):
         return{'FINISHED'}
 
 
-class QuickPropEditPie(bpy.types.Operator):
-    bl_idname = "mesh.quick_prop_edit_pie"
+class PropEditPie(bpy.types.Operator):
+    bl_idname = "mesh.prop_edit_pie"
     bl_label = "Proportional Editing Pie"
     bl_description = "Sets up Proportional Editing Falloffs"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        bpy.ops.wm.call_menu_pie(name="VIEW_MT_PIE_QPE")
+        bpy.ops.wm.call_menu_pie(name="VIEW_MT_PIE_PropEdit")
         return{'FINISHED'}
+
 
 class WireShadedToggle(bpy.types.Operator):
     bl_idname = "mesh.wire_shaded_toggle"

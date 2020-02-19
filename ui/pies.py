@@ -285,7 +285,7 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         pie = layout.menu_pie()
 
         # 4 - LEFT
-        
+
         submenu = pie.column()
         container = submenu.box()
         column = container.column()
@@ -378,8 +378,6 @@ class VIEW3D_MT_PIE_SM_mesh(Menu):
         row.operator("mesh.quick_flatten", text = "Z").mode = 4
         '''
 
-        
-
 
 class VIEW3D_MT_PIE_SM_looptools(Menu):
     # bl_idname = "mesh.ssc_new_obj_menu"
@@ -418,48 +416,28 @@ class VIEW3D_MT_PIE_QTO(Menu):
         pie = layout.menu_pie()
 
         # 4 - LEFT
-        pie.operator("mesh.quick_transform_orientation", text="Set Custom 2", icon='TRIA_DOWN').mode = 2
+        pie.operator("mesh.transform_orientation_op", text="Set Custom 2", icon='TRIA_DOWN').mode = 2
 
         # 6 - RIGHT
-        pie.operator("mesh.quick_transform_orientation", text="Use Custom 2", icon='TRIA_UP').mode = 5
+        pie.operator("mesh.transform_orientation_op", text="Use Custom 2", icon='TRIA_UP').mode = 5
 
         # 2 - BOTTOM
-        pie.operator("mesh.quick_transform_orientation", text="Reset Working Pivot", icon='FILE_REFRESH').mode = 7
+        pie.operator("mesh.transform_orientation_op", text="Reset Working Pivot", icon='FILE_REFRESH').mode = 7
         # 8 - TOP
         menu = pie.row()
         draw_orientations_submenu(menu)
 
         # 7 - TOP - LEFT
-        pie.operator("mesh.quick_transform_orientation", text="Set Custom 1", icon='TRIA_DOWN').mode = 1
+        pie.operator("mesh.transform_orientation_op", text="Set Custom 1", icon='TRIA_DOWN').mode = 1
 
         # 9 - TOP - RIGHT
-        pie.operator("mesh.quick_transform_orientation", text="Use Custom 1", icon='TRIA_UP').mode = 4
+        pie.operator("mesh.transform_orientation_op", text="Use Custom 1", icon='TRIA_UP').mode = 4
 
         # 1 - BOTTOM - LEFT
-        pie.operator("mesh.quick_transform_orientation", text="Set Custom 3", icon='TRIA_DOWN').mode = 3
+        pie.operator("mesh.transform_orientation_op", text="Set Custom 3", icon='TRIA_DOWN').mode = 3
 
         # 3 - BOTTOM - RIGHT
-        pie.operator("mesh.quick_transform_orientation", text="Use Custom 3", icon='TRIA_UP').mode = 6
-
-
-class VIEW3D_MT_PIE_SnapPresets(Menu):
-    bl_label = "Snap Presets"
-
-    def draw(self, context):
-        layout = self.layout
-        pie = layout.menu_pie()
-
-        # 4 - LEFT
-        pie.operator("mesh.quick_transform_orientation", text="Surface").mode = 2
-
-        # 6 - RIGHT
-        pie.operator("mesh.quick_transform_orientation", text="Grid").mode = 5
-
-        # 2 - BOTTOM
-        pie.operator("mesh.quick_transform_orientation", text="Snap").mode = 7
-
-        # 8 - TOP
-        pie.operator("mesh.quick_transform_orientation", text="Proportional Editing").mode = 7
+        pie.operator("mesh.transform_orientation_op", text="Use Custom 3", icon='TRIA_UP').mode = 6
 
 
 def draw_orientations_submenu(ui_space):
@@ -470,14 +448,14 @@ def draw_orientations_submenu(ui_space):
     row = column.row(align=True)
     row.label(text="Default Orientations")
     row = column.row(align=True)
-    row.operator("mesh.quick_transform_orientation", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
-    row.operator("mesh.quick_transform_orientation", text="Local", icon="ORIENTATION_LOCAL").mode = 9
-    row.operator("mesh.quick_transform_orientation", text="Cursor", icon="ORIENTATION_CURSOR").mode = 13
+    row.operator("mesh.transform_orientation_op", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
+    row.operator("mesh.transform_orientation_op", text="Local", icon="ORIENTATION_LOCAL").mode = 9
+    row.operator("mesh.transform_orientation_op", text="Cursor", icon="ORIENTATION_CURSOR").mode = 13
 
     row = column.row(align=True)
-    row.operator("mesh.quick_transform_orientation", text="Normal", icon="ORIENTATION_NORMAL").mode = 10
-    row.operator("mesh.quick_transform_orientation", text="View", icon="ORIENTATION_VIEW").mode = 12
-    row.operator("mesh.quick_transform_orientation", text="Gimbal", icon="ORIENTATION_GIMBAL").mode = 11
+    row.operator("mesh.transform_orientation_op", text="Normal", icon="ORIENTATION_NORMAL").mode = 10
+    row.operator("mesh.transform_orientation_op", text="View", icon="ORIENTATION_VIEW").mode = 12
+    row.operator("mesh.transform_orientation_op", text="Gimbal", icon="ORIENTATION_GIMBAL").mode = 11
 
 
 def draw_snap_submenu(ui_space):
@@ -488,12 +466,12 @@ def draw_snap_submenu(ui_space):
     row = column.row(align=True)
     row.label(text="Default Orientations")
     row = column.row(align=True)
-    row.operator("mesh.quick_transform_orientation", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
-    row.operator("mesh.quick_transform_orientation", text="Local", icon="ORIENTATION_LOCAL").mode = 9
+    row.operator("mesh.transform_orientation_pie", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
+    row.operator("mesh.transform_orientation_pie", text="Local", icon="ORIENTATION_LOCAL").mode = 9
 
     row = column.row(align=True)
-    row.operator("mesh.quick_transform_orientation", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
-    row.operator("mesh.quick_transform_orientation", text="Local", icon="ORIENTATION_LOCAL").mode = 9
+    row.operator("mesh.transform_orientation_pie", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
+    row.operator("mesh.transform_orientation_pie", text="Local", icon="ORIENTATION_LOCAL").mode = 9
 
 
 class VIEW3D_MT_PIE_TransformOptions(Menu):
@@ -507,13 +485,13 @@ class VIEW3D_MT_PIE_TransformOptions(Menu):
         draw_orientations_submenu(pie)
 
         # 6 - RIGHT
-        pie.operator("mesh.quick_transform_orientation", text="Pivot").mode = 5
+        pie.operator("mesh.transform_orientation_pie", text="Pivot").mode = 5
 
         # 2 - BOTTOM
-        pie.operator("mesh.quick_transform_orientation", text="Snap").mode = 7
+        pie.operator("mesh.transform_orientation_pie", text="Snap").mode = 7
 
         # 8 - TOP
-        pie.operator("mesh.quick_transform_orientation", text="Proportional Editing").mode = 7
+        pie.operator("mesh.transform_orientation_pie", text="Proportional Editing").mode = 7
 
 
 class VIEW3D_MT_PIE_QSP(Menu):
@@ -524,20 +502,20 @@ class VIEW3D_MT_PIE_QSP(Menu):
         pie = layout.menu_pie()
 
         # 4 - LEFT
-        op = pie.operator("mesh.quick_snap_presets", text="Vert Closest", icon="SNAP_VERTEX").mode = 3
+        op = pie.operator("mesh.snap_presets_op", text="Vert Closest", icon="SNAP_VERTEX").mode = 3
 
         # 6 - RIGHT
-        pie.operator("mesh.quick_snap_presets", text="Vert Center", icon="SNAP_VERTEX").mode = 2
+        pie.operator("mesh.snap_presets_op", text="Vert Center", icon="SNAP_VERTEX").mode = 2
 
         # 2 - BOTTOM
-        pie.operator("mesh.quick_snap_presets", text="Face Normal", icon="SNAP_FACE").mode = 4
+        pie.operator("mesh.snap_presets_op", text="Face Normal", icon="SNAP_FACE").mode = 4
 
         # 8 - TOP
-        pie.operator("mesh.quick_snap_presets", text="Grid Absolute", icon="SNAP_INCREMENT").mode = 1
+        pie.operator("mesh.snap_presets_op", text="Grid Absolute", icon="SNAP_INCREMENT").mode = 1
 
 
-class VIEW_MT_PIE_QPE(Menu):
-    bl_label = "Quick Prop Edit"
+class VIEW_MT_PIE_PropEdit(Menu):
+    bl_label = "Prop Edit"
 
     def draw(self, context):
         layout = self.layout
@@ -545,19 +523,19 @@ class VIEW_MT_PIE_QPE(Menu):
 
 
         if bpy.context.scene.tool_settings.use_proportional_connected:
-            pie.operator("mesh.quick_prop_edit", text="Connected Only", icon = "PROP_ON", depress=True).mode = 10
+            pie.operator("mesh.prop_edit_op", text="Connected Only", icon = "PROP_ON", depress=True).mode = 10
         else:
-            pie.operator("mesh.quick_prop_edit", text="Connected Only", icon = "PROP_OFF").mode = 10
+            pie.operator("mesh.prop_edit_op", text="Connected Only", icon = "PROP_OFF").mode = 10
 
         if bpy.context.scene.tool_settings.use_proportional_projected:
-            pie.operator("mesh.quick_prop_edit", text="Projected", icon = "PROP_ON", depress=True).mode = 11
+            pie.operator("mesh.prop_edit_op", text="Projected", icon = "PROP_ON", depress=True).mode = 11
         else:
-            pie.operator("mesh.quick_prop_edit", text="Projected", icon = "PROP_OFF").mode = 11
-        
+            pie.operator("mesh.prop_edit_op", text="Projected", icon = "PROP_OFF").mode = 11
+
         if bpy.context.scene.tool_settings.use_proportional_edit:
-            pie.operator("mesh.quick_prop_edit", text="Proportional Edit", icon = "PROP_ON", depress=True).mode = 9
+            pie.operator("mesh.prop_edit_op", text="Proportional Edit", icon = "PROP_ON", depress=True).mode = 9
         else:
-            pie.operator("mesh.quick_prop_edit", text="Proportional Edit", icon = "PROP_OFF").mode = 9
+            pie.operator("mesh.prop_edit_op", text="Proportional Edit", icon = "PROP_OFF").mode = 9
 
         submenu = pie.column()
         container = submenu.box()
@@ -566,15 +544,15 @@ class VIEW_MT_PIE_QPE(Menu):
         row = column.row(align=False)
         row.label(text="Falloffs")
         row = column.row(align=True)
-        row.operator("mesh.quick_prop_edit", text="Smooth", icon = "SMOOTHCURVE").mode = 1
-        row.operator("mesh.quick_prop_edit", text="Sphere", icon = "SPHERECURVE").mode = 2
-        row.operator("mesh.quick_prop_edit", text="Root", icon = "ROOTCURVE").mode = 3
+        row.operator("mesh.prop_edit_op", text="Smooth", icon = "SMOOTHCURVE").mode = 1
+        row.operator("mesh.prop_edit_op", text="Sphere", icon = "SPHERECURVE").mode = 2
+        row.operator("mesh.prop_edit_op", text="Root", icon = "ROOTCURVE").mode = 3
 
         row = column.row(align=True)
-        row.operator("mesh.quick_prop_edit", text="Inverse Square", icon = "INVERSESQUARECURVE").mode = 4
-        row.operator("mesh.quick_prop_edit", text="Sharp", icon = "SHARPCURVE").mode = 5
-        row.operator("mesh.quick_prop_edit", text="Linear", icon = "LINCURVE").mode = 6
+        row.operator("mesh.prop_edit_op", text="Inverse Square", icon = "INVERSESQUARECURVE").mode = 4
+        row.operator("mesh.prop_edit_op", text="Sharp", icon = "SHARPCURVE").mode = 5
+        row.operator("mesh.prop_edit_op", text="Linear", icon = "LINCURVE").mode = 6
 
         row = column.row(align=True)
-        row.operator("mesh.quick_prop_edit", text="Constant", icon = "NOCURVE").mode = 7
-        row.operator("mesh.quick_prop_edit", text="Random", icon = "RNDCURVE").mode = 8
+        row.operator("mesh.prop_edit_op", text="Constant", icon = "NOCURVE").mode = 7
+        row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE").mode = 8

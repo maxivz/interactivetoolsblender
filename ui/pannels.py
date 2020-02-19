@@ -65,13 +65,13 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
 
         layout.label(text="Pie Menus")
         row = layout.row()
-        row.operator('mesh.smart_modify', text="Smart Modify")
+        row.operator('mesh.smart_modify', text="Smart Modify Pie")
         row = layout.row()
-        row.operator('mesh.quick_transform_orientation_pie', text="Quick Transform Orientation")
+        row.operator('mesh.transform_orientation_pie', text="Transform Orientation Pie")
         row = layout.row()
-        row.operator('mesh.quick_snap_presets_pie', text="Quick Snap Presets")
+        row.operator('mesh.snap_presets_pie', text="Snap Presets Pie")
         row = layout.row()
-        row.operator('mesh.quick_prop_edit_pie', text="Quick Prop Edit Pie")
+        row.operator('mesh.prop_edit_pie', text="Prop Edit Pie")
 
         layout.label(text="Toggles")
         row = layout.row()
