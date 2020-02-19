@@ -1,6 +1,6 @@
 import bpy
 from . ui.menus import load_menus_itools, unload_menus_itools, VIEW3D_MT_object_mode_itools, VIEW3D_MT_edit_mesh_itools, VIEW3D_MT_edit_lattice_itools, VIEW3D_MT_edit_uvs_itools
-from . ui.pies import VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_QTO, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_QSP, VIEW3D_MT_PIE_SM_curve
+from . ui.pies import VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_QTO, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_QSP, VIEW3D_MT_PIE_SM_curve, VIEW_MT_PIE_QPE
 from . ui.pannels import VIEW3D_PT_Itools
 #from . utils.debug import MaxivzToolsDebug_PT_Panel, DebugOp
 from . op.super_smart_create import SuperSmartCreate
@@ -9,7 +9,7 @@ from . op.quick_align import QuickAlign
 from . op.pivot import QuickPivot, QuickEditPivot
 from . op.smart_extrude import SmartExtrude, SmartExtrudeModal
 from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace
-from . op.misc import TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, QuickTransformOrientation, QuickHpLpNamer, QuickTransformOrientationPie, QuickVisualGeoToMesh, QuickSnapPresets, QuickSnapPresetsPie
+from . op.misc import TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, QuickTransformOrientation, QuickHpLpNamer, QuickTransformOrientationPie, QuickVisualGeoToMesh, QuickSnapPresets, QuickSnapPresetsPie, QuickPropEditPie, QuickPropEdit
 from . op.smart_delete import SmartDelete
 from . op.smart_modify import SmartModify
 from . op.selection import SmartSelectLoop, SmartSelectRing
@@ -47,9 +47,10 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_uv, VIEW3D_MT_PIE_SM_curve,
            QuickLattice,SmartExtrude , SeamsFromSharps, QuickVisualGeoToMesh,
            QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,QuickPipe,
-           MenuPlaceholder, SmartModify, LatticeResolution2x2x2,
+           MenuPlaceholder, SmartModify, LatticeResolution2x2x2, VIEW_MT_PIE_QPE,
            LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer,
-           VIEW3D_MT_PIE_QSP, QuickSnapPresetsPie, QuickSnapPresets)
+           VIEW3D_MT_PIE_QSP, QuickSnapPresetsPie, QuickSnapPresets,
+           QuickPropEditPie, QuickPropEdit)
 
 legacy_classes = (SmartExtrudeModal, SmartTranslate)
 

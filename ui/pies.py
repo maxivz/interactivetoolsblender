@@ -534,3 +534,47 @@ class VIEW3D_MT_PIE_QSP(Menu):
 
         # 8 - TOP
         pie.operator("mesh.quick_snap_presets", text="Grid Absolute", icon="SNAP_INCREMENT").mode = 1
+
+
+class VIEW_MT_PIE_QPE(Menu):
+    bl_label = "Quick Prop Edit"
+
+    def draw(self, context):
+        layout = self.layout
+        pie = layout.menu_pie()
+
+
+        if bpy.context.scene.tool_settings.use_proportional_connected:
+            pie.operator("mesh.quick_prop_edit", text="Connected Only", icon = "PROP_ON", depress=True).mode = 10
+        else:
+            pie.operator("mesh.quick_prop_edit", text="Connected Only", icon = "PROP_OFF").mode = 10
+
+        if bpy.context.scene.tool_settings.use_proportional_projected:
+            pie.operator("mesh.quick_prop_edit", text="Projected", icon = "PROP_ON", depress=True).mode = 11
+        else:
+            pie.operator("mesh.quick_prop_edit", text="Projected", icon = "PROP_OFF").mode = 11
+        
+        if bpy.context.scene.tool_settings.use_proportional_edit:
+            pie.operator("mesh.quick_prop_edit", text="Proportional Edit", icon = "PROP_ON", depress=True).mode = 9
+        else:
+            pie.operator("mesh.quick_prop_edit", text="Proportional Edit", icon = "PROP_OFF").mode = 9
+
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+
+        row = column.row(align=False)
+        row.label(text="Falloffs")
+        row = column.row(align=True)
+        row.operator("mesh.quick_prop_edit", text="Smooth", icon = "SMOOTHCURVE").mode = 1
+        row.operator("mesh.quick_prop_edit", text="Sphere", icon = "SPHERECURVE").mode = 2
+        row.operator("mesh.quick_prop_edit", text="Root", icon = "ROOTCURVE").mode = 3
+
+        row = column.row(align=True)
+        row.operator("mesh.quick_prop_edit", text="Inverse Square", icon = "INVERSESQUARECURVE").mode = 4
+        row.operator("mesh.quick_prop_edit", text="Sharp", icon = "SHARPCURVE").mode = 5
+        row.operator("mesh.quick_prop_edit", text="Linear", icon = "LINCURVE").mode = 6
+
+        row = column.row(align=True)
+        row.operator("mesh.quick_prop_edit", text="Constant", icon = "NOCURVE").mode = 7
+        row.operator("mesh.quick_prop_edit", text="Random", icon = "RNDCURVE").mode = 8

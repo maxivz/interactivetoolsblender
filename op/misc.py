@@ -221,7 +221,7 @@ class QuickTransformOrientation(bpy.types.Operator):
         bpy.ops.transform.create_orientation(name=self.target_space, use=True, overwrite=True)
 
     def set_orientation(self, context):
-        if self.mode in [4,5,6]:
+        if self.mode in [4, 5, 6]:
             try:
                 bpy.context.scene.transform_orientation_slots[0].type = self.target_space
 
@@ -327,6 +327,73 @@ class QuickSnapPresetsPie(bpy.types.Operator):
         bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_QSP")
         return{'FINISHED'}
 
+
+class QuickPropEdit(bpy.types.Operator):
+    bl_idname = "mesh.quick_prop_edit"
+    bl_label = "Proportional Editing Set"
+    bl_description = "Sets up Proportional Editing Falloffs"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    mode: bpy.props.IntProperty(default=0)
+
+    def set_preset(self, context):
+
+        if self.mode == 1:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'SMOOTH'
+
+        elif self.mode == 2:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'SPHERE'
+
+        elif self.mode == 3:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'ROOT'
+
+        elif self.mode == 4:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'INVERSE_SQUARE'
+
+        elif self.mode == 5:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'SHARP'
+
+        elif self.mode == 6:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'LINEAR'
+
+        elif self.mode == 7:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'CONSTANT'
+
+        elif self.mode == 8:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'RANDOM'
+        
+        elif self.mode == 9:
+            if bpy.context.scene.tool_settings.use_proportional_edit:
+                bpy.context.scene.tool_settings.use_proportional_edit = False
+            else:
+                bpy.context.scene.tool_settings.use_proportional_edit = True
+
+        elif self.mode == 10:
+            if bpy.context.scene.tool_settings.use_proportional_connected:
+                    bpy.context.scene.tool_settings.use_proportional_connected = False
+            else:
+                bpy.context.scene.tool_settings.use_proportional_connected = True
+
+        elif self.mode == 11:
+            if bpy.context.scene.tool_settings.use_proportional_projected:
+                bpy.context.scene.tool_settings.use_proportional_projected = False
+            else:
+                bpy.context.scene.tool_settings.use_proportional_projected = True
+
+    def execute(self, context):
+        self.set_preset(context)
+        return{'FINISHED'}
+
+
+class QuickPropEditPie(bpy.types.Operator):
+    bl_idname = "mesh.quick_prop_edit_pie"
+    bl_label = "Proportional Editing Pie"
+    bl_description = "Sets up Proportional Editing Falloffs"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        bpy.ops.wm.call_menu_pie(name="VIEW_MT_PIE_QPE")
+        return{'FINISHED'}
 
 class WireShadedToggle(bpy.types.Operator):
     bl_idname = "mesh.wire_shaded_toggle"
