@@ -47,7 +47,7 @@ class QuickPipe(bpy.types.Operator):
         bpy.ops.wm.context_modal_mouse('INVOKE_DEFAULT',
                                            data_path_iter='selected_editable_objects',
                                            data_path_item='data.bevel_depth',
-                                           input_scale=0.050000000149011612,
+                                           input_scale=0.02000000149011612,
                                            header_text='Pipe Thickness %.f')
 
     def __init__(self):

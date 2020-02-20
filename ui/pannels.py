@@ -5,8 +5,8 @@ from ..utils.user_prefs import get_enable_legacy_tools
 
 class VIEW3D_PT_Itools(bpy.types.Panel):
     bl_idname = "VIEW3D_PT_Itools"
-    bl_label = "Maxivz Interactive Tools"
-    bl_category = "Maxivz Tools"
+    bl_label = "Interactive Tools"
+    bl_category = "Interactive Tools"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
 
@@ -43,7 +43,7 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row = layout.row()
         row.operator('mesh.smart_delete', text="Smart Delete", icon="TRASH")
         row = layout.row()
-        row.operator('mesh.smart_extrude', text="Smart Extrude")
+        row.operator('mesh.smart_extrude', text="Smart Extrude", icon="EMPTY_SINGLE_ARROW")
 
         layout.label(text="Utilities")
         row = layout.row(align=True)
