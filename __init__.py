@@ -1,29 +1,30 @@
 import bpy
 from . ui.menus import load_menus_itools, unload_menus_itools, VIEW3D_MT_object_mode_itools, VIEW3D_MT_edit_mesh_itools, VIEW3D_MT_edit_lattice_itools, VIEW3D_MT_edit_uvs_itools
-from . ui.pies import VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_Obj
+from . ui.pies import VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_QTO, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_QSP, VIEW3D_MT_PIE_SM_curve, VIEW_MT_PIE_PropEdit
 from . ui.pannels import VIEW3D_PT_Itools
-# from . utils.debug import MaxivzToolsDebug_PT_Panel, DebugOp
+#from . utils.debug import MaxivzToolsDebug_PT_Panel, DebugOp
 from . op.super_smart_create import SuperSmartCreate
 from . op.radial_symmetry import QuickRadialSymmetry
 from . op.quick_align import QuickAlign
 from . op.pivot import QuickPivot, QuickEditPivot
-from . op.smart_extrude import SmartExtrude
+from . op.smart_extrude import SmartExtrude, SmartExtrudeModal
 from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace
-from . op.misc import TransformModeCycle, CSBevel, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, QuickTransformOrientation, QuickHpLpNamer
+from . op.misc import TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, TransformOrientationOp, QuickHpLpNamer, TransformOrientationOpPie, QuickVisualGeoToMesh, SnapPresetsOp, SnapPresetsOpPie, PropEditPie, PropEditOp
 from . op.smart_delete import SmartDelete
 from . op.smart_modify import SmartModify
 from . op.selection import SmartSelectLoop, SmartSelectRing
-from . op.smart_transform import SmartTranslate
+from . op.smart_transform import SmartTranslate, CSMove, CSRotate, CSScale
 from . op.quick_lattice import QuickLattice, LatticeResolution2x2x2, LatticeResolution3x3x3, LatticeResolution4x4x4
+from . op.quick_pipe import QuickPipe
 from . op.rebase_cylinder import RebaseCylinder
 from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromSharps, UvsFromSharps
-from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps
+from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps, get_enable_legacy_tools
 
 bl_info = {
     "name": "MaxivzsTools",
     "author": "Maxi Vazquez",
     "description": "Collection of context sensitive and time saving tools",
-    "blender": (2, 80, 0),
+    "blender": (2, 81, 0),
     "location": "View3D",
     "version": (1, 0),
     "tracker_url": "https://blenderartists.org/t/interactive-tools-for-blender-2-8/1164932",
@@ -35,18 +36,25 @@ bl_info = {
 
 classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_Obj, RebaseCylinder,
            VIEW3D_MT_object_mode_itools, VIEW3D_MT_edit_mesh_itools, VIEW3D_MT_edit_lattice_itools,
-           VIEW3D_MT_edit_uvs_itools, SuperSmartCreate, TransformModeCycle, QuickAlign,
-           QuickRadialSymmetry,QuickPivot, QuickEditPivot, SelectionModeCycle,
-           QuickSelectionEdge, QuickSelectionVert, QuickSelectionFace,
+            VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, TransformOrientationOpPie,
+           VIEW3D_MT_edit_uvs_itools, VIEW3D_MT_PIE_QTO, SuperSmartCreate, TransformModeCycle, QuickAlign,
+           QuickRadialSymmetry,QuickPivot, QuickEditPivot, SelectionModeCycle,VIEW3D_MT_PIE_TransformOptions,
+           QuickSelectionEdge, QuickSelectionVert, QuickSelectionFace, VIEW3D_MT_PIE_SM_lattice,
            FlexiBezierToolsCreate, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle,
            QuickWireToggle, WireShadedToggle, CSBevel, SmartDelete, TransformOrientationCycle,
-           AddonPreferences, OBJECT_OT_addon_prefs_example, QuickTransformOrientation,
-           SmartSelectLoop, SmartSelectRing, SmartTranslate,
-           QuickLattice, SmartExtrude, SeamsFromSharps,
-           QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,
-           MenuPlaceholder, SmartModify, LatticeResolution2x2x2,
-           LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer)
+           AddonPreferences, OBJECT_OT_addon_prefs_example, TransformOrientationOp, QuickFlattenAxis,
+           SmartSelectLoop, SmartSelectRing, CSMove, CSRotate, CSScale,
+           VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_uv, VIEW3D_MT_PIE_SM_curve,
+           QuickLattice,SmartExtrude , SeamsFromSharps, QuickVisualGeoToMesh,
+           QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,QuickPipe,
+           MenuPlaceholder, SmartModify, LatticeResolution2x2x2, VIEW_MT_PIE_PropEdit,
+           LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer,
+           VIEW3D_MT_PIE_QSP, SnapPresetsOpPie, SnapPresetsOp,
+           PropEditPie, PropEditOp)
 
+legacy_classes = (SmartExtrudeModal, SmartTranslate)
+
+classes += legacy_classes
 
 def register():
     from bpy.utils import register_class
@@ -57,6 +65,7 @@ def register():
     load_menus_itools()
 
     # Keymapping
+
     # register_keymaps()
 
 

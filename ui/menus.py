@@ -9,19 +9,21 @@ class VIEW3D_MT_object_mode_itools(bpy.types.Menu):
 
         layout.operator("mesh.super_smart_create", text="Super Smart Create")
         layout.operator("mesh.smart_delete", text="Smart Delete")
+        layout.operator("mesh.smart_modify", text="Smart Modify")
+        layout.operator("mesh.smart_extrude", text="Smart Extrude")
 
         layout.separator()
         layout.operator("mesh.quick_pivot", text="Quick Origin")
         layout.operator("mesh.simple_edit_pivot", text="Edit Origin")
-        layout.operator("mesh.quick_transform_orientation", text="Quick Transform Orientation")
+        layout.operator("mesh.transform_orientation_pie_pie", text="Quick Transform Orientation")
         layout.operator('mesh.quick_align', text="Quick Align")
         layout.operator('mesh.quick_lattice', text="Quick Lattice")
         layout.operator('mesh.rebase_cylinder', text="Edit Rebased Cylinder")
         layout.operator('mesh.radial_symmetry', text="Radial Symmetry")
 
         layout.separator()
-        layout.operator('mesh.seams_from_sharps', text="Seams From Sharps")
-        layout.operator('mesh.uvs_from_sharps', text="Uvs From Sharps")
+        layout.operator('uv.seams_from_sharps', text="Seams From Sharps")
+        layout.operator('uv.uvs_from_sharps', text="Uvs From Sharps")
 
         layout.separator()
         layout.operator("object.transform_apply", text="Apply Transforms")
@@ -37,10 +39,13 @@ class VIEW3D_MT_edit_mesh_itools(bpy.types.Menu):
 
         layout.operator("mesh.super_smart_create", text="Super Smart Create")
         layout.operator("mesh.smart_delete", text="Smart Delete")
+        layout.operator("mesh.smart_modify", text="Smart Modify")
+        layout.operator("mesh.smart_extrude", text="Smart Extrude")
 
         layout.separator()
         layout.operator("mesh.quick_pivot", text="Quick Origin")
-        layout.operator("mesh.quick_transform_orientation", text="Quick Transform Orientation")
+        layout.operator("mesh.transform_orientation_pie_pie", text="Quick Transform Orientation")
+        layout.operator('mesh.quick_pipe', text="Quick Pipe")
         layout.operator('mesh.quick_lattice', text="Quick Lattice")
         layout.operator('mesh.rebase_cylinder', text="Rebase Cylinder")
 
@@ -69,6 +74,7 @@ class VIEW3D_MT_edit_uvs_itools(bpy.types.Menu):
         layout.operator('uv.seams_from_islands', text="Seams From Islands")
         layout.operator('uv.seams_from_sharps', text="Seams From Sharps")
         layout.operator('uv.uvs_from_sharps', text="UVs From Sharps")
+        layout.operator("mesh.smart_modify", text="Smart Modify")
 
 
 def menu_object_mode_itools(self, context):

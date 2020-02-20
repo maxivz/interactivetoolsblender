@@ -9,10 +9,100 @@ def mouse_2d_to_3d(context, event):
     return Vector(location)
 
 
+class CSMove(bpy.types.Operator):
+    bl_idname = "mesh.cs_move"
+    bl_label = "CS Move"
+    bl_description = "Context Sensitive Move Tool"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def smart_move(self):
+        areas = bpy.context.workspace.screens[0].areas
+
+        for area in areas:
+            for space in area.spaces:
+                if space.type == 'VIEW_3D':
+                    # Make sure active tool is set to select
+                    override = bpy.context.copy()
+                    override["space_data"] = area.spaces[0]
+                    override["area"] = area
+                    bpy.ops.wm.tool_set_by_id(override, name="builtin.select_box")
+
+                    if space.show_gizmo_object_translate:
+                        bpy.ops.transform.translate('INVOKE_DEFAULT')
+                    else:
+                        space.show_gizmo_object_translate = True
+                        space.show_gizmo_object_rotate = False
+                        space.show_gizmo_object_scale = False
+
+    def execute(self, context):
+        self.smart_move()
+        return{'FINISHED'}
+
+
+class CSRotate(bpy.types.Operator):
+    bl_idname = "mesh.cs_rotate"
+    bl_label = "CS Rotate"
+    bl_description = "Context Sensitive Rotate Tool"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def smart_rotate(self):
+        areas = bpy.context.workspace.screens[0].areas
+
+        for area in areas:
+            for space in area.spaces:
+                if space.type == 'VIEW_3D':
+                    # Make sure active tool is set to select
+                    override = bpy.context.copy()
+                    override["space_data"] = area.spaces[0]
+                    override["area"] = area
+                    bpy.ops.wm.tool_set_by_id(override, name="builtin.select_box")
+
+                    if space.show_gizmo_object_rotate:
+                        bpy.ops.transform.rotate('INVOKE_DEFAULT')
+                    else:
+                        space.show_gizmo_object_translate = False
+                        space.show_gizmo_object_rotate = True
+                        space.show_gizmo_object_scale = False
+
+    def execute(self, context):
+        self.smart_rotate()
+        return{'FINISHED'}
+
+
+class CSScale(bpy.types.Operator):
+    bl_idname = "mesh.cs_scale"
+    bl_label = "CS Scale"
+    bl_description = "Context Sensitive Scale Tool"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def smart_scale(self):
+        areas = bpy.context.workspace.screens[0].areas
+
+        for area in areas:
+            for space in area.spaces:
+                if space.type == 'VIEW_3D':
+                    # Make sure active tool is set to select
+                    override = bpy.context.copy()
+                    override["space_data"] = area.spaces[0]
+                    override["area"] = area
+                    bpy.ops.wm.tool_set_by_id(override, name="builtin.select_box")
+
+                    if space.show_gizmo_object_scale:
+                        bpy.ops.transform.resize('INVOKE_DEFAULT')
+                    else:
+                        space.show_gizmo_object_translate = False
+                        space.show_gizmo_object_rotate = False
+                        space.show_gizmo_object_scale = True
+
+    def execute(self, context):
+        self.smart_scale()
+        return{'FINISHED'}
+
+
 class SmartTranslate(bpy.types.Operator):
     bl_idname = "mesh.smart_translate_modal"
-    bl_label = "Smart Translate"
-    bl_description = "Smart Translate Tool"
+    bl_label = "Smart Translate Legacy"
+    bl_description = "Smart Translate Tool, Legacy feature use at own risk"
     bl_options = {'REGISTER', 'UNDO'}
 
     initial_mouse_pos = Vector((0, 0, 0))

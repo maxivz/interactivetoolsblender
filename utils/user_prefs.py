@@ -58,12 +58,16 @@ def activate_keymap(key):
     print("Get keymap")
 
 
-def addon_active_prop(addon_active, addon, row):
+def addon_active_prop(addon_active, addon, row, url='none'):
     if addon_active:
         row.operator('menu.placeholder', text=addon)
 
     else:
-        row.operator('menu.placeholder', text=addon, icon="ERROR")
+        if url != 'none':
+            row.operator("wm.url_open", text='Get '+addon, icon="ERROR").url = url
+
+        else:
+            row.operator('menu.placeholder', text=addon, icon="ERROR")
 
 
 def get_addon_name():
@@ -93,16 +97,6 @@ def get_keymaps_by_key():
         print("Keymap :", km)
         for kmi in km:
             print("Keymap Item :", kmi)
-    """
-    wm = bpy.context.window_manager
-    kc = wm.keyconfigs.addon
-    if '3D View Generic' in kc.keymaps:
-        km = kc.keymaps['3D View Generic']
-        for km, kmi in addon_keymaps:
-            km.keymap_items.remove(kmi)
-            wm.keyconfigs.addon.keymaps.remove(km)
-    addon_keymaps.clear()
-    """
 
 
 def get_keymap(name):
@@ -145,6 +139,10 @@ def get_bezierutilities_active():
     return bezierutilities_active
 
 
+def get_textools_active():
+    return textools_active
+
+
 def get_ssc_switch_modes():
     prefs = get_addon_preferences()
     return prefs.ssc_switch_modes
@@ -174,21 +172,26 @@ def get_enable_dissolve_faces():
     prefs = get_addon_preferences()
     return prefs.enable_dissolve_faces
 
+
 def get_radsym_hide_pivot():
     prefs = get_addon_preferences()
     return prefs.radsym_hide_pivot
+
 
 def get_quickhplp_lp_suffix():
     prefs = get_addon_preferences()
     return prefs.quickhplp_lp_suffix
 
+
 def get_quickhplp_hp_suffix():
     prefs = get_addon_preferences()
     return prefs.quickhplp_hp_suffix
 
+
 def get_enable_wireshaded_cs():
     prefs = get_addon_preferences()
     return prefs.enable_wireshaded_cs
+
 
 def unregister_keymaps():
     # wm = bpy.context.window_manager
@@ -196,6 +199,16 @@ def unregister_keymaps():
         km.keymap_items.remove(kmi)
         # wm.keyconfigs.addon.keymaps.remove(km)
     addon_keymaps.clear()
+
+
+def get_enable_legacy_origin():
+    prefs = get_addon_preferences()
+    return prefs.enable_legacy_origin
+
+
+def get_enable_legacy_tools():
+    prefs = get_addon_preferences()
+    return prefs.enable_legacy_tools
 
 # Store keymaps to access after registration
 addon_keymaps = []
@@ -205,13 +218,14 @@ f2_active = addon_installed("mesh_f2")
 loop_tools_active = addon_installed("mesh_looptools")
 qblocker_active = addon_installed("QBlocker")
 bezierutilities_active = addon_installed("blenderbezierutils")
+textools_active = addon_installed("TexTools")
 set_flow_active = addon_installed("EdgeFlow-master")
 
 
 class MenuPlaceholder(bpy.types.Operator):
     bl_idname = "menu.placeholder"
     bl_label = ""
-    bl_description = ""
+    bl_description = "Please enable this addon manually"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
@@ -226,7 +240,7 @@ class AddonPreferences(AddonPreferences):
     # Properties
     cateogries: EnumProperty(name="Categories",
                              items=[("GENERAL", "General Settings", ""),
-                                    ("KEYMAPS", "Keymaps", ""), ],
+                                    ("KEYMAPS", "Keymaps (BETA)", ""), ],
                              default="GENERAL")
 
     ssc_switch_modes: BoolProperty(name="Super Smart Create Switch Modes",
@@ -268,6 +282,15 @@ class AddonPreferences(AddonPreferences):
     enable_wireshaded_cs: BoolProperty(name="Wireframe / Shaded Context Sensitive Mode",
                                        description="Enables context sensitive mode for the Wireframe / Shaded Tool",
                                        default=True)
+
+    enable_legacy_origin:  BoolProperty(name="Legacy Origin Edit Mode",
+                                        description="Enable Legacy Origin Edit Mode",
+                                        default=False)
+
+    enable_legacy_tools:  BoolProperty(name="Enable Legacy Tools",
+                                       description="Enable Legacy Tools that are no longer in active development or supported. Use at own risk",
+                                       default=False)
+
 
     def draw(self, context):
         layout = self.layout
@@ -313,9 +336,6 @@ class AddonPreferences(AddonPreferences):
             row.prop(self, "ssc_bezierutilities_integration", toggle=False)
 
         row = layout.row(align=True)
-        row.prop(self, "ssc_flexibezier_integration", toggle=False)
-
-        row = layout.row(align=True)
         row.prop(self, "enable_dissolve_faces", toggle=False)
 
         row = layout.row(align=True)
@@ -329,7 +349,15 @@ class AddonPreferences(AddonPreferences):
 
         row = layout.row(align=True)
         row.prop(self, "enable_wireshaded_cs", toggle=False)
-        
+
+        row = layout.row(align=True)
+        row.prop(self, "enable_legacy_tools", toggle=False)
+
+        if float(bpy.app.version_string[:4]) >= 2.82:
+            row = layout.row(align=True)
+            row.prop(self, "enable_legacy_origin", toggle=False)
+
+
 
         #
         # Recommended Addons::
@@ -341,10 +369,15 @@ class AddonPreferences(AddonPreferences):
         row = layout.row(align=True)
         addon_active_prop(f2_active, "F2", row)
         addon_active_prop(loop_tools_active, "Loop Tools", row)
-        addon_active_prop(set_flow_active, "Set Flow", row)
+        addon_active_prop(set_flow_active, "Set Flow", row,
+                          url='https://github.com/BenjaminSauder/EdgeFlow')
         row = layout.row(align=True)
-        addon_active_prop(qblocker_active, "QBlocker", row)
-        addon_active_prop(bezierutilities_active, "Bezier Utilities", row)
+        addon_active_prop(qblocker_active, "QBlocker", row,
+                          url='https://gumroad.com/l/gOEV')
+        addon_active_prop(bezierutilities_active, "Bezier Utilities", row,
+                          url='https://github.com/Shriinivas/blenderbezierutils')
+        addon_active_prop(bezierutilities_active, "TexTools", row,
+                          url='https://github.com/SavMartin/TexTools-Blender')
 
         row = layout.row(align=True)
         row.label(text="To take full advantage of this addon make sure the following addons are enabled.")
@@ -359,7 +392,12 @@ class AddonPreferences(AddonPreferences):
         km = kc.keymaps['3D View Generic']
 
         row = layout.row(align=True)
-        row.label(text="Dont remove keymaps, disable or modify them.")
+        row.label(text="This pannel is a Beta feature, use at own risk.")
+        row = layout.row(align=True)
+        row.label(text="This pannel needs to be opened every time Blender is run for it to enable the set hotkeys")
+        row = layout.row(align=True)
+        row.label(text="Dont remove keymaps, disable or modify them instead.")
+
 
         #
         # Modes Cycling, double space:
@@ -451,7 +489,7 @@ class AddonPreferences(AddonPreferences):
 
         # Quick Transform Orientation
         row = layout.row(align=True)
-        add_hotkey_ui('mesh.quick_transform_orientation', km, kc, row)
+        add_hotkey_ui('mesh.transform_orientation_pie', km, kc, row)
 
         # Quick Align
         row = layout.row(align=True)

@@ -50,6 +50,7 @@ class QuickAlign(bpy.types.Operator):
             ('Z', "Z", ""),
         ),
         options={'ENUM_FLAG'},
+        default= {'X', 'Y', 'Z'},
     )
     rotation_axis: EnumProperty(
         name="Rotation",
@@ -154,10 +155,14 @@ class QuickAlign(bpy.types.Operator):
         if self.target != 'World':
             itools.select(self.target, item=False, deselect=True)
 
+            # Make first selected object active again
+            for obj in self.selected:
+                itools.active_set(obj, item=False)
+
         return {'FINISHED'}
 
     def invoke(self, context, event):
-        self.align_axis = {'X', 'Y', 'Z'}
+        # self.align_axis = {'X', 'Y', 'Z'}
         self.selected = itools.get_selected('OBJECT', item=False)
         self.target = self.mouse_raycast(context, event)
 

@@ -1,11 +1,12 @@
 import bpy
 from bpy.utils import register_class, unregister_class
+from ..utils.user_prefs import get_enable_legacy_tools
 
 
 class VIEW3D_PT_Itools(bpy.types.Panel):
     bl_idname = "VIEW3D_PT_Itools"
-    bl_label = "Maxivz Interactive Tools"
-    bl_category = "Maxivz Tools"
+    bl_label = "Interactive Tools"
+    bl_category = "Interactive Tools"
     bl_space_type = "VIEW_3D"
     bl_region_type = "UI"
 
@@ -30,26 +31,28 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row.operator('mesh.smart_select_loop', text="Smart Loop")
         row.operator('mesh.smart_select_ring', text="Smart Ring")
 
+        layout.label(text="Transform")
+        row = layout.row(align=True)
+        row.operator('mesh.cs_move', text="CS Move", icon="ORIENTATION_VIEW")
+        row.operator('mesh.cs_rotate', text="CS Rotate", icon="ORIENTATION_GIMBAL")
+        row.operator('mesh.cs_scale', text="CS Scale", icon="OBJECT_DATAMODE")
+
         layout.label(text="Smart Tools")
         row = layout.row()
         row.operator('mesh.super_smart_create', text="Super Smart Create", icon="PLUS")
         row = layout.row()
         row.operator('mesh.smart_delete', text="Smart Delete", icon="TRASH")
         row = layout.row()
-        row.operator('mesh.smart_modify', text="Smart Modify")
-        row = layout.row(align=True)
-        row.operator('mesh.smart_extrude_modal', text="Smart Extrude")
-        row.operator('mesh.smart_translate_modal', text="Smart Translate")
+        row.operator('mesh.smart_extrude', text="Smart Extrude", icon="EMPTY_SINGLE_ARROW")
 
         layout.label(text="Utilities")
         row = layout.row(align=True)
         row.operator('mesh.quick_pivot', text="Quick Origin")
         row.operator('mesh.simple_edit_pivot', text="Edit Origin")
         row = layout.row()
-        row.operator('mesh.quick_transform_orientation', text="Quick Transform Orientation")
-        row = layout.row()
         row.operator('mesh.quick_align', text="Quick Align")
-        row = layout.row()
+        row = layout.row(align=True)
+        row.operator('mesh.quick_pipe', text="Quick Pipe")
         row.operator('mesh.quick_lattice', text="Quick Lattice")
         row = layout.row(align=True)
         row.operator('mesh.rebase_cylinder', text="Rebase Cylinder")
@@ -59,6 +62,16 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row.operator('mesh.context_sensitive_bevel', text="CS Bevel")
         row = layout.row(align=True)
         row.operator('mesh.quick_hplp_namer', text="Quick Hp Lp Namer")
+
+        layout.label(text="Pie Menus")
+        row = layout.row()
+        row.operator('mesh.smart_modify', text="Smart Modify Pie")
+        row = layout.row()
+        row.operator('mesh.transform_orientation_pie', text="Transform Orientation Pie")
+        row = layout.row()
+        row.operator('mesh.snap_presets_pie', text="Snap Presets Pie")
+        row = layout.row()
+        row.operator('mesh.prop_edit_pie', text="Prop Edit Pie")
 
         layout.label(text="Toggles")
         row = layout.row()
@@ -79,3 +92,10 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row.operator('uv.seams_from_sharps', text="Seams From Sharps")
         row = layout.row()
         row.operator('uv.uvs_from_sharps', text="Uvs From Sharps")
+
+        if get_enable_legacy_tools():
+            layout.label(text="Legacy Tools")
+            row = layout.row()
+            row.operator('mesh.smart_extrude_modal', text="Smart Extrude Legacy")
+            row = layout.row()
+            row.operator('mesh.smart_translate_modal', text="Smart Translate Legacy")

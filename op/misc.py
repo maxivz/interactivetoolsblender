@@ -3,7 +3,6 @@ from ..utils import itools as itools
 from .. utils import dictionaries as dic
 from .. utils.user_prefs import get_quickhplp_hp_suffix, get_quickhplp_lp_suffix, get_enable_wireshaded_cs
 
-
 class TransformModeCycle(bpy.types.Operator):
     bl_idname = "mesh.transform_mode_cycle"
     bl_label = "Transform Mode Cycle"
@@ -185,29 +184,215 @@ class QuickWireToggle(bpy.types.Operator):
         return{'FINISHED'}
 
 
-class QuickTransformOrientation(bpy.types.Operator):
-    bl_idname = "mesh.quick_transform_orientation"
-    bl_label = "Quick Transform Orientation"
+class TransformOrientationOp(bpy.types.Operator):
+    bl_idname = "mesh.transform_orientation_op"
+    bl_label = "Transform Orientation Operator"
     bl_description = "Sets up a transform orientation from selected"
     bl_options = {'REGISTER', 'UNDO'}
+
+    # Mode 1 - Set Orientation 1
+    # Mode 2 - Set Orientation 2
+    # Mode 3 - Set Orientation 3
+    # Mode 4 - Use Orientation 1
+    # Mode 5 - Use Orientation 2
+    # Mode 6 - Use Orientation 3
+    # Mode 7 - Reset Orientation
+
+    mode: bpy.props.IntProperty(default=0)
+    target_space = 'NONE'
+
+    def set_target_space(self, context):
+        if self.mode in [1, 4]:
+            self.target_space = 'Custom 1'
+
+        elif self.mode in [2, 5]:
+            self.target_space = 'Custom 2'
+
+        elif self.mode in [3, 6]:
+            self.target_space = 'Custom 3'
 
     def make_orientation(self, context):
         space = bpy.context.scene.transform_orientation_slots[0].type
         selection = itools.get_selected()
 
-        if space != 'Custom':
+        if space in ['GLOBAL', 'LOCAL', 'NORMAL', 'GIMBAL', 'VIEW', 'CURSOR']:
             dic.write("stored_transform_orientation", space)
-            bpy.ops.transform.create_orientation(name="Custom", use=True, overwrite=True)
+
+        bpy.ops.transform.create_orientation(name=self.target_space, use=True, overwrite=True)
+
+    def set_orientation(self, context):
+        if self.mode in [4, 5, 6]:
+            try:
+                bpy.context.scene.transform_orientation_slots[0].type = self.target_space
+
+            except:
+                self.make_orientation(context)
 
         else:
-            if len(selection) < 1:
-                new_space = dic.read("stored_transform_orientation")
-                bpy.context.scene.transform_orientation_slots[0].type = new_space
-            else:
-                bpy.ops.transform.create_orientation(name="Custom", use=True, overwrite=True)
+            if self.mode == 8:
+                bpy.context.scene.transform_orientation_slots[0].type = 'GLOBAL'
+            elif self.mode == 9:
+                bpy.context.scene.transform_orientation_slots[0].type = 'LOCAL'
+            elif self.mode == 10:
+                bpy.context.scene.transform_orientation_slots[0].type = 'NORMAL'
+            elif self.mode == 11:
+                bpy.context.scene.transform_orientation_slots[0].type = 'GIMBAL'
+            elif self.mode == 12:
+                bpy.context.scene.transform_orientation_slots[0].type = 'VIEW'
+            elif self.mode == 13:
+                bpy.context.scene.transform_orientation_slots[0].type = 'CURSOR'
+
+    def reset_orientation(self, context):
+        space = bpy.context.scene.transform_orientation_slots[0].type
+        new_space = dic.read("stored_transform_orientation")
+
+        if new_space != '':
+            bpy.context.scene.transform_orientation_slots[0].type = new_space
+        else:
+            bpy.context.scene.transform_orientation_slots[0].type = 'GLOBAL'
 
     def execute(self, context):
-        self.make_orientation(context)
+        self.set_target_space(context)
+
+        if self.mode in [1, 2, 3]:
+            self.make_orientation(context)
+
+        elif self.mode in [4, 5, 6, 8, 9, 10, 11, 12, 13]:
+            self.set_orientation(context)
+
+        elif self.mode == 7:
+            self.reset_orientation(context)
+
+        return{'FINISHED'}
+
+
+class TransformOrientationOpPie(bpy.types.Operator):
+    bl_idname = "mesh.transform_orientation_pie"
+    bl_label = "Transform Orientation Pie"
+    bl_description = "Sets up a transform orientation from selected"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_QTO")
+        return{'FINISHED'}
+
+
+class SnapPresetsOp(bpy.types.Operator):
+    bl_idname = "mesh.snap_presets_op"
+    bl_label = "Quick Snap Presets"
+    bl_description = "Sets up snapping settings based on presets"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    # Mode 1 - Grid Absolute
+    # Mode 2 - Vert Center
+    # Mode 3 - Vert Closest
+    # Mode 4 - Face Normal
+
+    mode: bpy.props.IntProperty(default=0)
+
+    def set_preset(self, context):
+        bpy.context.scene.tool_settings.use_snap_translate = True
+        bpy.context.scene.tool_settings.use_snap_rotate = True
+        bpy.context.scene.tool_settings.use_snap_scale = True
+
+        if self.mode == 1:
+            bpy.context.scene.tool_settings.snap_elements = {'INCREMENT'}
+            bpy.context.scene.tool_settings.use_snap_grid_absolute = True
+
+        elif self.mode == 2:
+            bpy.context.scene.tool_settings.snap_elements = {'VERTEX'}
+            bpy.context.scene.tool_settings.snap_target = 'CENTER'
+
+        elif self.mode == 3:
+            bpy.context.scene.tool_settings.snap_elements = {'VERTEX'}
+            bpy.context.scene.tool_settings.snap_target = 'CLOSEST'
+
+        elif self.mode == 4:
+            bpy.context.scene.tool_settings.snap_elements = {'FACE'}
+            bpy.context.scene.tool_settings.use_snap_align_rotation = True
+            bpy.context.scene.tool_settings.use_snap_project = True
+
+    def execute(self, context):
+        self.set_preset(context)
+        return{'FINISHED'}
+
+
+class SnapPresetsOpPie(bpy.types.Operator):
+    bl_idname = "mesh.snap_presets_pie"
+    bl_label = "Snap Presets Pie"
+    bl_description = "Sets up snapping settings based on presets"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_QSP")
+        return{'FINISHED'}
+
+
+class PropEditOp(bpy.types.Operator):
+    bl_idname = "mesh.prop_edit_op"
+    bl_label = "Proportional Editing Op"
+    bl_description = "Sets up Proportional Editing Falloffs"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    mode: bpy.props.IntProperty(default=0)
+
+    def set_preset(self, context):
+
+        if self.mode == 1:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'SMOOTH'
+
+        elif self.mode == 2:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'SPHERE'
+
+        elif self.mode == 3:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'ROOT'
+
+        elif self.mode == 4:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'INVERSE_SQUARE'
+
+        elif self.mode == 5:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'SHARP'
+
+        elif self.mode == 6:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'LINEAR'
+
+        elif self.mode == 7:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'CONSTANT'
+
+        elif self.mode == 8:
+            bpy.context.scene.tool_settings.proportional_edit_falloff = 'RANDOM'
+
+        elif self.mode == 9:
+            if bpy.context.scene.tool_settings.use_proportional_edit:
+                bpy.context.scene.tool_settings.use_proportional_edit = False
+            else:
+                bpy.context.scene.tool_settings.use_proportional_edit = True
+
+        elif self.mode == 10:
+            if bpy.context.scene.tool_settings.use_proportional_connected:
+                    bpy.context.scene.tool_settings.use_proportional_connected = False
+            else:
+                bpy.context.scene.tool_settings.use_proportional_connected = True
+
+        elif self.mode == 11:
+            if bpy.context.scene.tool_settings.use_proportional_projected:
+                bpy.context.scene.tool_settings.use_proportional_projected = False
+            else:
+                bpy.context.scene.tool_settings.use_proportional_projected = True
+
+    def execute(self, context):
+        self.set_preset(context)
+        return{'FINISHED'}
+
+
+class PropEditPie(bpy.types.Operator):
+    bl_idname = "mesh.prop_edit_pie"
+    bl_label = "Proportional Editing Pie"
+    bl_description = "Sets up Proportional Editing Falloffs"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        bpy.ops.wm.call_menu_pie(name="VIEW_MT_PIE_PropEdit")
         return{'FINISHED'}
 
 
@@ -257,6 +442,7 @@ class FlexiBezierToolsCreate(bpy.types.Operator):
                 bpy.ops.wm.tool_set_by_id(name='flexi_bezier.draw_tool')
         return{'FINISHED'}
 
+
 class QuickHpLpNamer(bpy.types.Operator):
     bl_idname = "mesh.quick_hplp_namer"
     bl_label = "Quick HP Lp Namer"
@@ -282,5 +468,56 @@ class QuickHpLpNamer(bpy.types.Operator):
         for obj in selection:
             if obj is not lp:
                 obj.name = lp.name[:-len(lp_suffix)] + hp_suffix
+
+        return{'FINISHED'}
+
+
+class QuickVisualGeoToMesh(bpy.types.Operator):
+    bl_idname = "mesh.quick_visual_geo_to_mesh"
+    bl_label = "Quick Visual Geo To Mesh"
+    bl_description = "Visual Geo To Mesh that also workds from edit mode"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        mode = itools.get_mode()
+        if mode in ['VERT', 'EDGE', 'FACE']:
+            itools.set_mode('OBJECT')
+            bpy.ops.object.convert(target='MESH')
+            itools.set_mode(mode)
+
+        else:
+            bpy.ops.object.convert(target='MESH')
+
+        return{'FINISHED'}
+
+
+class QuickFlattenAxis(bpy.types.Operator):
+    # Add support for local aligns
+
+    bl_idname = "mesh.quick_flatten"
+    bl_label = "Quick Flatten"
+    bl_description = "Quick Flatten with axis options"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    # Mode 1 - Global
+    # Mode 2 - Flatten X
+    # Mode 3 - Flatten Y
+    # Mode 4 - Flatten Z
+
+    mode: bpy.props.IntProperty(default=0)
+
+    def execute(self, context):
+        if self.mode == 1:
+            bpy.ops.mesh.looptools_flatten()
+
+        else:
+            if self.mode == 2:
+                axis_transform = (0, 1, 1)
+            elif self.mode == 3:
+                axis_transform = (1, 0, 1)
+            elif self.mode == 4:
+                axis_transform = (1, 1, 0)
+
+            bpy.ops.transform.resize(value=axis_transform, orient_type='GLOBAL', mirror=True, use_proportional_edit=False, release_confirm=True)
 
         return{'FINISHED'}
