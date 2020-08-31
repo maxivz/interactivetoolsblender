@@ -81,11 +81,19 @@ class CSBevel(bpy.types.Operator):
 
         mode = itools.get_mode()
 
+        version =  bpy.app.version_string[:4]
+        
         if mode == 'VERT':
-            bpy.ops.mesh.bevel('INVOKE_DEFAULT', vertex_only=True)
+            if float(version) >= 2.90:
+                bpy.ops.mesh.bevel('INVOKE_DEFAULT', affect='VERTICES')
+            else:
+                bpy.ops.mesh.bevel('INVOKE_DEFAULT', vertex_only=True)
 
         if mode == 'EDGE':
-            bpy.ops.mesh.bevel('INVOKE_DEFAULT', vertex_only=False)
+            if float(version) >= 2.90:
+                bpy.ops.mesh.bevel('INVOKE_DEFAULT', affect='EDGES')
+            else:
+                bpy.ops.mesh.bevel('INVOKE_DEFAULT', vertex_only=False)
 
         if mode == 'FACE':
             bpy.ops.mesh.inset('INVOKE_DEFAULT')
