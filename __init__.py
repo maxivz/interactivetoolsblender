@@ -71,14 +71,16 @@ def register():
 
 def unregister():
     from bpy.utils import unregister_class
-    for cls in reversed(classes):
-        unregister_class(cls)
+    # Keymap removal
+    unregister_keymaps()
 
     # Unload Custom Menus
     unload_menus_itools()
 
-    # Keymap removal
-    unregister_keymaps()
+    for cls in reversed(classes):
+        unregister_class(cls)
+
+
 
 
 if __name__ == "__main__":

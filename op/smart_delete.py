@@ -1,7 +1,7 @@
 import bpy
 from ..utils import itools as itools
 from ..utils import mesh as mesh
-from ..utils.user_prefs import get_enable_dissolve_faces
+from ..utils.user_prefs import get_enable_dissolve_faces get_enable_dissolve_verts
 
 
 class SmartDelete(bpy.types.Operator):
@@ -27,7 +27,10 @@ class SmartDelete(bpy.types.Operator):
                     bpy.ops.mesh.dissolve_verts()
 
                 else:
-                    bpy.ops.mesh.delete(type='VERT')
+                    if get_enable_dissolve_verts():
+                        bpy.ops.mesh.dissolve_verts()
+                    else:
+                        bpy.ops.mesh.delete(type='VERT')
 
             elif mode == 'EDGE':
                 selection = itools.get_selected()

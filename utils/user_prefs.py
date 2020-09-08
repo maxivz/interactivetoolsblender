@@ -30,7 +30,7 @@ def add_keymap(function_name, key, modifiers=[], kname='3D View Generic', contex
         mod_shift = True
 
     wm = bpy.context.window_manager
-    kc = wm.keyconfigs.addon
+    kc = wm.keyconfigs.user
     if kc:
         km = kc.keymaps.new(name=kname,
                             space_type=context,
@@ -93,7 +93,7 @@ def get_property(target):
 
 def get_keymaps_by_key():
     wm = bpy.context.window_manager
-    for km in wm.keyconfigs.addon.keymaps:
+    for km in wm.keyconfigs.user.keymaps:
         print("Keymap :", km)
         for kmi in km:
             print("Keymap Item :", kmi)
@@ -168,6 +168,11 @@ def get_enable_show_faces():
     return prefs.enable_show_faces
 
 
+def get_enable_dissolve_verts():
+    prefs = get_addon_preferences()
+    return prefs.enable_dissolve_verts
+
+
 def get_enable_dissolve_faces():
     prefs = get_addon_preferences()
     return prefs.enable_dissolve_faces
@@ -194,10 +199,19 @@ def get_enable_wireshaded_cs():
 
 
 def unregister_keymaps():
-    # wm = bpy.context.window_manager
+    wm = bpy.context.window_manager
+    kc = wm.keyconfigs.user
+
+    print("Keymaps Disabled")
+    print(len(addon_keymaps))
     for km, kmi in addon_keymaps:
+        print(kmi)
+
+    for km, kmi in addon_keymaps:
+        print(kmi)
+        kc.keymaps.keymap_items.remove(kmi)
         km.keymap_items.remove(kmi)
-        # wm.keyconfigs.addon.keymaps.remove(km)
+
     addon_keymaps.clear()
 
 
@@ -212,6 +226,7 @@ def get_enable_legacy_tools():
 
 # Store keymaps to access after registration
 addon_keymaps = []
+
 
 # Check for integrations:
 f2_active = addon_installed("mesh_f2")
@@ -263,6 +278,10 @@ class AddonPreferences(AddonPreferences):
                                     description="Enables Face Hilighting when using Quick Select and Selection Cycle Modes",
                                     default=True)
 
+    enable_dissolve_verts: BoolProperty(name="Smart Delete Dissolve Verts",
+                                        description="Verts will be dissolved, if disabled they will be deleted",
+                                        default=True)
+    
     enable_dissolve_faces: BoolProperty(name="Smart Delete Dissolve Edges",
                                         description="Non-border edges will be dissolved, if disabled they will be deleted",
                                         default=True)
