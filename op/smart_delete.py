@@ -1,7 +1,7 @@
 import bpy
 from ..utils import itools as itools
 from ..utils import mesh as mesh
-from ..utils.user_prefs import get_enable_dissolve_faces get_enable_dissolve_verts
+from ..utils.user_prefs import get_enable_dissolve_faces, get_enable_dissolve_verts
 
 
 class SmartDelete(bpy.types.Operator):

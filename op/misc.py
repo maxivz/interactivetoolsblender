@@ -82,7 +82,7 @@ class CSBevel(bpy.types.Operator):
         mode = itools.get_mode()
 
         version =  bpy.app.version_string[:4]
-        
+
         if mode == 'VERT':
             if float(version) >= 2.90:
                 bpy.ops.mesh.bevel('INVOKE_DEFAULT', affect='VERTICES')
@@ -306,14 +306,17 @@ class SnapPresetsOp(bpy.types.Operator):
         if self.mode == 1:
             bpy.context.scene.tool_settings.snap_elements = {'INCREMENT'}
             bpy.context.scene.tool_settings.use_snap_grid_absolute = True
+            bpy.context.scene.tool_settings.use_snap_align_rotation = False
 
         elif self.mode == 2:
             bpy.context.scene.tool_settings.snap_elements = {'VERTEX'}
             bpy.context.scene.tool_settings.snap_target = 'CENTER'
+            bpy.context.scene.tool_settings.use_snap_align_rotation = False
 
         elif self.mode == 3:
             bpy.context.scene.tool_settings.snap_elements = {'VERTEX'}
             bpy.context.scene.tool_settings.snap_target = 'CLOSEST'
+            bpy.context.scene.tool_settings.use_snap_align_rotation = False
 
         elif self.mode == 4:
             bpy.context.scene.tool_settings.snap_elements = {'FACE'}
@@ -348,33 +351,41 @@ class PropEditOp(bpy.types.Operator):
 
         if self.mode == 1:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'SMOOTH'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 2:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'SPHERE'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 3:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'ROOT'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 4:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'INVERSE_SQUARE'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 5:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'SHARP'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 6:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'LINEAR'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 7:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'CONSTANT'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 8:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'RANDOM'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 9:
-            if bpy.context.scene.tool_settings.use_proportional_edit:
-                bpy.context.scene.tool_settings.use_proportional_edit = False
+            if bpy.context.scene.tool_settings.use_proportional_edit_objects:
+                bpy.context.scene.tool_settings.use_proportional_edit_objects = False
             else:
-                bpy.context.scene.tool_settings.use_proportional_edit = True
+                bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 10:
             if bpy.context.scene.tool_settings.use_proportional_connected:

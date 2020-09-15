@@ -21,12 +21,12 @@ from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromS
 from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps, get_enable_legacy_tools
 
 bl_info = {
-    "name": "MaxivzsTools",
+    "name": "Interactive Tools",
     "author": "Maxi Vazquez",
     "description": "Collection of context sensitive and time saving tools",
     "blender": (2, 81, 0),
     "location": "View3D",
-    "version": (1, 0),
+    "version": (1, 1),
     "tracker_url": "https://blenderartists.org/t/interactive-tools-for-blender-2-8/1164932",
     "wiki_url": "https://github.com/maxivz/interactivetoolsblender",
     "warning": "",

@@ -281,7 +281,7 @@ class AddonPreferences(AddonPreferences):
     enable_dissolve_verts: BoolProperty(name="Smart Delete Dissolve Verts",
                                         description="Verts will be dissolved, if disabled they will be deleted",
                                         default=True)
-    
+
     enable_dissolve_faces: BoolProperty(name="Smart Delete Dissolve Edges",
                                         description="Non-border edges will be dissolved, if disabled they will be deleted",
                                         default=True)
@@ -353,6 +353,9 @@ class AddonPreferences(AddonPreferences):
         if bezierutilities_active:
             row = layout.row(align=True)
             row.prop(self, "ssc_bezierutilities_integration", toggle=False)
+
+        row = layout.row(align=True)
+        row.prop(self, "enable_dissolve_verts", toggle=False)
 
         row = layout.row(align=True)
         row.prop(self, "enable_dissolve_faces", toggle=False)
