@@ -62,6 +62,12 @@ class QuickLattice(bpy.types.Operator):
 
             # Make vertex group, assign verts and update viewlayer
             itools.set_mode('OBJECT')
+
+            #Remove old vertex group if it existed
+            vg = selection.vertex_groups.get("lattice_group")
+            if vg is not None:
+                selection.vertex_groups.remove(vg)
+
             vg = selection.vertex_groups.new(name="lattice_group")
             vg.add(vert_indexes, 1.0, 'ADD')
             bpy.context.view_layer.update()
@@ -100,6 +106,8 @@ class QuickLattice(bpy.types.Operator):
             bpy.context.view_layer.objects.active = selection
             mod = selection.modifiers.new(name="Lattice", type='LATTICE')
             mod.object = lattice
+
+            #Make new vertex group
             mod.vertex_group = "lattice_group"
             bpy.context.view_layer.objects.active = lattice
 
@@ -115,7 +123,13 @@ class QuickLattice(bpy.types.Operator):
         bpy.data.objects[lattice.name].select_set(False)
         bpy.data.objects[obj.name].select_set(True)
         bpy.context.view_layer.objects.active = obj
-        bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Lattice")
+
+        #Fix for blender 2.90
+        version =  bpy.app.version_string[:4]
+        if float(version) >= 2.90:
+            bpy.ops.object.modifier_apply(modifier="Lattice")
+        else:
+            bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Lattice")
 
         # Delete vertex group
         vg = obj.vertex_groups.get("lattice_group")
