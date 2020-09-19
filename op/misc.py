@@ -1,7 +1,7 @@
 import bpy
 from ..utils import itools as itools
 from .. utils import dictionaries as dic
-from .. utils.user_prefs import get_quickhplp_hp_suffix, get_quickhplp_lp_suffix, get_enable_wireshaded_cs
+from .. utils.user_prefs import get_quickhplp_hp_suffix, get_quickhplp_lp_suffix, get_enable_wireshaded_cs, get_transform_mode_cycle_cyclic
 
 class TransformModeCycle(bpy.types.Operator):
     bl_idname = "mesh.transform_mode_cycle"
@@ -31,7 +31,9 @@ class TransformModeCycle(bpy.types.Operator):
 
                     elif space.show_gizmo_object_scale:
                         space.show_gizmo_object_scale = False
-                        space.show_gizmo_object_translate = True
+
+                        if get_transform_mode_cycle_cyclic():
+                            space.show_gizmo_object_translate = True
 
                     else:
                         space.show_gizmo_object_translate = True

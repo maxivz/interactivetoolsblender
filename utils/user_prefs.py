@@ -197,6 +197,9 @@ def get_enable_wireshaded_cs():
     prefs = get_addon_preferences()
     return prefs.enable_wireshaded_cs
 
+def get_transform_mode_cycle_cyclic():
+    prefs = get_addon_preferences()
+    return prefs.transform_mode_cycle_cyclic
 
 def unregister_keymaps():
     wm = bpy.context.window_manager
@@ -301,6 +304,10 @@ class AddonPreferences(AddonPreferences):
     enable_wireshaded_cs: BoolProperty(name="Wireframe / Shaded Context Sensitive Mode",
                                        description="Enables context sensitive mode for the Wireframe / Shaded Tool",
                                        default=True)
+                        
+    transform_mode_cycle_cyclic: BoolProperty(name="Transform Mode Cycle Cyclic",
+                                       description="Enables switching to the transform tool right after the Scale Tool",
+                                       default=True)
 
     enable_legacy_origin:  BoolProperty(name="Legacy Origin Edit Mode",
                                         description="Enable Legacy Origin Edit Mode",
@@ -371,6 +378,10 @@ class AddonPreferences(AddonPreferences):
 
         row = layout.row(align=True)
         row.prop(self, "enable_wireshaded_cs", toggle=False)
+
+        row = layout.row(align=True)
+        row.prop(self, "transform_mode_cycle_cyclic", toggle=False)
+
 
         row = layout.row(align=True)
         row.prop(self, "enable_legacy_tools", toggle=False)
