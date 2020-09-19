@@ -1,11 +1,14 @@
 site_name: Interactive Tools
 
 nav:
-    - Modes Cycling: modes-cycling.md
-    - Selection: selection.md
-    - Tools: tools.md
-    - Pie Menus: pie-menus.md
-    - Uv Tools: uv-tools.md
-    - Preferences: preferences.md
+    - 'Getting Started':
+        - Introduction : 'index.md'
+    - Documentation:
+        - Modes Cycling: 'modes-cycling.md'
+        - Selection: 'selection.md'
+        - Tools: 'tools.md'
+        - Pie Menus: 'pie-menus.md'
+        - Uv Tools: 'uv-tools.md'
+        - Preferences: 'preferences.md'
     
 theme: readthedocs
