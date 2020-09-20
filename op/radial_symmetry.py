@@ -269,9 +269,7 @@ class QuickRadialSymmetry(bpy.types.Operator):
             return {'CANCELLED'}
 
         #Tooltip
-        context.area.header_text_set("Count: (" + ("%.3f" % self.sym_count) + "), Axis (" + str(self.ui_axis)[2] +")" +
-            "LMB: confirm, RMB:Cancel, Mouse Left/Right for number of instances, CTRL + Mouse Left/ Right to change Symmetry Axis H: Show / Hide Origin")
-
+        context.area.header_text_set("LMB: confirm, RMB:Cancel, Mouse Left/Right for number of instances, CTRL + Mouse Left/ Right to change Symmetry Axis H: Show / Hide Origin")
         return {'RUNNING_MODAL'}
 
     def invoke(self, context, event):

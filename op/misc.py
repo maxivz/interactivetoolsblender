@@ -105,6 +105,24 @@ class CSBevel(bpy.types.Operator):
         return{'FINISHED'}
 
 
+class ChildrenVisibility(bpy.types.Operator):
+    bl_idname = "object.children_visibility"
+    bl_label = "Children Visibility"
+    bl_description = "Hide or show children for the selected object"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    hide: bpy.props.BoolProperty(default=True)
+
+    def change_children_visibility(self):
+        children = itools.get_children(itools.get_selected(item=False)[0])
+        for obj in children:
+            bpy.data.objects[obj.name].hide_viewport = self.hide
+
+    def execute(self, context):
+        self.change_children_visibility()
+        return{'FINISHED'}
+
+
 class ContextSensitiveSlide(bpy.types.Operator):
     bl_idname = "mesh.context_sensitive_slide"
     bl_label = "Context Sensitive Slide"
@@ -414,6 +432,17 @@ class PropEditPie(bpy.types.Operator):
 
     def execute(self, context):
         bpy.ops.wm.call_menu_pie(name="VIEW_MT_PIE_PropEdit")
+        return{'FINISHED'}
+
+
+class ObjectPropertiesPie(bpy.types.Operator):
+    bl_idname = "mesh.obj_properties_pie"
+    bl_label = "Object Properties Pie"
+    bl_description = "Sets up Object Properties"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_ObjectProperties")
         return{'FINISHED'}
 
 

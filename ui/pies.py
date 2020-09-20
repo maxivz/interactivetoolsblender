@@ -389,6 +389,7 @@ class VIEW3D_MT_PIE_SM_looptools(Menu):
 
         # 4 - LEFT
         pie.operator("mesh.looptools_circle", text="Make Circle")
+
         # 6 - RIGHT
         pie.operator("mesh.looptools_flatten", text="Flatten")
 
@@ -421,11 +422,13 @@ class VIEW3D_MT_PIE_QTO(Menu):
         # 6 - RIGHT
         if bpy.context.scene.transform_orientation_slots[0].type == 'Custom 2':
             pie.operator("mesh.transform_orientation_op", text="Use Custom 2", icon='TRIA_UP', depress=True).mode = 5
+
         else:
             pie.operator("mesh.transform_orientation_op", text="Use Custom 2", icon='TRIA_UP').mode = 5
 
         # 2 - BOTTOM
         pie.operator("mesh.transform_orientation_op", text="Reset Working Pivot", icon='FILE_REFRESH').mode = 7
+
         # 8 - TOP
         menu = pie.row()
         draw_orientations_submenu(menu)
@@ -447,7 +450,6 @@ class VIEW3D_MT_PIE_QTO(Menu):
             pie.operator("mesh.transform_orientation_op", text="Use Custom 3", icon='TRIA_UP', depress=True).mode = 6
         else:
             pie.operator("mesh.transform_orientation_op", text="Use Custom 3", icon='TRIA_UP').mode = 6
-
 
 def draw_orientations_submenu(ui_space):
     submenu = ui_space.column()
@@ -659,9 +661,79 @@ class VIEW_MT_PIE_PropEdit(Menu):
         else:
             row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE").mode = 8
 
+class VIEW_MT_PIE_PropEdit(Menu):
+    bl_label = "Prop Edit"
 
-class VIEW3D_MT_PIE_V(Menu):
-    bl_label = "Restriction Toggles"
+    def draw(self, context):
+        layout = self.layout
+        pie = layout.menu_pie()
+
+        if bpy.context.scene.tool_settings.use_proportional_connected:
+            pie.operator("mesh.prop_edit_op", text="Connected Only", icon = "PROP_ON", depress=True).mode = 10
+        else:
+            pie.operator("mesh.prop_edit_op", text="Connected Only", icon = "PROP_OFF").mode = 10
+
+        if bpy.context.scene.tool_settings.use_proportional_projected:
+            pie.operator("mesh.prop_edit_op", text="Projected", icon = "PROP_ON", depress=True).mode = 11
+        else:
+            pie.operator("mesh.prop_edit_op", text="Projected", icon = "PROP_OFF").mode = 11
+
+        if bpy.context.scene.tool_settings.use_proportional_edit_objects:
+            pie.operator("mesh.prop_edit_op", text="Proportional Edit", icon = "PROP_ON", depress=True).mode = 9
+        else:
+            pie.operator("mesh.prop_edit_op", text="Proportional Edit", icon = "PROP_OFF").mode = 9
+
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+
+        row = column.row(align=False)
+        row.label(text="Falloffs")
+        row = column.row(align=True)
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'SMOOTH':
+            row.operator("mesh.prop_edit_op", text="Smooth", icon = "SMOOTHCURVE", depress=True).mode = 1
+        else:
+            row.operator("mesh.prop_edit_op", text="Smooth", icon = "SMOOTHCURVE").mode = 1
+
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'SPHERE':
+            row.operator("mesh.prop_edit_op", text="Sphere", icon = "SPHERECURVE", depress=True).mode = 2
+        else:
+            row.operator("mesh.prop_edit_op", text="Sphere", icon = "SPHERECURVE").mode = 2
+
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'ROOT':
+            row.operator("mesh.prop_edit_op", text="Root", icon = "ROOTCURVE", depress=True).mode = 3
+        else:
+            row.operator("mesh.prop_edit_op", text="Root", icon = "ROOTCURVE").mode = 3
+
+        row = column.row(align=True)
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'INVERSE_SQUARE':
+            row.operator("mesh.prop_edit_op", text="Inverse Square", icon = "INVERSESQUARECURVE", depress=True).mode = 4
+        else:
+            row.operator("mesh.prop_edit_op", text="Inverse", icon = "INVERSESQUARECURVE").mode = 4
+        
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'SHARP':
+            row.operator("mesh.prop_edit_op", text="Sharp", icon = "SHARPCURVE", depress=True).mode = 5
+        else:
+            row.operator("mesh.prop_edit_op", text="Sharp", icon = "SHARPCURVE").mode = 5
+        
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'LINEAR':
+            row.operator("mesh.prop_edit_op", text="Linear", icon = "LINCURVE", depress=True).mode = 6
+        else:
+            row.operator("mesh.prop_edit_op", text="Linear", icon = "LINCURVE").mode = 6
+
+        row = column.row(align=True)
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'CONSTANT':
+            row.operator("mesh.prop_edit_op", text="Constant", icon = "NOCURVE", depress=True).mode = 7
+        else:
+            row.operator("mesh.prop_edit_op", text="Constant", icon = "NOCURVE").mode = 7
+        
+        if bpy.context.scene.tool_settings.proportional_edit_falloff == 'RANDOM':
+            row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE", depress=True).mode = 8
+        else:
+            row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE").mode = 8
+            
+class VIEW3D_MT_PIE_ObjectProperties(Menu):
+    bl_label = "Object Propoerties"
 
     #Parent/Unparent
     #Hide/Unhide
@@ -673,32 +745,40 @@ class VIEW3D_MT_PIE_V(Menu):
     def draw(self, context):
         layout = self.layout
         pie = layout.menu_pie()
+        #Show/Hide
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
 
-        # 4 - LEFT
-        if (bpy.context.scene.tool_settings.snap_elements == {'VERTEX'} and
-            bpy.context.scene.tool_settings.snap_target == 'CLOSEST'):
-            op = pie.operator("mesh.snap_presets_op", text="Vert Closest", icon="SNAP_VERTEX", depress=True).mode = 3
-        else:
-            op = pie.operator("mesh.snap_presets_op", text="Vert Closest", icon="SNAP_VERTEX").mode = 3
+        row = column.row(align=False)
+        row.label(text="Visibility")
+        row = column.row(align=True)
+        row.operator("object.children_visibility", text="Show ", icon = "HIDE_OFF").hide = False
+        row.operator("object.children_visibility", text="Hide Children", icon = "HIDE_ON").hide = True
+        row = column.row(align=True)
+        row.operator("object.hide_view_clear", text="Show All", icon = "HIDE_OFF")
 
-        # 6 - RIGHT
-        if(bpy.context.scene.tool_settings.snap_elements == {'VERTEX'} and
-            bpy.context.scene.tool_settings.snap_target == 'CENTER'):
-            pie.operator("mesh.snap_presets_op", text="Vert Center", icon="SNAP_VERTEX", depress=True).mode = 2
-        else:
-            pie.operator("mesh.snap_presets_op", text="Vert Center", icon="SNAP_VERTEX").mode = 2
+        #Parent Pie
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
 
-        # 2 - BOTTOM
-        if(bpy.context.scene.tool_settings.snap_elements == {'FACE'} and
-            bpy.context.scene.tool_settings.use_snap_align_rotation == True and
-            bpy.context.scene.tool_settings.use_snap_project == True):
-            pie.operator("mesh.snap_presets_op", text="Face Normal", icon="SNAP_FACE",depress=True).mode = 4
-        else:
-            pie.operator("mesh.snap_presets_op", text="Face Normal", icon="SNAP_FACE").mode = 4
+        row = column.row(align=False)
+        row.label(text="Parenting")
+        row = column.row(align=True)
+        row.operator("object.parent_set", text="Set Parent")
+        row = column.row(align=True)
+        row.operator("object.parent_clear", text="Clear Parent")
 
-        # 8 - TOP
-        if (bpy.context.scene.tool_settings.snap_elements == {'INCREMENT'} and
-            bpy.context.scene.tool_settings.use_snap_grid_absolute == True):
-            pie.operator("mesh.snap_presets_op", text="Grid Absolute", icon="SNAP_INCREMENT",depress=True).mode = 1
-        else:
-            pie.operator("mesh.snap_presets_op", text="Grid Absolute", icon="SNAP_INCREMENT").mode = 1
+
+        #Collection Menu
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+
+        row = column.row(align=False)
+        row.label(text="Collections")
+        row = column.row(align=False)
+        row.operator("object.move_to_collection", text="Move To Collection", icon = "DECORATE_DRIVER")
+        row = column.row(align=False)
+        row.operator("object.link_to_collection", text="Link To Collection", icon = "DECORATE_LINKED")

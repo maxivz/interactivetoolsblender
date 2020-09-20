@@ -321,3 +321,12 @@ def update_indexes(mode=''):
 
 def remove_duplicates(target):
     return list(set(target))
+
+
+def get_children(obj_name):
+    children = []
+    for ob in bpy.data.objects:
+        if ob.parent != None:
+            if ob.parent.name == obj_name:
+                children.append(ob)
+    return children
