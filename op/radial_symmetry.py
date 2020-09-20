@@ -77,7 +77,7 @@ class QuickRadialSymmetry(bpy.types.Operator):
 
         blf.color(font_id, 1, 1, 1, 1)
         blf.position(font_id, width / 2 - 100, 60, 0)
-        blf.draw(font_id, "Show Pivot: ")
+        blf.draw(font_id, "Show Origin: ")
 
         blf.color(font_id, 0, .8, 1, 1)
         blf.position(font_id, width / 2 + 60, 60, 0)
@@ -270,7 +270,7 @@ class QuickRadialSymmetry(bpy.types.Operator):
 
         #Tooltip
         context.area.header_text_set("Count: (" + ("%.3f" % self.sym_count) + "), Axis (" + str(self.ui_axis)[2] +")" +
-            "LMB: confirm, RMB:Cancel, Mouse Left/Right for number of instances, CTRL + Mouse Left/ Right to change Symmetry Axis H: Show / Hide Pivot")
+            "LMB: confirm, RMB:Cancel, Mouse Left/Right for number of instances, CTRL + Mouse Left/ Right to change Symmetry Axis H: Show / Hide Origin")
 
         return {'RUNNING_MODAL'}
 
