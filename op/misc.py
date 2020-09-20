@@ -470,7 +470,12 @@ class WireShadedToggle(bpy.types.Operator):
                 for space in area.spaces:
                     if space.type == 'VIEW_3D':
                         if space.shading.type == 'WIREFRAME':
-                            space.shading.type = dic.read("shading_mode")
+                            stored_mode = dic.read("shading_mode")
+
+                            if len(stored_mode)< 1:
+                                stored_mode = 'SOLID'
+
+                            space.shading.type = stored_mode
                         else:
                             dic.write("shading_mode", space.shading.type)
                             space.shading.type = 'WIREFRAME'
