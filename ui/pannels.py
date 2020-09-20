@@ -37,15 +37,13 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row.operator('mesh.cs_rotate', text="CS Rotate", icon="ORIENTATION_GIMBAL")
         row.operator('mesh.cs_scale', text="CS Scale", icon="OBJECT_DATAMODE")
 
-        layout.label(text="Smart Tools")
+        layout.label(text="Tools")
         row = layout.row()
         row.operator('mesh.super_smart_create', text="Super Smart Create", icon="PLUS")
         row = layout.row()
         row.operator('mesh.smart_delete', text="Smart Delete", icon="TRASH")
         row = layout.row()
         row.operator('mesh.smart_extrude', text="Smart Extrude", icon="EMPTY_SINGLE_ARROW")
-
-        layout.label(text="Utilities")
         row = layout.row(align=True)
         row.operator('mesh.quick_pivot', text="Quick Origin")
         row.operator('mesh.simple_edit_pivot', text="Edit Origin")
