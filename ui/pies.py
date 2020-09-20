@@ -108,16 +108,48 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         pie = layout.menu_pie()
 
         # 4 - LEFT
-        pie.operator("mesh.quick_lattice", text="Quick Lattice")
+        #Visibility
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+        row = column.row(align=False)
+        row.label(text="Visibility")
+        row = column.row(align=True)
+        row.operator("object.children_visibility", text="Show ", icon = "HIDE_OFF").hide = False
+        row.operator("object.children_visibility", text="Hide Children", icon = "HIDE_ON").hide = True
+        row = column.row(align=True)
+        row.operator("object.hide_view_clear", text="Show All", icon = "HIDE_OFF")
+
+        #Parenting
+        row = column.row(align=False)
+        row.label(text="Parenting")
+        row = column.row(align=True)
+        row.operator("object.parent_set", text="Set Parent")
+        row = column.row(align=True)
+        row.operator("object.parent_clear", text="Clear Parent")
+        row = column.row(align=False)
+
+        #Collections
+        row.label(text="Collections")
+        row = column.row(align=False)
+        row.operator("object.move_to_collection", text="Move To Collection", icon = "DECORATE_DRIVER")
+        row = column.row(align=False)
+        row.operator("object.link_to_collection", text="Link To Collection", icon = "DECORATE_LINKED")
 
         # 6 - RIGHT
-        pie.operator("mesh.radial_symmetry", text="Radial Symmetry")
-
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+        row = column.row(align=True)
+        row.operator("mesh.quick_lattice", text="Quick Lattice")
+        row = column.row(align=True)
+        row.operator("mesh.radial_symmetry", text="Radial Symmetry")
+        row = column.row(align=True)
+        row.operator("mesh.rebase_cylinder", text="Rebase Cylinder")
         # 2 - BOTTOM
-        pie.operator("mesh.rebase_cylinder", text="Rebase Cylinder")
+        pie.operator("object.convert", text="Visual Geo To Mesh").target='MESH'
 
         # 8 - TOP
-        pie.operator("object.convert", text="Visual Geo To Mesh").target='MESH'
 
         # 7 - TOP - LEFT
         # Align World Submenu
@@ -142,8 +174,9 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         op.relative_to = 'OPT_1'
         op.align_axis = {'Z'}
 
-        # 9 - TOP - RIGHT
 
+        # 9 - TOP - RIGHT
+           
         # 1 - BOTTOM - LEFT
 
         # 3 - BOTTOM - RIGHT
@@ -451,6 +484,7 @@ class VIEW3D_MT_PIE_QTO(Menu):
         else:
             pie.operator("mesh.transform_orientation_op", text="Use Custom 3", icon='TRIA_UP').mode = 6
 
+
 def draw_orientations_submenu(ui_space):
     submenu = ui_space.column()
     container = submenu.box()
@@ -731,54 +765,3 @@ class VIEW_MT_PIE_PropEdit(Menu):
             row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE", depress=True).mode = 8
         else:
             row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE").mode = 8
-            
-class VIEW3D_MT_PIE_ObjectProperties(Menu):
-    bl_label = "Object Propoerties"
-
-    #Parent/Unparent
-    #Hide/Unhide
-    #Freeze/Unfreeze
-    #Unhide All
-    #bpy.ops.object.parent_set(type='OBJECT', keep_transform=False)
-    #bpy.ops.object.parent_clear(type='CLEAR')
-
-    def draw(self, context):
-        layout = self.layout
-        pie = layout.menu_pie()
-        #Show/Hide
-        submenu = pie.column()
-        container = submenu.box()
-        column = container.column()
-
-        row = column.row(align=False)
-        row.label(text="Visibility")
-        row = column.row(align=True)
-        row.operator("object.children_visibility", text="Show ", icon = "HIDE_OFF").hide = False
-        row.operator("object.children_visibility", text="Hide Children", icon = "HIDE_ON").hide = True
-        row = column.row(align=True)
-        row.operator("object.hide_view_clear", text="Show All", icon = "HIDE_OFF")
-
-        #Parent Pie
-        submenu = pie.column()
-        container = submenu.box()
-        column = container.column()
-
-        row = column.row(align=False)
-        row.label(text="Parenting")
-        row = column.row(align=True)
-        row.operator("object.parent_set", text="Set Parent")
-        row = column.row(align=True)
-        row.operator("object.parent_clear", text="Clear Parent")
-
-
-        #Collection Menu
-        submenu = pie.column()
-        container = submenu.box()
-        column = container.column()
-
-        row = column.row(align=False)
-        row.label(text="Collections")
-        row = column.row(align=False)
-        row.operator("object.move_to_collection", text="Move To Collection", icon = "DECORATE_DRIVER")
-        row = column.row(align=False)
-        row.operator("object.link_to_collection", text="Link To Collection", icon = "DECORATE_LINKED")

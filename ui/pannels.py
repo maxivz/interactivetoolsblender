@@ -70,8 +70,6 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row.operator('mesh.snap_presets_pie', text="Snap Presets Pie")
         row = layout.row()
         row.operator('mesh.prop_edit_pie', text="Prop Edit Pie")
-        row = layout.row()
-        row.operator('mesh.obj_properties_pie', text="Obj Propoerties Pie")
 
         layout.label(text="Toggles")
         row = layout.row()
