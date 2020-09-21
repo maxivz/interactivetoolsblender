@@ -51,7 +51,7 @@ class QuickPipe(bpy.types.Operator):
         blf.draw(font_id, "Resolution: ")
 
         blf.color(font_id, 0, .8, 1, 1)
-        blf.position(font_id, width / 2, 100, 0)
+        blf.position(font_id, width / 2 + 40, 100, 0)
         blf.size(font_id, 30, 60)
         blf.draw(font_id, str(self.resolution))
 

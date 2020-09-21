@@ -40,6 +40,8 @@ class QuickRadialSymmetry(bpy.types.Operator):
     sym_axis = 0
     initial_sym_axis = 0
     initial_sym_count = 0
+    original_sym_axis = 0
+    original_sym_count = 0
     offset_obj = "Empty"
     selection = "Empty"
     senitivity = 0.01
@@ -50,7 +52,7 @@ class QuickRadialSymmetry(bpy.types.Operator):
     change_rotation = False
     change_iteration = False
     symmetry_center = ""
-
+    first_run = False
 
     def draw_ui(self, context, event):
         width = bpy.context.area.width
@@ -204,6 +206,22 @@ class QuickRadialSymmetry(bpy.types.Operator):
         self.sym_axis = self.initial_sym_axis
         self.sym_count = self.initial_sym_count
 
+        if not self.first_run:
+            self.original_sym_axis = self.initial_sym_axis
+            self.original_sym_count = self.initial_sym_count
+
+    def restore_settings(self, context, selection):
+        selection.modifiers["Radial Symmetry"].count = self.original_sym_count
+
+        if self.original_sym_axis == 0:
+                bpy.data.objects[self.offset_obj].rotation_euler = (math.radians(360 / self.original_sym_count), 0, 0)
+
+        elif self.original_sym_axis == 1:
+            bpy.data.objects[self.offset_obj].rotation_euler = (0, math.radians(360 / self.original_sym_count), 0)
+
+        elif self.original_sym_axis == 2:
+            bpy.data.objects[self.offset_obj].rotation_euler = (0, 0, math.radians(360 / self.original_sym_count))
+
     def __init__(self):
         print("Start")
 
@@ -260,12 +278,18 @@ class QuickRadialSymmetry(bpy.types.Operator):
                 return {'FINISHED'}
 
         elif event.type in {'RIGHTMOUSE', 'ESC'}:  # Cancel
+            if not self.first_run:
+                self.restore_settings(context, bpy.data.objects[self.selection])
             bpy.types.SpaceView3D.draw_handler_remove(self.draw_handler, 'WINDOW')
             context.area.header_text_set(text=None)
 
             #Switch between modes to force update UI
             bpy.ops.object.mode_set(mode='EDIT')
             bpy.ops.object.mode_set(mode='OBJECT')
+
+            if self.first_run:
+                bpy.ops.object.modifier_remove(modifier="Radial Symmetry")
+
             return {'CANCELLED'}
 
         #Tooltip
@@ -278,6 +302,7 @@ class QuickRadialSymmetry(bpy.types.Operator):
 
         if bpy.data.objects[self.selection].modifiers.find("Radial Symmetry") < 0:
             self.setup_symmetry(context, bpy.data.objects[self.selection])
+            self.first_run = True
 
         self.recover_settings(context, bpy.data.objects[self.selection])
 
