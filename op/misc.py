@@ -294,14 +294,14 @@ class TransformOrientationOp(bpy.types.Operator):
         return{'FINISHED'}
 
 
-class TransformOrientationOpPie(bpy.types.Operator):
-    bl_idname = "mesh.transform_orientation_pie"
+class TransformOptionsPie(bpy.types.Operator):
+    bl_idname = "mesh.transform_options_pie"
     bl_label = "Transform Orientation Pie"
     bl_description = "Sets up a transform orientation from selected"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_QTO")
+        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_TransformOptions")
         return{'FINISHED'}
 
 
@@ -325,6 +325,7 @@ class SnapPresetsOp(bpy.types.Operator):
 
         if self.mode == 1:
             bpy.context.scene.tool_settings.snap_elements = {'INCREMENT'}
+            bpy.context.scene.tool_settings.snap_target = 'CLOSEST'
             bpy.context.scene.tool_settings.use_snap_grid_absolute = True
             bpy.context.scene.tool_settings.use_snap_align_rotation = False
 
@@ -340,22 +341,18 @@ class SnapPresetsOp(bpy.types.Operator):
 
         elif self.mode == 4:
             bpy.context.scene.tool_settings.snap_elements = {'FACE'}
+            bpy.context.scene.tool_settings.snap_target = 'CENTER'
             bpy.context.scene.tool_settings.use_snap_align_rotation = True
             bpy.context.scene.tool_settings.use_snap_project = True
 
+        elif self.mode == 5:
+            bpy.context.scene.tool_settings.snap_elements = {'EDGE_MIDPOINT'}
+            bpy.context.scene.tool_settings.snap_target = 'MEDIAN'
+            bpy.context.scene.tool_settings.use_snap_align_rotation = False
+            bpy.context.scene.tool_settings.use_snap_project = False
+
     def execute(self, context):
         self.set_preset(context)
-        return{'FINISHED'}
-
-
-class SnapPresetsOpPie(bpy.types.Operator):
-    bl_idname = "mesh.snap_presets_pie"
-    bl_label = "Snap Presets Pie"
-    bl_description = "Sets up snapping settings based on presets"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    def execute(self, context):
-        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_QSP")
         return{'FINISHED'}
 
 
@@ -422,18 +419,6 @@ class PropEditOp(bpy.types.Operator):
     def execute(self, context):
         self.set_preset(context)
         return{'FINISHED'}
-
-
-class PropEditPie(bpy.types.Operator):
-    bl_idname = "mesh.prop_edit_pie"
-    bl_label = "Proportional Editing Pie"
-    bl_description = "Sets up Proportional Editing Falloffs"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    def execute(self, context):
-        bpy.ops.wm.call_menu_pie(name="VIEW_MT_PIE_PropEdit")
-        return{'FINISHED'}
-
 
 class ObjectPropertiesPie(bpy.types.Operator):
     bl_idname = "mesh.obj_properties_pie"

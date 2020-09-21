@@ -522,7 +522,7 @@ class AddonPreferences(AddonPreferences):
 
         # Quick Transform Orientation
         row = layout.row(align=True)
-        add_hotkey_ui('mesh.transform_orientation_pie', km, kc, row)
+        add_hotkey_ui('mesh.transform_options_pie', km, kc, row)
 
         # Quick Align
         row = layout.row(align=True)
