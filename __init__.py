@@ -26,7 +26,7 @@ bl_info = {
     "description": "Collection of context sensitive and time saving tools",
     "blender": (2, 81, 0),
     "location": "View3D",
-    "version": (2, 0),
+    "version": (1, 8),
     "tracker_url": "https://blenderartists.org/t/interactive-tools-for-blender-2-8/1164932",
     "wiki_url": "https://github.com/maxivz/interactivetoolsblender",
     "warning": "",

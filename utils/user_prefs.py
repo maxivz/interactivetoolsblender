@@ -377,6 +377,9 @@ class AddonPreferences(AddonPreferences):
         row.prop(self, "quickhplp_hp_suffix", toggle=False)
 
         row = layout.row(align=True)
+        row.prop(self, "quickselection_gpencil_advanced", toggle=False)
+
+        row = layout.row(align=True)
         row.prop(self, "enable_wireshaded_cs", toggle=False)
 
         row = layout.row(align=True)

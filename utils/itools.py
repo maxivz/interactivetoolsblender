@@ -40,6 +40,10 @@ def get_mode():
             return 'EDGE'
         elif selection_mode[2]:
             return 'FACE'
+
+    if mode == 'EDIT_GPENCIL':
+        return bpy.context.scene.tool_settings.gpencil_selectmode_edit
+
     return mode
 
 
