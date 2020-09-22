@@ -138,10 +138,9 @@ class QuickLattice(bpy.types.Operator):
 
         # Delete lattice
         bpy.data.objects[obj.name].select_set(False)
-        bpy.data.objects[lattice.name].select_set(True)
-        bpy.ops.object.delete()
+        bpy.data.objects.remove(bpy.data.objects[lattice.name])
         bpy.data.objects[obj.name].select_set(True)
-        bpy.ops.object.editmode_toggle()
+        bpy.ops.object.mode_set(mode='EDIT')
 
     def get_lattice(self, context, obj):
         lattice = obj.name + ".Lattice"
