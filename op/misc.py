@@ -294,6 +294,31 @@ class TransformOrientationOp(bpy.types.Operator):
         return{'FINISHED'}
 
 
+class TransformPivotPointOp(bpy.types.Operator):
+    bl_idname = "mesh.transform_pivot_point_op"
+    bl_label = "Transform Pivot Point Operator"
+    bl_description = "Sets up transform Pivot Point"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    mode: bpy.props.IntProperty(default=0)
+
+    def set_transform_pivot_point(self, context):
+        if self.mode == 1:
+            bpy.context.scene.tool_settings.transform_pivot_point = 'MEDIAN_POINT'
+        elif self.mode == 2:
+            bpy.context.scene.tool_settings.transform_pivot_point = 'ACTIVE_ELEMENT'
+        elif self.mode == 3:
+            bpy.context.scene.tool_settings.transform_pivot_point = 'INDIVIDUAL_ORIGINS'
+        elif self.mode == 4:
+            bpy.context.scene.tool_settings.transform_pivot_point = 'CURSOR'
+        elif self.mode == 5:
+            bpy.context.scene.tool_settings.transform_pivot_point = 'BOUNDING_BOX_CENTER'
+
+    def execute(self, context):
+        self.set_transform_pivot_point(context)
+
+        return{'FINISHED'}
+
 class TransformOptionsPie(bpy.types.Operator):
     bl_idname = "mesh.transform_options_pie"
     bl_label = "Transform Orientation Pie"

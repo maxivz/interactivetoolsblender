@@ -9,7 +9,7 @@ from . op.quick_align import QuickAlign
 from . op.pivot import QuickPivot, QuickEditPivot
 from . op.smart_extrude import SmartExtrude, SmartExtrudeModal
 from . op.mesh_modes import SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace
-from . op.misc import TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, TransformOrientationOp, QuickHpLpNamer, TransformOptionsPie, QuickVisualGeoToMesh, SnapPresetsOp, PropEditOp, ChildrenVisibility
+from . op.misc import TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSensitiveSlide, TargetWeldToggle, QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, TransformOrientationCycle, TransformOrientationOp, QuickHpLpNamer, TransformOptionsPie, QuickVisualGeoToMesh, SnapPresetsOp, PropEditOp, ChildrenVisibility, TransformPivotPointOp
 from . op.smart_delete import SmartDelete
 from . op.smart_modify import SmartModify
 from . op.selection import SmartSelectLoop, SmartSelectRing
@@ -48,7 +48,7 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            QuickLattice,SmartExtrude , SeamsFromSharps, QuickVisualGeoToMesh,
            QuickRotateUv90Pos, QuickRotateUv90Neg, UvsFromSharps,QuickPipe,
            MenuPlaceholder, SmartModify, LatticeResolution2x2x2,
-           SnapPresetsOp, PropEditOp,
+           SnapPresetsOp, PropEditOp, TransformPivotPointOp,
            LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer, ChildrenVisibility)
 
 legacy_classes = (SmartExtrudeModal, SmartTranslate)

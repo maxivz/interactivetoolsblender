@@ -479,6 +479,7 @@ class VIEW3D_MT_PIE_TransformOptions(Menu):
 
         #Top Center
         column = box.column()
+        column.scale_x = 1.5
         self.draw_orientations_submenu(column)
 
         #Top Right Column
@@ -582,33 +583,33 @@ class VIEW3D_MT_PIE_TransformOptions(Menu):
         row = column.row(align=True)
 
         if bpy.context.scene.tool_settings.transform_pivot_point == 'MEDIAN_POINT':
-            row.operator("mesh.transform_orientation_op", text="Global", icon="PIVOT_MEDIAN", depress=True).mode = 8
+            row.operator("mesh.transform_pivot_point_op", text="Median Point", icon="PIVOT_MEDIAN", depress=True).mode = 1
         else:
-            row.operator("mesh.transform_orientation_op", text="Global", icon="PIVOT_MEDIAN").mode = 8
+            row.operator("mesh.transform_pivot_point_op", text="Median Point", icon="PIVOT_MEDIAN").mode = 1
 
         row = column.row(align=True)
         if bpy.context.scene.tool_settings.transform_pivot_point == 'ACTIVE_ELEMENT':
-            row.operator("mesh.transform_orientation_op", text="Local", icon="PIVOT_ACTIVE", depress=True).mode = 9
+            row.operator("mesh.transform_pivot_point_op", text="Active Element", icon="PIVOT_ACTIVE", depress=True).mode = 2
         else:
-            row.operator("mesh.transform_orientation_op", text="Local", icon="PIVOT_ACTIVE").mode = 9
+            row.operator("mesh.transform_pivot_point_op", text="Active Element", icon="PIVOT_ACTIVE").mode = 2
 
         row = column.row(align=True)
         if bpy.context.scene.tool_settings.transform_pivot_point == 'INDIVIDUAL_ORIGINS':
-            row.operator("mesh.transform_orientation_op", text="Normal", icon="PIVOT_INDIVIDUAL", depress=True).mode = 10
+            row.operator("mesh.transform_pivot_point_op", text="Individual Origins", icon="PIVOT_INDIVIDUAL", depress=True).mode = 3
         else:
-            row.operator("mesh.transform_orientation_op", text="Normal", icon="PIVOT_INDIVIDUAL").mode = 10
+            row.operator("mesh.transform_pivot_point_op", text="Individual Origins", icon="PIVOT_INDIVIDUAL").mode = 3
 
         row = column.row(align=True)
         if bpy.context.scene.tool_settings.transform_pivot_point == 'CURSOR':
-            row.operator("mesh.transform_orientation_op", text="View", icon="PIVOT_CURSOR", depress=True).mode = 12
+            row.operator("mesh.transform_pivot_point_op", text="3D Cursor", icon="PIVOT_CURSOR", depress=True).mode = 4
         else:
-            row.operator("mesh.transform_orientation_op", text="View", icon="PIVOT_CURSOR").mode = 12
+            row.operator("mesh.transform_pivot_point_op", text="3D Cursor", icon="PIVOT_CURSOR").mode = 4
 
         row = column.row(align=True)
         if bpy.context.scene.tool_settings.transform_pivot_point == 'BOUNDING_BOX_CENTER':
-            row.operator("mesh.transform_orientation_op", text="Gimbal", icon="PIVOT_BOUNDBOX", depress=True).mode = 11
+            row.operator("mesh.transform_pivot_point_op", text="Bounding Box Center", icon="PIVOT_BOUNDBOX", depress=True).mode = 5
         else:
-            row.operator("mesh.transform_orientation_op", text="Gimbal", icon="PIVOT_BOUNDBOX").mode = 11
+            row.operator("mesh.transform_pivot_point_op", text="Bounding Box Center", icon="PIVOT_BOUNDBOX").mode = 5
 
     def draw_proportional_editing(self, ui_space):
         submenu = ui_space.column()
