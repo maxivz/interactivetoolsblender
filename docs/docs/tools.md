@@ -153,7 +153,7 @@ Select a loop in a cylindrical object and run the tool to make a copy of the sha
 If the tool is run with the created object selected its possible to continue editing the number of sides
 ![Alt Text](img/setcylindricalobjsides_02.gif)
 
-##Radial Symmetry
+##Radial Symmetry (TODO)
 Select an object and run the tool. A radial symmetry will be created using the object's pivot point as the center point.
 
 ---
@@ -161,6 +161,8 @@ Select an object and run the tool. A radial symmetry will be created using the o
 * Move the mouse to the left and the right the amount of iterations will increase and decrease.
 
 * Control + mouse movement changes the symmetry axis.
+
+* H To show and Hide the symmetry Origin
 
 ---
 

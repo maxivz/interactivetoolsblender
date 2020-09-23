@@ -47,3 +47,6 @@ Enable Legacy Origin Edit Mode
 
 **Enable Legacy Tools**
 Enable Legacy Tools that are no longer in active development or supported. Use at own risk
+
+**Enable Experimental Hotkey Editor**
+Enables the hotkey editor in Itools Preference Pannel, this is a experimental feature, enable at own risk

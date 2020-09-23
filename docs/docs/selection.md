@@ -3,17 +3,31 @@
 
 ###Quick Vert Mode
 
+####Mesh Mode
+
 *	If you are in object mode it will switch to vert selection mode.
 
 *	If you are in face or edge mode it will switch to vert mode.
 
 *	If you are in vertex selection mode it will switch to object mode.
 
+####Curve Mode
+
 *	If the selected object is a curve, and you are in object mode it will switch to edit mode.
 
 *	If you are in the curve edit mode it will switch to object mode.
 
+####Grease Pencil Mode
+
+*	If you are in object mode it will switch to point selection mode.
+
+*	If you are in stroke or segment mode it will switch to point mode.
+
+*	If you are in point selection mode it will switch to object mode.
+
 ###Quick Edge Mode
+
+####Mesh Mode
 
 *	If you are in object mode it will switch to edge selection mode.
 
@@ -21,11 +35,24 @@
 
 *	If you are in edge selection mode it will switch to object mode.
 
+####Curve Mode
+
 *	If the selected object is a curve, and you are in object mode it will switch to edit mode.
 
 *	If you are in the curve edit mode it will switch to object mode.
 
+
+####Grease Pencil Mode
+
+*	If you are in object mode it will switch to stroke selection mode.
+
+*	If you are in point or segment mode it will switch to stroke mode.
+
+*	If you are in stroke selection mode it will switch to object mode.
+
 ###Quick Face Mode
+
+####Mesh Mode
 
 *	If you are in object mode it will switch to face selection mode.
 
@@ -33,9 +60,19 @@
 
 *	If you are in face selection mode it will switch to object mode.
 
+####Curve Mode
+
 *	If the selected object is a curve, and you are in object mode it will switch to edit mode.
 
 *	If you are in the curve edit mode it will switch to object mode.
+
+####Grease Pencil Mode
+
+*	If you are in object mode it will switch to segment selection mode.
+
+*	If you are in point or stroke mode it will switch to segment mode.
+
+*	If you are in segment selection mode it will switch to object mode.
 
 ###Sticky Selection(TODO)
 
