@@ -201,6 +201,10 @@ def get_transform_mode_cycle_cyclic():
     prefs = get_addon_preferences()
     return prefs.transform_mode_cycle_cyclic
 
+def get_enable_hotkey_editor():
+    prefs = get_addon_preferences()
+    return prefs.enable_hotkey_editor
+
 def unregister_keymaps():
     wm = bpy.context.window_manager
     kc = wm.keyconfigs.user
@@ -258,7 +262,7 @@ class AddonPreferences(AddonPreferences):
     # Properties
     cateogries: EnumProperty(name="Categories",
                              items=[("GENERAL", "General Settings", ""),
-                                    ("KEYMAPS", "Keymaps (BETA)", ""), ],
+                                    ("KEYMAPS", "Keymaps", ""), ],
                              default="GENERAL")
 
     ssc_switch_modes: BoolProperty(name="Super Smart Create Switch Modes",
@@ -317,21 +321,29 @@ class AddonPreferences(AddonPreferences):
                                        description="Enable Legacy Tools that are no longer in active development or supported. Use at own risk",
                                        default=False)
 
+    enable_hotkey_editor: BoolProperty(name="Enable Experimental Hotkey Editor",
+                                       description="Enables the hotkey editor in Itools Preference Pannel, this is a experimental feature, enable at own risk",
+                                       default=False)
 
     def draw(self, context):
         layout = self.layout
 
         col = layout.column(align=True)
         row = col.row()
+
         row.prop(self, "cateogries", expand=True)
+
 
         box = col.box()
 
         if self.cateogries == "GENERAL":
             self.draw_general(box)
 
-        elif self.cateogries == "KEYMAPS":
+        elif get_enable_hotkey_editor() and self.cateogries == "KEYMAPS":
             self.draw_keymaps(box)
+        
+        else:
+            self.draw_keymaps_disabled(box)
 
     def draw_general(self, context):
         column = context.column()
@@ -393,6 +405,8 @@ class AddonPreferences(AddonPreferences):
             row = layout.row(align=True)
             row.prop(self, "enable_legacy_origin", toggle=False)
 
+        row = layout.row(align=True)
+        row.prop(self, "enable_hotkey_editor", toggle=False)
 
 
         #
@@ -417,6 +431,19 @@ class AddonPreferences(AddonPreferences):
 
         row = layout.row(align=True)
         row.label(text="To take full advantage of this addon make sure the following addons are enabled.")
+
+    def draw_keymaps_disabled(self, context):
+        column = context.column()
+        layout = column
+
+        # Hotkey setup:
+        wm = bpy.context.window_manager
+        kc = wm.keyconfigs.user
+        km = kc.keymaps['3D View Generic']
+
+        row = layout.row(align=True)
+        row.label(text="Feature currentlly disabled, to be released in future versions.")
+
 
     def draw_keymaps(self, context):
         column = context.column()
