@@ -18,10 +18,13 @@ class RebaseCylinder(bpy.types.Operator):
     initial_pos_x = 0.0
     sides_count = 0
     rebase_axis = 0
+    merge_distance = 0.0
     initial_rebase_axis = 0
     initial_sides_count = 0
+    initial_merge_distance = 0.0
     original_rebase_axis = 0
     original_sides_count = 0
+    original_merge_distance = 0.0
     selection = "Empty"
     senitivity = 0.01
     modkey = 0
@@ -55,6 +58,14 @@ class RebaseCylinder(bpy.types.Operator):
         blf.size(font_id, 30, 60)
         blf.draw(font_id, str(self.ui_axis)[2])
 
+        blf.color(font_id, 1, 1, 1, 1)
+        blf.position(font_id, width / 2 - 100, 60, 0)
+        blf.draw(font_id, "Merge Dist: ")
+
+        blf.color(font_id, 0, .8, 1, 1)
+        blf.position(font_id, width / 2 + 60, 60, 0)
+        blf.size(font_id, 30, 60)
+        blf.draw(font_id, str(self.merge_distance)[0:6])
 
     def setup_rebase(self, context, selection):
         if selection is not []:
@@ -70,7 +81,9 @@ class RebaseCylinder(bpy.types.Operator):
 
             # Create modifier and assign name
             bpy.ops.object.modifier_add(type='SCREW')
-            mod = bpy.context.object.modifiers["Screw"].name = "Cylindrical Sides"
+            mod = bpy.context.object.modifiers["Screw"]
+            mod.name = "Cylindrical Sides"
+            mod.use_merge_vertices = True
 
             # Update both depsgraph and viewlayer
             bpy.context.view_layer.objects.active = selection
@@ -117,6 +130,19 @@ class RebaseCylinder(bpy.types.Operator):
 
             self.change_axis = False
 
+    def calculate_merge_distance(self, context, selection):
+        if self.merge_distance == 0.01:
+            self.merge_distance = 0.001
+
+        elif self.merge_distance == 0.001:
+            self.merge_distance = 0.0001
+
+        else:
+            self.merge_distance = 0.01
+
+        selection.modifiers["Cylindrical Sides"].merge_threshold = self.merge_distance
+        
+
     def sync_ui_settings(self):
         global axis
         # Use UI settings to drive parameters
@@ -151,6 +177,7 @@ class RebaseCylinder(bpy.types.Operator):
     def recover_settings(self, context, selection):
         mod = selection.modifiers["Cylindrical Sides"]
         self.initial_sides_count = mod.steps
+        self.initial_merge_distance = mod.merge_threshold
 
         if mod.axis == 'X':
             self.initial_rebase_axis = 0
@@ -163,22 +190,28 @@ class RebaseCylinder(bpy.types.Operator):
 
         self.rebase_axis = self.initial_rebase_axis
         self.sides_count = self.initial_sides_count
+        self.merge_distance = self.initial_merge_distance 
 
         if not self.first_run:
             self.original_rebase_axis = self.initial_rebase_axis
             self.original_sides_count = self.initial_sides_count
+            self.original_merge_distance = self.initial_merge_distance
+
 
     def restore_settings(self, context, selection):
-        selection.modifiers["Cylindrical Sides"].steps = self.original_sides_count
+        mod = selection.modifiers["Cylindrical Sides"]
+        mod.steps = self.original_sides_count
 
         if self.original_rebase_axis == 0:
-            selection.modifiers["Cylindrical Sides"].axis = "X"
+            mod.axis = "X"
 
         elif self.original_rebase_axis == 1:
-            selection.modifiers["Cylindrical Sides"].axis = "Y"
+            mod.axis = "Y"
 
         elif self.original_rebase_axis == 2:
-            selection.modifiers["Cylindrical Sides"].axis = "Z"
+            mod.axis = "Z"
+        
+        mod.merge_threshold = self.original_merge_distance
 
     def __init__(self):
         print("Start")
@@ -188,8 +221,11 @@ class RebaseCylinder(bpy.types.Operator):
 
     @classmethod
     def poll(cls, context):
-        return ((context.mode == 'OBJECT' and bpy.context.object.modifiers.find("Cylindrical Sides") > -1) or
-                bpy.context.mode == 'EDIT_MESH')
+        if  bpy.context.object != None:
+            return ((context.mode == 'OBJECT' and bpy.context.object.modifiers.find("Cylindrical Sides") > -1) or
+                    bpy.context.mode == 'EDIT_MESH')
+        else:
+            return False
 
     def execute(self, context):
         self.sync_ui_settings()
@@ -228,6 +264,10 @@ class RebaseCylinder(bpy.types.Operator):
                 bpy.ops.object.mode_set(mode='OBJECT')
                 return {'FINISHED'}
 
+        elif event.type == 'M':  # Change Merge threshold
+            if event.value == 'RELEASE':
+                self.calculate_merge_distance(context, bpy.data.objects[self.selection])
+
         elif event.type in {'RIGHTMOUSE', 'ESC'}:  # Cancel
             if not self.first_run:
                 self.restore_settings(context, bpy.data.objects[self.selection])
@@ -244,7 +284,7 @@ class RebaseCylinder(bpy.types.Operator):
             return {'CANCELLED'}
 
         #Tooltip
-        context.area.header_text_set("LMB: confirm, RMB:Cancel, Mouse Left/Right for number of instances, CTRL + Mouse Left/ Right to change Axis")
+        context.area.header_text_set("LMB: confirm, RMB:Cancel, Mouse Left/Right for number of instances, CTRL + Mouse Left/ Right to change Axis, M changes merge threshold precission")
         return {'RUNNING_MODAL'}
 
     def invoke(self, context, event):
@@ -261,3 +301,8 @@ class RebaseCylinder(bpy.types.Operator):
         self.execute(context)
         context.window_manager.modal_handler_add(self)
         return {'RUNNING_MODAL'}
+
+"""
+bpy.context.object.modifiers["Cylindrical Sides"].use_merge_vertices = True
+bpy.context.object.modifiers["Cylindrical Sides"].merge_threshold = 0.001
+"""
