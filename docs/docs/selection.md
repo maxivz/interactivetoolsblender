@@ -74,7 +74,15 @@
 
 *	If you are in segment selection mode it will switch to object mode.
 
-###Sticky Selection(TODO)
+###Sticky Selection
+
+Sticky selection refeers to keeping the selection stored between different selection modes in a similar way to what 3ds Max does.
+
+Interactive Tool's Sticky Selection implementation works by storing the selected verts, edges or faces as a custom attribute, for this to happen
+you need to enable Sticky Selection in the [**preferences**](../Preferences) and use Quick Vert, Edge and Face or Selection Cycle to move between modes.
+
+While this feature works most of the times, doing a lot of operations that modifies the order of the elements and forces blender to recalculate it, like extruding, beveling, 
+etc will break the tool.
 
 ![Alt Text](img/selection_sticky.gif)
 

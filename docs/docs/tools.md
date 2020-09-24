@@ -127,11 +127,12 @@ With the helper selected run the tool to apply the new origin position to the ob
 TODO
 
 ##Quick Pipe
-Makes a Pipe from an edge selection
+Makes a Pipe from an edge selection, can also be run on existing pipes to continue editing.
 
 ---
 
-* Move the mouse left and right to control the thickness of the pipe.
+* Move Left/Right to controls the thickness of the pipe.
+* Ctrl + Mouse Left/Right controls the resolution of the pipe.
 
 ---
 ![Alt Text](img/quickpipe.gif)
@@ -147,24 +148,31 @@ If the lattice is selected and the tool is run lattice will be applied and the o
 ![Alt Text](img/quickffd_03.gif)
 
 ##Rebase Cylinder
-Select a loop in a cylindrical object and run the tool to make a copy of the shape with customizable number of sides
+---
+
+* Move Left/Right to controls the resolution of the cylinder.
+* Ctrl + Mouse Left/Right controls the axis in which the cylinder is calculated.
+* M to change between different merge distance presets
+
+---
+Select a loop in a cylindrical object and run the tool to make a copy of the shape with customizable number of sides.
 ![Alt Text](img/setcylindricalobjsides_01.gif)
 
-If the tool is run with the created object selected its possible to continue editing the number of sides
+The tool can be run on rebased cylinders to continue editing after they have been created as long as the modifiers havent been collapsed.
 ![Alt Text](img/setcylindricalobjsides_02.gif)
 
-##Radial Symmetry (TODO)
-Select an object and run the tool. A radial symmetry will be created using the object's pivot point as the center point.
-
+##Radial Symmetry 
 ---
 
 * Move the mouse to the left and the right the amount of iterations will increase and decrease.
 
 * Control + mouse movement changes the symmetry axis.
 
-* H To show and Hide the symmetry Origin
+* H To show and Hide the symmetry Origin.
 
 ---
+
+Select an object and run the tool. A radial symmetry will be created using the object's pivot point as the center point.
 
 ![Alt Text](img/quickradialsymmetry_01.gif)
 

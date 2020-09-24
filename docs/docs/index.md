@@ -33,6 +33,13 @@ Github is updated more frequentlly while Gumroad is only updated on big releases
 * Smart Loop
 * Smart Ring
 
+###Transform
+
+* Transform Mode Cycle
+* CS Move
+* CS Rotate
+* CS Scale
+
 ###Tools
 
 * Super Smart Create
