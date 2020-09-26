@@ -23,12 +23,12 @@ from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, 
 bl_info = {
     "name": "Interactive Tools",
     "author": "Maxi Vazquez",
-    "description": "Collection of context sensitive and time saving tools",
+    "description": "Collection of context sensitive tools",
     "blender": (2, 81, 0),
     "location": "View3D",
     "version": (1, 8),
-    "tracker_url": "https://blenderartists.org/t/interactive-tools-for-blender-2-8/1164932",
-    "wiki_url": "https://github.com/maxivz/interactivetoolsblender",
+    "tracker_url": "https://github.com/maxivz/interactivetoolsblender/issues",
+    "wiki_url": "https://maxivz.github.io/interactivetoolsblenderdocs.github.io/",
     "warning": "",
     "category": "Generic"
 }
