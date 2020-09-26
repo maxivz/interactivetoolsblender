@@ -1,5 +1,5 @@
 
-![Logo](./images/interactivetools_logo.jpg)
+![Logo](./images/logo.jpg)
 
 ### What is Interactive Tools?
 Interactive Tools is a collection of tools for Blender that aims to provide intuitive, context sensitive tools.
