@@ -349,76 +349,105 @@ class AddonPreferences(AddonPreferences):
         column = context.column()
         layout = column
 
-        #
-        # Options:
-        #
-        row = layout.row(align=True)
-        row = layout.row(align=True)
-        row.label(text="General Settings :")
+        #Super Smart Create
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Super Smart Create:")
+        row = box.row(align=True)
 
-        row = layout.row(align=True)
-        row.prop(self, "enable_sticky_selection", toggle=False)
-
-        row = layout.row(align=True)
-        row.prop(self, "enable_show_faces", toggle=False)
-
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.prop(self, "ssc_switch_modes", toggle=False)
 
         if qblocker_active:
-            row = layout.row(align=True)
-            row.prop(self, "ssc_qblocker_integration", toggle=False)
+            row = box.row(align=True)
+            row.prop(self, "ssc_qblocker_integration", toggle=True)
+        else:
+            row = box.row(align=True)
+            row.label(text="Qblocker Integration unavailable, install the addon to enable")
 
         if bezierutilities_active:
-            row = layout.row(align=True)
-            row.prop(self, "ssc_bezierutilities_integration", toggle=False)
+            row = box.row(align=True)
+            row.prop(self, "ssc_bezierutilities_integration", toggle=True)
+        else:
+            row = box.row(align=True)
+            row.label(text="Bezier Utilities Integration unavailable, install the addon to enable")
 
-        row = layout.row(align=True)
+        #Selection
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Selection:")
+        row = box.row(align=True)
+
+        row = box.row(align=True)
+        row.prop(self, "enable_sticky_selection", toggle=False)
+
+        row = box.row(align=True)
+        row.prop(self, "enable_show_faces", toggle=False)
+
+        #Smart Delete
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Smart Delete:")
+        row = box.row(align=True)
+
+        row = box.row(align=True)
         row.prop(self, "enable_dissolve_verts", toggle=False)
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.prop(self, "enable_dissolve_faces", toggle=False)
 
-        row = layout.row(align=True)
-        row.prop(self, "radsym_hide_pivot", toggle=False)
+        #Quick Lp Hp Name
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Quick Lp Hp Name:")
+        row = box.row(align=True)
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.prop(self, "quickhplp_lp_suffix", toggle=False)
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.prop(self, "quickhplp_hp_suffix", toggle=False)
 
-        row = layout.row(align=True)
+        #Other
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Other:")
+        row = box.row(align=True)
+
+        row = box.row(align=True)
+        row.prop(self, "radsym_hide_pivot", toggle=False)
+
+        row = box.row(align=True)
         row.prop(self, "enable_wireshaded_cs", toggle=False)
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.prop(self, "transform_mode_cycle_cyclic", toggle=False)
 
-
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.prop(self, "enable_legacy_tools", toggle=False)
 
         if float(bpy.app.version_string[:4]) >= 2.82:
-            row = layout.row(align=True)
+            row = box.row(align=True)
             row.prop(self, "enable_legacy_origin", toggle=False)
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.prop(self, "enable_hotkey_editor", toggle=False)
 
 
         #
         # Recommended Addons::
         #
-        row = layout.row(align=True)
-        row = layout.row(align=True)
+        box = layout.box()
+        row = box.row(align=True)
+        row = box.row(align=True)
         row.label(text="Recommended addons:")
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
         addon_active_prop(f2_active, "F2", row)
         addon_active_prop(loop_tools_active, "Loop Tools", row)
         addon_active_prop(set_flow_active, "Set Flow", row,
                           url='https://github.com/BenjaminSauder/EdgeFlow')
-        row = layout.row(align=True)
+        row = box.row(align=True)
         addon_active_prop(qblocker_active, "QBlocker", row,
                           url='https://gumroad.com/l/gOEV')
         addon_active_prop(bezierutilities_active, "Bezier Utilities", row,
@@ -426,7 +455,7 @@ class AddonPreferences(AddonPreferences):
         addon_active_prop(bezierutilities_active, "TexTools", row,
                           url='https://github.com/SavMartin/TexTools-Blender')
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.label(text="To take full advantage of this addon make sure the following addons are enabled.")
 
     def draw_keymaps_disabled(self, context):
