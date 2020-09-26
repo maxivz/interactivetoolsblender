@@ -26,7 +26,7 @@ bl_info = {
     "description": "Collection of context sensitive tools",
     "blender": (2, 81, 0),
     "location": "View3D",
-    "version": (1, 8),
+    "version": (1, 4),
     "tracker_url": "https://github.com/maxivz/interactivetoolsblender/issues",
     "wiki_url": "https://maxivz.github.io/interactivetoolsblenderdocs.github.io/",
     "warning": "",
