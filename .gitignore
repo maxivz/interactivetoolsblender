@@ -105,5 +105,5 @@ venv.bak/
 .mypy_cache/
 
 #Vs Code Settings
-.vscode/settings.json
-.code-workspace
+.vscode/
+itools_workspace.code-workspace
