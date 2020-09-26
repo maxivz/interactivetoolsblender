@@ -1,7 +1,7 @@
 import bpy
 from ..utils import itools as itools
 from .. utils import dictionaries as dic
-from .. utils.user_prefs import get_quickhplp_hp_suffix, get_quickhplp_lp_suffix, get_enable_wireshaded_cs
+from .. utils.user_prefs import get_quickhplp_hp_suffix, get_quickhplp_lp_suffix, get_enable_wireshaded_cs, get_transform_mode_cycle_cyclic
 
 class TransformModeCycle(bpy.types.Operator):
     bl_idname = "mesh.transform_mode_cycle"
@@ -31,7 +31,9 @@ class TransformModeCycle(bpy.types.Operator):
 
                     elif space.show_gizmo_object_scale:
                         space.show_gizmo_object_scale = False
-                        space.show_gizmo_object_translate = True
+
+                        if get_transform_mode_cycle_cyclic():
+                            space.show_gizmo_object_translate = True
 
                     else:
                         space.show_gizmo_object_translate = True
@@ -82,7 +84,7 @@ class CSBevel(bpy.types.Operator):
         mode = itools.get_mode()
 
         version =  bpy.app.version_string[:4]
-        
+
         if mode == 'VERT':
             if float(version) >= 2.90:
                 bpy.ops.mesh.bevel('INVOKE_DEFAULT', affect='VERTICES')
@@ -100,6 +102,24 @@ class CSBevel(bpy.types.Operator):
 
     def execute(self, context):
         self.cs_bevel()
+        return{'FINISHED'}
+
+
+class ChildrenVisibility(bpy.types.Operator):
+    bl_idname = "object.children_visibility"
+    bl_label = "Children Visibility"
+    bl_description = "Hide or show children for the selected object"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    hide: bpy.props.BoolProperty(default=True)
+
+    def change_children_visibility(self):
+        children = itools.get_children(itools.get_selected(item=False)[0])
+        for obj in children:
+            bpy.data.objects[obj.name].hide_viewport = self.hide
+
+    def execute(self, context):
+        self.change_children_visibility()
         return{'FINISHED'}
 
 
@@ -274,14 +294,39 @@ class TransformOrientationOp(bpy.types.Operator):
         return{'FINISHED'}
 
 
-class TransformOrientationOpPie(bpy.types.Operator):
-    bl_idname = "mesh.transform_orientation_pie"
+class TransformPivotPointOp(bpy.types.Operator):
+    bl_idname = "mesh.transform_pivot_point_op"
+    bl_label = "Transform Pivot Point Operator"
+    bl_description = "Sets up transform Pivot Point"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    mode: bpy.props.IntProperty(default=0)
+
+    def set_transform_pivot_point(self, context):
+        if self.mode == 1:
+            bpy.context.scene.tool_settings.transform_pivot_point = 'MEDIAN_POINT'
+        elif self.mode == 2:
+            bpy.context.scene.tool_settings.transform_pivot_point = 'ACTIVE_ELEMENT'
+        elif self.mode == 3:
+            bpy.context.scene.tool_settings.transform_pivot_point = 'INDIVIDUAL_ORIGINS'
+        elif self.mode == 4:
+            bpy.context.scene.tool_settings.transform_pivot_point = 'CURSOR'
+        elif self.mode == 5:
+            bpy.context.scene.tool_settings.transform_pivot_point = 'BOUNDING_BOX_CENTER'
+
+    def execute(self, context):
+        self.set_transform_pivot_point(context)
+
+        return{'FINISHED'}
+
+class TransformOptionsPie(bpy.types.Operator):
+    bl_idname = "mesh.transform_options_pie"
     bl_label = "Transform Orientation Pie"
     bl_description = "Sets up a transform orientation from selected"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_QTO")
+        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_TransformOptions")
         return{'FINISHED'}
 
 
@@ -305,34 +350,34 @@ class SnapPresetsOp(bpy.types.Operator):
 
         if self.mode == 1:
             bpy.context.scene.tool_settings.snap_elements = {'INCREMENT'}
+            bpy.context.scene.tool_settings.snap_target = 'CLOSEST'
             bpy.context.scene.tool_settings.use_snap_grid_absolute = True
+            bpy.context.scene.tool_settings.use_snap_align_rotation = False
 
         elif self.mode == 2:
             bpy.context.scene.tool_settings.snap_elements = {'VERTEX'}
             bpy.context.scene.tool_settings.snap_target = 'CENTER'
+            bpy.context.scene.tool_settings.use_snap_align_rotation = False
 
         elif self.mode == 3:
             bpy.context.scene.tool_settings.snap_elements = {'VERTEX'}
             bpy.context.scene.tool_settings.snap_target = 'CLOSEST'
+            bpy.context.scene.tool_settings.use_snap_align_rotation = False
 
         elif self.mode == 4:
             bpy.context.scene.tool_settings.snap_elements = {'FACE'}
+            bpy.context.scene.tool_settings.snap_target = 'CENTER'
             bpy.context.scene.tool_settings.use_snap_align_rotation = True
             bpy.context.scene.tool_settings.use_snap_project = True
 
+        elif self.mode == 5:
+            bpy.context.scene.tool_settings.snap_elements = {'EDGE_MIDPOINT'}
+            bpy.context.scene.tool_settings.snap_target = 'MEDIAN'
+            bpy.context.scene.tool_settings.use_snap_align_rotation = False
+            bpy.context.scene.tool_settings.use_snap_project = False
+
     def execute(self, context):
         self.set_preset(context)
-        return{'FINISHED'}
-
-
-class SnapPresetsOpPie(bpy.types.Operator):
-    bl_idname = "mesh.snap_presets_pie"
-    bl_label = "Snap Presets Pie"
-    bl_description = "Sets up snapping settings based on presets"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    def execute(self, context):
-        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_QSP")
         return{'FINISHED'}
 
 
@@ -348,33 +393,41 @@ class PropEditOp(bpy.types.Operator):
 
         if self.mode == 1:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'SMOOTH'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 2:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'SPHERE'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 3:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'ROOT'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 4:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'INVERSE_SQUARE'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 5:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'SHARP'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 6:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'LINEAR'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 7:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'CONSTANT'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 8:
             bpy.context.scene.tool_settings.proportional_edit_falloff = 'RANDOM'
+            bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 9:
-            if bpy.context.scene.tool_settings.use_proportional_edit:
-                bpy.context.scene.tool_settings.use_proportional_edit = False
+            if bpy.context.scene.tool_settings.use_proportional_edit_objects:
+                bpy.context.scene.tool_settings.use_proportional_edit_objects = False
             else:
-                bpy.context.scene.tool_settings.use_proportional_edit = True
+                bpy.context.scene.tool_settings.use_proportional_edit_objects = True
 
         elif self.mode == 10:
             if bpy.context.scene.tool_settings.use_proportional_connected:
@@ -392,15 +445,14 @@ class PropEditOp(bpy.types.Operator):
         self.set_preset(context)
         return{'FINISHED'}
 
-
-class PropEditPie(bpy.types.Operator):
-    bl_idname = "mesh.prop_edit_pie"
-    bl_label = "Proportional Editing Pie"
-    bl_description = "Sets up Proportional Editing Falloffs"
+class ObjectPropertiesPie(bpy.types.Operator):
+    bl_idname = "mesh.obj_properties_pie"
+    bl_label = "Object Properties Pie"
+    bl_description = "Sets up Object Properties"
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        bpy.ops.wm.call_menu_pie(name="VIEW_MT_PIE_PropEdit")
+        bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_ObjectProperties")
         return{'FINISHED'}
 
 
@@ -428,7 +480,12 @@ class WireShadedToggle(bpy.types.Operator):
                 for space in area.spaces:
                     if space.type == 'VIEW_3D':
                         if space.shading.type == 'WIREFRAME':
-                            space.shading.type = dic.read("shading_mode")
+                            stored_mode = dic.read("shading_mode")
+
+                            if len(stored_mode)< 1:
+                                stored_mode = 'SOLID'
+
+                            space.shading.type = stored_mode
                         else:
                             dic.write("shading_mode", space.shading.type)
                             space.shading.type = 'WIREFRAME'

@@ -108,16 +108,48 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         pie = layout.menu_pie()
 
         # 4 - LEFT
-        pie.operator("mesh.quick_lattice", text="Quick Lattice")
+        #Visibility
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+        row = column.row(align=False)
+        row.label(text="Visibility")
+        row = column.row(align=True)
+        row.operator("object.children_visibility", text="Show ", icon = "HIDE_OFF").hide = False
+        row.operator("object.children_visibility", text="Hide Children", icon = "HIDE_ON").hide = True
+        row = column.row(align=True)
+        row.operator("object.hide_view_clear", text="Show All", icon = "HIDE_OFF")
+
+        #Parenting
+        row = column.row(align=False)
+        row.label(text="Parenting")
+        row = column.row(align=True)
+        row.operator("object.parent_set", text="Set Parent")
+        row = column.row(align=True)
+        row.operator("object.parent_clear", text="Clear Parent")
+        row = column.row(align=False)
+
+        #Collections
+        row.label(text="Collections")
+        row = column.row(align=False)
+        row.operator("object.move_to_collection", text="Move To Collection", icon = "DECORATE_DRIVER")
+        row = column.row(align=False)
+        row.operator("object.link_to_collection", text="Link To Collection", icon = "DECORATE_LINKED")
 
         # 6 - RIGHT
-        pie.operator("mesh.radial_symmetry", text="Radial Symmetry")
-
+        submenu = pie.column()
+        container = submenu.box()
+        column = container.column()
+        row = column.row(align=True)
+        row.operator("mesh.quick_lattice", text="Quick Lattice")
+        row = column.row(align=True)
+        row.operator("mesh.radial_symmetry", text="Radial Symmetry")
+        row = column.row(align=True)
+        row.operator("mesh.rebase_cylinder", text="Rebase Cylinder")
         # 2 - BOTTOM
-        pie.operator("mesh.rebase_cylinder", text="Rebase Cylinder")
+        pie.operator("object.convert", text="Visual Geo To Mesh").target='MESH'
 
         # 8 - TOP
-        pie.operator("object.convert", text="Visual Geo To Mesh").target='MESH'
 
         # 7 - TOP - LEFT
         # Align World Submenu
@@ -142,8 +174,9 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         op.relative_to = 'OPT_1'
         op.align_axis = {'Z'}
 
-        # 9 - TOP - RIGHT
 
+        # 9 - TOP - RIGHT
+           
         # 1 - BOTTOM - LEFT
 
         # 3 - BOTTOM - RIGHT
@@ -389,6 +422,7 @@ class VIEW3D_MT_PIE_SM_looptools(Menu):
 
         # 4 - LEFT
         pie.operator("mesh.looptools_circle", text="Make Circle")
+
         # 6 - RIGHT
         pie.operator("mesh.looptools_flatten", text="Flatten")
 
@@ -408,117 +442,15 @@ class VIEW3D_MT_PIE_SM_looptools(Menu):
         pie.operator("mesh.looptools_space", text="Space")
 
 
-class VIEW3D_MT_PIE_QTO(Menu):
-    bl_label = "Transform Orientation"
-
-    def draw(self, context):
-        layout = self.layout
-        pie = layout.menu_pie()
-
-        # 4 - LEFT
-        pie.operator("mesh.transform_orientation_op", text="Set Custom 2", icon='TRIA_DOWN').mode = 2
-
-        # 6 - RIGHT
-        if bpy.context.scene.transform_orientation_slots[0].type == 'Custom 2':
-            pie.operator("mesh.transform_orientation_op", text="Use Custom 2", icon='TRIA_UP', depress=True).mode = 5
-        else:
-            pie.operator("mesh.transform_orientation_op", text="Use Custom 2", icon='TRIA_UP').mode = 5
-
-        # 2 - BOTTOM
-        pie.operator("mesh.transform_orientation_op", text="Reset Working Pivot", icon='FILE_REFRESH').mode = 7
-        # 8 - TOP
-        menu = pie.row()
-        draw_orientations_submenu(menu)
-
-        # 7 - TOP - LEFT
-        pie.operator("mesh.transform_orientation_op", text="Set Custom 1", icon='TRIA_DOWN').mode = 1
-
-        # 9 - TOP - RIGHT
-        if bpy.context.scene.transform_orientation_slots[0].type == 'Custom 1':
-            pie.operator("mesh.transform_orientation_op", text="Use Custom 1", icon='TRIA_UP', depress=True).mode = 4
-        else:
-            pie.operator("mesh.transform_orientation_op", text="Use Custom 1", icon='TRIA_UP').mode = 4
-
-        # 1 - BOTTOM - LEFT
-        pie.operator("mesh.transform_orientation_op", text="Set Custom 3", icon='TRIA_DOWN').mode = 3
-
-        # 3 - BOTTOM - RIGHT
-        if bpy.context.scene.transform_orientation_slots[0].type == 'Custom 3':
-            pie.operator("mesh.transform_orientation_op", text="Use Custom 3", icon='TRIA_UP', depress=True).mode = 6
-        else:
-            pie.operator("mesh.transform_orientation_op", text="Use Custom 3", icon='TRIA_UP').mode = 6
-
-
-def draw_orientations_submenu(ui_space):
-    submenu = ui_space.column()
-    container = submenu.box()
-    column = container.column()
-
-    row = column.row(align=True)
-    row.label(text="Default Orientations")
-    row = column.row(align=True)
-    if bpy.context.scene.transform_orientation_slots[0].type == 'GLOBAL':
-        row.operator("mesh.transform_orientation_op", text="Global", icon="ORIENTATION_GLOBAL", depress=True).mode = 8
-    else:
-        row.operator("mesh.transform_orientation_op", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
-
-    if bpy.context.scene.transform_orientation_slots[0].type == 'LOCAL':
-        row.operator("mesh.transform_orientation_op", text="Local", icon="ORIENTATION_LOCAL", depress=True).mode = 9
-    else:
-        row.operator("mesh.transform_orientation_op", text="Local", icon="ORIENTATION_LOCAL").mode = 9
-    
-    if bpy.context.scene.transform_orientation_slots[0].type == 'CURSOR':
-        row.operator("mesh.transform_orientation_op", text="Cursor", icon="ORIENTATION_CURSOR", depress=True).mode = 13
-    else:
-        row.operator("mesh.transform_orientation_op", text="Cursor", icon="ORIENTATION_CURSOR").mode = 13
-
-    row = column.row(align=True)
-    if bpy.context.scene.transform_orientation_slots[0].type == 'NORMAL':
-        row.operator("mesh.transform_orientation_op", text="Normal", icon="ORIENTATION_NORMAL", depress=True).mode = 10
-    else:
-        row.operator("mesh.transform_orientation_op", text="Normal", icon="ORIENTATION_NORMAL").mode = 10
-
-    if bpy.context.scene.transform_orientation_slots[0].type == 'VIEW':
-        row.operator("mesh.transform_orientation_op", text="View", icon="ORIENTATION_VIEW", depress=True).mode = 12
-    else:
-        row.operator("mesh.transform_orientation_op", text="View", icon="ORIENTATION_VIEW").mode = 12
-
-    if bpy.context.scene.transform_orientation_slots[0].type == 'GIMBAL':
-        row.operator("mesh.transform_orientation_op", text="Gimbal", icon="ORIENTATION_GIMBAL", depress=True).mode = 11
-    else:
-        row.operator("mesh.transform_orientation_op", text="Gimbal", icon="ORIENTATION_GIMBAL").mode = 11
-
-
 class VIEW3D_MT_PIE_TransformOptions(Menu):
-    bl_label = "Transform Orientation"
+    bl_label = "Transform Options"
 
     def draw(self, context):
         layout = self.layout
         pie = layout.menu_pie()
 
         # 4 - LEFT
-        draw_orientations_submenu(pie)
-
-        # 6 - RIGHT
-        pie.operator("mesh.transform_orientation_pie", text="Pivot").mode = 5
-
-        # 2 - BOTTOM
-        pie.operator("mesh.transform_orientation_pie", text="Snap").mode = 7
-
-        # 8 - TOP
-        pie.operator("mesh.transform_orientation_pie", text="Proportional Editing").mode = 7
-
-
-class VIEW3D_MT_PIE_QSP(Menu):
-    bl_label = "Snap Presets"
-
-    def draw(self, context):
-        layout = self.layout
-        pie = layout.menu_pie()
-
-        # 4 - LEFT
-        if (bpy.context.scene.tool_settings.snap_elements == {'VERTEX'} and
-            bpy.context.scene.tool_settings.snap_target == 'CLOSEST'):
+        if (bpy.context.scene.tool_settings.snap_elements == {'VERTEX'} and bpy.context.scene.tool_settings.snap_target == 'CLOSEST'):
             op = pie.operator("mesh.snap_presets_op", text="Vert Closest", icon="SNAP_VERTEX", depress=True).mode = 3
         else:
             op = pie.operator("mesh.snap_presets_op", text="Vert Closest", icon="SNAP_VERTEX").mode = 3
@@ -539,42 +471,155 @@ class VIEW3D_MT_PIE_QSP(Menu):
             pie.operator("mesh.snap_presets_op", text="Face Normal", icon="SNAP_FACE").mode = 4
 
         # 8 - TOP
-        if (bpy.context.scene.tool_settings.snap_elements == {'INCREMENT'} and
-            bpy.context.scene.tool_settings.use_snap_grid_absolute == True):
+        box = pie.split()
+
+        #Top Left Column
+        column = box.column()
+        self.draw_proportional_editing(column)
+
+        #Top Center
+        column = box.column()
+        column.scale_x = 1.5
+        self.draw_orientations_submenu(column)
+
+        #Top Right Column
+        column = box.column()
+        self.draw_transform_pivot_submenu(column)
+
+        # 7 - TOP - LEFT
+        pie.separator()
+
+        # 9 - TOP - RIGHT
+        pie.separator()
+
+        # 1 - BOTTOM - LEFT
+        if (bpy.context.scene.tool_settings.snap_elements == {'INCREMENT'} and bpy.context.scene.tool_settings.use_snap_grid_absolute == True):
             pie.operator("mesh.snap_presets_op", text="Grid Absolute", icon="SNAP_INCREMENT",depress=True).mode = 1
         else:
             pie.operator("mesh.snap_presets_op", text="Grid Absolute", icon="SNAP_INCREMENT").mode = 1
 
-
-class VIEW_MT_PIE_PropEdit(Menu):
-    bl_label = "Prop Edit"
-
-    def draw(self, context):
-        layout = self.layout
-        pie = layout.menu_pie()
-
-        if bpy.context.scene.tool_settings.use_proportional_connected:
-            pie.operator("mesh.prop_edit_op", text="Connected Only", icon = "PROP_ON", depress=True).mode = 10
+        # 3 - BOTTOM - RIGHT
+        if (bpy.context.scene.tool_settings.snap_elements == {'EDGE_MIDPOINT'} and bpy.context.scene.tool_settings.snap_target == 'MEDIAN'):
+            pie.operator("mesh.snap_presets_op", text="Edge Center", icon="SNAP_MIDPOINT",depress=True).mode = 5
         else:
-            pie.operator("mesh.prop_edit_op", text="Connected Only", icon = "PROP_OFF").mode = 10
+            pie.operator("mesh.snap_presets_op", text="Edge Center", icon="SNAP_MIDPOINT").mode = 5
 
-        if bpy.context.scene.tool_settings.use_proportional_projected:
-            pie.operator("mesh.prop_edit_op", text="Projected", icon = "PROP_ON", depress=True).mode = 11
-        else:
-            pie.operator("mesh.prop_edit_op", text="Projected", icon = "PROP_OFF").mode = 11
-
-        if bpy.context.scene.tool_settings.use_proportional_edit:
-            pie.operator("mesh.prop_edit_op", text="Proportional Edit", icon = "PROP_ON", depress=True).mode = 9
-        else:
-            pie.operator("mesh.prop_edit_op", text="Proportional Edit", icon = "PROP_OFF").mode = 9
-
-        submenu = pie.column()
+    def draw_orientations_submenu(self, ui_space):
+        submenu = ui_space.column()
         container = submenu.box()
         column = container.column()
 
-        row = column.row(align=False)
-        row.label(text="Falloffs")
         row = column.row(align=True)
+        row.label(text="Default Orientations")
+        row = column.row(align=True)
+        if bpy.context.scene.transform_orientation_slots[0].type == 'GLOBAL':
+            row.operator("mesh.transform_orientation_op", text="Global", icon="ORIENTATION_GLOBAL", depress=True).mode = 8
+        else:
+            row.operator("mesh.transform_orientation_op", text="Global", icon="ORIENTATION_GLOBAL").mode = 8
+
+        if bpy.context.scene.transform_orientation_slots[0].type == 'LOCAL':
+            row.operator("mesh.transform_orientation_op", text="Local", icon="ORIENTATION_LOCAL", depress=True).mode = 9
+        else:
+            row.operator("mesh.transform_orientation_op", text="Local", icon="ORIENTATION_LOCAL").mode = 9
+
+        if bpy.context.scene.transform_orientation_slots[0].type == 'CURSOR':
+            row.operator("mesh.transform_orientation_op", text="Cursor", icon="ORIENTATION_CURSOR", depress=True).mode = 13
+        else:
+            row.operator("mesh.transform_orientation_op", text="Cursor", icon="ORIENTATION_CURSOR").mode = 13
+
+        row = column.row(align=True)
+        if bpy.context.scene.transform_orientation_slots[0].type == 'NORMAL':
+            row.operator("mesh.transform_orientation_op", text="Normal", icon="ORIENTATION_NORMAL", depress=True).mode = 10
+        else:
+            row.operator("mesh.transform_orientation_op", text="Normal", icon="ORIENTATION_NORMAL").mode = 10
+
+        if bpy.context.scene.transform_orientation_slots[0].type == 'VIEW':
+            row.operator("mesh.transform_orientation_op", text="View", icon="ORIENTATION_VIEW", depress=True).mode = 12
+        else:
+            row.operator("mesh.transform_orientation_op", text="View", icon="ORIENTATION_VIEW").mode = 12
+
+        if bpy.context.scene.transform_orientation_slots[0].type == 'GIMBAL':
+            row.operator("mesh.transform_orientation_op", text="Gimbal", icon="ORIENTATION_GIMBAL", depress=True).mode = 11
+        else:
+            row.operator("mesh.transform_orientation_op", text="Gimbal", icon="ORIENTATION_GIMBAL").mode = 11
+
+        row = column.row(align=True)
+        row.label(text="Custom Orientations")
+
+        row = column.row(align=True)
+        row.operator("mesh.transform_orientation_op", text="Set Custom 1", icon='TRIA_DOWN').mode = 1
+        if bpy.context.scene.transform_orientation_slots[0].type == 'Custom 1':
+            row.operator("mesh.transform_orientation_op", text="Use Custom 1", icon='TRIA_UP', depress=True).mode = 4
+        else:
+            row.operator("mesh.transform_orientation_op", text="Use Custom 1", icon='TRIA_UP').mode = 4
+
+        row = column.row(align=True)
+        row.operator("mesh.transform_orientation_op", text="Set Custom 2", icon='TRIA_DOWN').mode = 2
+        if bpy.context.scene.transform_orientation_slots[0].type == 'Custom 2':
+            row.operator("mesh.transform_orientation_op", text="Use Custom 2", icon='TRIA_UP', depress=True).mode = 5
+        else:
+            row.operator("mesh.transform_orientation_op", text="Use Custom 2", icon='TRIA_UP').mode = 5
+
+        row = column.row(align=True)
+        row.operator("mesh.transform_orientation_op", text="Set Custom 3", icon='TRIA_DOWN').mode = 3
+        if bpy.context.scene.transform_orientation_slots[0].type == 'Custom 3':
+            row.operator("mesh.transform_orientation_op", text="Use Custom 3", icon='TRIA_UP', depress=True).mode = 6
+        else:
+            row.operator("mesh.transform_orientation_op", text="Use Custom 3", icon='TRIA_UP').mode = 6
+
+        row = column.row(align=True)
+        row.separator()
+
+        row = column.row(align=True)
+        row.operator("mesh.transform_orientation_op", text="Reset Working Pivot", icon='FILE_REFRESH').mode = 7
+
+    def draw_transform_pivot_submenu(self, ui_space):
+        submenu = ui_space.column()
+        container = submenu.box()
+        column = container.column()
+
+        row = column.row(align=True)
+        row.label(text="Transform Pivot Point")
+        row = column.row(align=True)
+
+        if bpy.context.scene.tool_settings.transform_pivot_point == 'MEDIAN_POINT':
+            row.operator("mesh.transform_pivot_point_op", text="Median Point", icon="PIVOT_MEDIAN", depress=True).mode = 1
+        else:
+            row.operator("mesh.transform_pivot_point_op", text="Median Point", icon="PIVOT_MEDIAN").mode = 1
+
+        row = column.row(align=True)
+        if bpy.context.scene.tool_settings.transform_pivot_point == 'ACTIVE_ELEMENT':
+            row.operator("mesh.transform_pivot_point_op", text="Active Element", icon="PIVOT_ACTIVE", depress=True).mode = 2
+        else:
+            row.operator("mesh.transform_pivot_point_op", text="Active Element", icon="PIVOT_ACTIVE").mode = 2
+
+        row = column.row(align=True)
+        if bpy.context.scene.tool_settings.transform_pivot_point == 'INDIVIDUAL_ORIGINS':
+            row.operator("mesh.transform_pivot_point_op", text="Individual Origins", icon="PIVOT_INDIVIDUAL", depress=True).mode = 3
+        else:
+            row.operator("mesh.transform_pivot_point_op", text="Individual Origins", icon="PIVOT_INDIVIDUAL").mode = 3
+
+        row = column.row(align=True)
+        if bpy.context.scene.tool_settings.transform_pivot_point == 'CURSOR':
+            row.operator("mesh.transform_pivot_point_op", text="3D Cursor", icon="PIVOT_CURSOR", depress=True).mode = 4
+        else:
+            row.operator("mesh.transform_pivot_point_op", text="3D Cursor", icon="PIVOT_CURSOR").mode = 4
+
+        row = column.row(align=True)
+        if bpy.context.scene.tool_settings.transform_pivot_point == 'BOUNDING_BOX_CENTER':
+            row.operator("mesh.transform_pivot_point_op", text="Bounding Box Center", icon="PIVOT_BOUNDBOX", depress=True).mode = 5
+        else:
+            row.operator("mesh.transform_pivot_point_op", text="Bounding Box Center", icon="PIVOT_BOUNDBOX").mode = 5
+
+    def draw_proportional_editing(self, ui_space):
+        submenu = ui_space.column()
+        container = submenu.box()
+        column = container.column()
+
+        row = column.row(align=True)
+        row.label(text="Proportional Editing Falloffs")
+        row = column.row(align=True)
+
         if bpy.context.scene.tool_settings.proportional_edit_falloff == 'SMOOTH':
             row.operator("mesh.prop_edit_op", text="Smooth", icon = "SMOOTHCURVE", depress=True).mode = 1
         else:
@@ -616,3 +661,27 @@ class VIEW_MT_PIE_PropEdit(Menu):
             row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE", depress=True).mode = 8
         else:
             row.operator("mesh.prop_edit_op", text="Random", icon = "RNDCURVE").mode = 8
+
+        row = column.row(align=True)
+        row.separator()
+
+        row = column.row(align=True)
+        if bpy.context.scene.tool_settings.use_proportional_connected:
+            row.operator("mesh.prop_edit_op", text="Connected Only", icon = "PROP_ON", depress=True).mode = 10
+        else:
+            row.operator("mesh.prop_edit_op", text="Connected Only", icon = "PROP_OFF").mode = 10
+        row = column.row(align=True)
+
+        if bpy.context.scene.tool_settings.use_proportional_projected:
+            row.operator("mesh.prop_edit_op", text="Projected", icon = "PROP_ON", depress=True).mode = 11
+        else:
+            row.operator("mesh.prop_edit_op", text="Projected", icon = "PROP_OFF").mode = 11
+
+        row = column.row(align=True)
+        row.separator()
+
+        row = column.row(align=True)
+        if bpy.context.scene.tool_settings.use_proportional_edit_objects:
+            row.operator("mesh.prop_edit_op", text="Deactivate", icon = "PROP_ON", depress=True).mode = 9
+        else:
+            row.operator("mesh.prop_edit_op", text="Acrivate", icon = "PROP_OFF").mode = 9

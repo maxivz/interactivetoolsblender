@@ -1,7 +1,7 @@
 import bpy
 from .. utils import itools as itools
 from .. utils import dictionaries as dic
-from ..utils.user_prefs import get_enable_sticky_selection
+from ..utils.user_prefs import get_enable_sticky_selection  
 
 
 def store_sel_data(mode):
@@ -16,45 +16,66 @@ def store_sel_data(mode):
 def quick_selection(target_mode, safe_mode=False):
     current_mode = itools.get_mode()
     current_object = bpy.context.object
-    other_modes = itools.list_difference(['VERT', 'EDGE', 'FACE', 'OBJECT'], [target_mode])
-    sticky = get_enable_sticky_selection()
 
-    if current_mode in other_modes and current_object.type == 'MESH':
-        if current_mode != 'OBJECT' and sticky:
-            itools.update_indexes()
-            store_sel_data(current_mode)
+    if current_object != None:
 
-        itools.set_mode(target_mode)
-
-        if sticky:
+        #Convert types from Mesh to Gpencil space
+        if current_object.type == 'GPENCIL':
             if target_mode == 'VERT':
-                stored_selection = dic.read("selected_verts")
-
+                target_mode = 'POINT'
             elif target_mode == 'EDGE':
-                stored_selection = dic.read("selected_edges")
+                target_mode = 'STROKE'
+            elif target_mode == 'FACE':  
+                target_mode = 'SEGMENT'
 
-            elif target_mode == 'FACE':
-                stored_selection = dic.read("selected_faces")
+        other_modes = itools.list_difference(['VERT', 'EDGE', 'FACE', 'POINT', 'STROKE', 'SEGMENT', 'OBJECT'], [target_mode])
+        sticky = get_enable_sticky_selection()
 
-            if len(stored_selection) > 0 and "itools" in bpy.context.object:
+        if current_mode in other_modes and current_object.type == 'MESH':
+            if current_mode != 'OBJECT' and sticky:
                 itools.update_indexes()
-                indexes = [index for index in stored_selection]
-                if safe_mode:
-                    itools.select(indexes, item=False, replace=True, safe_mode=safe_mode)
-                else:
-                    itools.select(indexes, item=False, replace=True)
+                store_sel_data(current_mode)
 
-    elif current_mode == target_mode and current_object.type == 'MESH':
-        if sticky:
-            itools.update_indexes()
-            store_sel_data(current_mode)
-        itools.set_mode('OBJECT')
+            itools.set_mode(target_mode)
 
-    elif current_object.type == 'GPENCIL':
-        bpy.ops.gpencil.paintmode_toggle()
+            if sticky:
+                if target_mode == 'VERT':
+                    stored_selection = dic.read("selected_verts")
 
-    else:
-        bpy.ops.object.editmode_toggle()
+                elif target_mode == 'EDGE':
+                    stored_selection = dic.read("selected_edges")
+
+                elif target_mode == 'FACE':
+                    stored_selection = dic.read("selected_faces")
+
+                if len(stored_selection) > 0 and "itools" in bpy.context.object:
+                    itools.update_indexes()
+                    indexes = [index for index in stored_selection]
+                    if safe_mode:
+                        itools.select(indexes, item=False, replace=True, safe_mode=safe_mode)
+                    else:
+                        itools.select(indexes, item=False, replace=True)
+
+        elif current_mode == target_mode and current_object.type == 'MESH':
+            if sticky:
+                itools.update_indexes()
+                store_sel_data(current_mode)
+            itools.set_mode('OBJECT')
+
+        if current_object.type == 'GPENCIL':
+            bpy.ops.object.mode_set(mode="EDIT_GPENCIL")
+
+            if current_mode in other_modes:
+                if target_mode == 'POINT':
+                    bpy.context.scene.tool_settings.gpencil_selectmode_edit = 'POINT'
+                elif target_mode == 'STROKE':
+                    bpy.context.scene.tool_settings.gpencil_selectmode_edit = 'STROKE'
+                elif target_mode == 'SEGMENT':
+                    bpy.context.scene.tool_settings.gpencil_selectmode_edit = 'SEGMENT'
+
+            elif current_mode == target_mode:
+                bpy.ops.object.mode_set(mode="OBJECT")
+
 
 
 class SelectionModeCycle(bpy.types.Operator):

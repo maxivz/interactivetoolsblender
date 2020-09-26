@@ -30,7 +30,7 @@ def add_keymap(function_name, key, modifiers=[], kname='3D View Generic', contex
         mod_shift = True
 
     wm = bpy.context.window_manager
-    kc = wm.keyconfigs.addon
+    kc = wm.keyconfigs.user
     if kc:
         km = kc.keymaps.new(name=kname,
                             space_type=context,
@@ -93,7 +93,7 @@ def get_property(target):
 
 def get_keymaps_by_key():
     wm = bpy.context.window_manager
-    for km in wm.keyconfigs.addon.keymaps:
+    for km in wm.keyconfigs.user.keymaps:
         print("Keymap :", km)
         for kmi in km:
             print("Keymap Item :", kmi)
@@ -168,6 +168,11 @@ def get_enable_show_faces():
     return prefs.enable_show_faces
 
 
+def get_enable_dissolve_verts():
+    prefs = get_addon_preferences()
+    return prefs.enable_dissolve_verts
+
+
 def get_enable_dissolve_faces():
     prefs = get_addon_preferences()
     return prefs.enable_dissolve_faces
@@ -192,12 +197,28 @@ def get_enable_wireshaded_cs():
     prefs = get_addon_preferences()
     return prefs.enable_wireshaded_cs
 
+def get_transform_mode_cycle_cyclic():
+    prefs = get_addon_preferences()
+    return prefs.transform_mode_cycle_cyclic
+
+def get_enable_hotkey_editor():
+    prefs = get_addon_preferences()
+    return prefs.enable_hotkey_editor
 
 def unregister_keymaps():
-    # wm = bpy.context.window_manager
+    wm = bpy.context.window_manager
+    kc = wm.keyconfigs.user
+
+    print("Keymaps Disabled")
+    print(len(addon_keymaps))
     for km, kmi in addon_keymaps:
+        print(kmi)
+
+    for km, kmi in addon_keymaps:
+        print(kmi)
+        kc.keymaps.keymap_items.remove(kmi)
         km.keymap_items.remove(kmi)
-        # wm.keyconfigs.addon.keymaps.remove(km)
+
     addon_keymaps.clear()
 
 
@@ -212,6 +233,7 @@ def get_enable_legacy_tools():
 
 # Store keymaps to access after registration
 addon_keymaps = []
+
 
 # Check for integrations:
 f2_active = addon_installed("mesh_f2")
@@ -240,7 +262,7 @@ class AddonPreferences(AddonPreferences):
     # Properties
     cateogries: EnumProperty(name="Categories",
                              items=[("GENERAL", "General Settings", ""),
-                                    ("KEYMAPS", "Keymaps (BETA)", ""), ],
+                                    ("KEYMAPS", "Keymaps", ""), ],
                              default="GENERAL")
 
     ssc_switch_modes: BoolProperty(name="Super Smart Create Switch Modes",
@@ -263,6 +285,10 @@ class AddonPreferences(AddonPreferences):
                                     description="Enables Face Hilighting when using Quick Select and Selection Cycle Modes",
                                     default=True)
 
+    enable_dissolve_verts: BoolProperty(name="Smart Delete Dissolve Verts",
+                                        description="Verts will be dissolved, if disabled they will be deleted",
+                                        default=True)
+
     enable_dissolve_faces: BoolProperty(name="Smart Delete Dissolve Edges",
                                         description="Non-border edges will be dissolved, if disabled they will be deleted",
                                         default=True)
@@ -282,6 +308,10 @@ class AddonPreferences(AddonPreferences):
     enable_wireshaded_cs: BoolProperty(name="Wireframe / Shaded Context Sensitive Mode",
                                        description="Enables context sensitive mode for the Wireframe / Shaded Tool",
                                        default=True)
+                        
+    transform_mode_cycle_cyclic: BoolProperty(name="Transform Mode Cycle Cyclic",
+                                       description="Enables switching to the transform tool right after the Scale Tool",
+                                       default=True)
 
     enable_legacy_origin:  BoolProperty(name="Legacy Origin Edit Mode",
                                         description="Enable Legacy Origin Edit Mode",
@@ -291,87 +321,133 @@ class AddonPreferences(AddonPreferences):
                                        description="Enable Legacy Tools that are no longer in active development or supported. Use at own risk",
                                        default=False)
 
+    enable_hotkey_editor: BoolProperty(name="Enable Experimental Hotkey Editor",
+                                       description="Enables the hotkey editor in Itools Preference Pannel, this is a experimental feature, enable at own risk",
+                                       default=False)
 
     def draw(self, context):
         layout = self.layout
 
         col = layout.column(align=True)
         row = col.row()
+
         row.prop(self, "cateogries", expand=True)
+
 
         box = col.box()
 
         if self.cateogries == "GENERAL":
             self.draw_general(box)
 
-        elif self.cateogries == "KEYMAPS":
+        elif get_enable_hotkey_editor() and self.cateogries == "KEYMAPS":
             self.draw_keymaps(box)
+        
+        else:
+            self.draw_keymaps_disabled(box)
 
     def draw_general(self, context):
         column = context.column()
         layout = column
 
-        #
-        # Options:
-        #
-        row = layout.row(align=True)
-        row = layout.row(align=True)
-        row.label(text="General Settings :")
+        #Super Smart Create
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Super Smart Create:")
+        row = box.row(align=True)
 
-        row = layout.row(align=True)
-        row.prop(self, "enable_sticky_selection", toggle=False)
-
-        row = layout.row(align=True)
-        row.prop(self, "enable_show_faces", toggle=False)
-
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.prop(self, "ssc_switch_modes", toggle=False)
 
         if qblocker_active:
-            row = layout.row(align=True)
-            row.prop(self, "ssc_qblocker_integration", toggle=False)
+            row = box.row(align=True)
+            row.prop(self, "ssc_qblocker_integration", toggle=True)
+        else:
+            row = box.row(align=True)
+            row.label(text="Qblocker Integration unavailable, install the addon to enable")
 
         if bezierutilities_active:
-            row = layout.row(align=True)
-            row.prop(self, "ssc_bezierutilities_integration", toggle=False)
+            row = box.row(align=True)
+            row.prop(self, "ssc_bezierutilities_integration", toggle=True)
+        else:
+            row = box.row(align=True)
+            row.label(text="Bezier Utilities Integration unavailable, install the addon to enable")
 
-        row = layout.row(align=True)
+        #Selection
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Selection:")
+        row = box.row(align=True)
+
+        row = box.row(align=True)
+        row.prop(self, "enable_sticky_selection", toggle=False)
+
+        row = box.row(align=True)
+        row.prop(self, "enable_show_faces", toggle=False)
+
+        #Smart Delete
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Smart Delete:")
+        row = box.row(align=True)
+
+        row = box.row(align=True)
+        row.prop(self, "enable_dissolve_verts", toggle=False)
+
+        row = box.row(align=True)
         row.prop(self, "enable_dissolve_faces", toggle=False)
 
-        row = layout.row(align=True)
-        row.prop(self, "radsym_hide_pivot", toggle=False)
+        #Quick Lp Hp Name
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Quick Lp Hp Name:")
+        row = box.row(align=True)
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.prop(self, "quickhplp_lp_suffix", toggle=False)
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.prop(self, "quickhplp_hp_suffix", toggle=False)
 
-        row = layout.row(align=True)
+        #Other
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Other:")
+        row = box.row(align=True)
+
+        row = box.row(align=True)
+        row.prop(self, "radsym_hide_pivot", toggle=False)
+
+        row = box.row(align=True)
         row.prop(self, "enable_wireshaded_cs", toggle=False)
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
+        row.prop(self, "transform_mode_cycle_cyclic", toggle=False)
+
+        row = box.row(align=True)
         row.prop(self, "enable_legacy_tools", toggle=False)
 
         if float(bpy.app.version_string[:4]) >= 2.82:
-            row = layout.row(align=True)
+            row = box.row(align=True)
             row.prop(self, "enable_legacy_origin", toggle=False)
 
+        row = box.row(align=True)
+        row.prop(self, "enable_hotkey_editor", toggle=False)
 
 
         #
         # Recommended Addons::
         #
-        row = layout.row(align=True)
-        row = layout.row(align=True)
+        box = layout.box()
+        row = box.row(align=True)
+        row = box.row(align=True)
         row.label(text="Recommended addons:")
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
         addon_active_prop(f2_active, "F2", row)
         addon_active_prop(loop_tools_active, "Loop Tools", row)
         addon_active_prop(set_flow_active, "Set Flow", row,
                           url='https://github.com/BenjaminSauder/EdgeFlow')
-        row = layout.row(align=True)
+        row = box.row(align=True)
         addon_active_prop(qblocker_active, "QBlocker", row,
                           url='https://gumroad.com/l/gOEV')
         addon_active_prop(bezierutilities_active, "Bezier Utilities", row,
@@ -379,8 +455,21 @@ class AddonPreferences(AddonPreferences):
         addon_active_prop(bezierutilities_active, "TexTools", row,
                           url='https://github.com/SavMartin/TexTools-Blender')
 
-        row = layout.row(align=True)
+        row = box.row(align=True)
         row.label(text="To take full advantage of this addon make sure the following addons are enabled.")
+
+    def draw_keymaps_disabled(self, context):
+        column = context.column()
+        layout = column
+
+        # Hotkey setup:
+        wm = bpy.context.window_manager
+        kc = wm.keyconfigs.user
+        km = kc.keymaps['3D View Generic']
+
+        row = layout.row(align=True)
+        row.label(text="Feature currentlly disabled, to be released in future versions.")
+
 
     def draw_keymaps(self, context):
         column = context.column()
@@ -489,7 +578,7 @@ class AddonPreferences(AddonPreferences):
 
         # Quick Transform Orientation
         row = layout.row(align=True)
-        add_hotkey_ui('mesh.transform_orientation_pie', km, kc, row)
+        add_hotkey_ui('mesh.transform_options_pie', km, kc, row)
 
         # Quick Align
         row = layout.row(align=True)

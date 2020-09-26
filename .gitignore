@@ -89,6 +89,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+.vscode
 
 # Spyder project settings
 .spyderproject
@@ -102,4 +103,7 @@ venv.bak/
 
 # mypy
 .mypy_cache/
-.vscode/settings.json
+
+#Vs Code Settings
+.vscode/
+itools_workspace.code-workspace

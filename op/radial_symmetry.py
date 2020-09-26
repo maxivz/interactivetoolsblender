@@ -1,5 +1,6 @@
 import bpy
 import math
+import blf
 from bpy_extras.view3d_utils import region_2d_to_vector_3d, region_2d_to_origin_3d
 from ..utils.user_prefs import get_radsym_hide_pivot
 from bpy.props import EnumProperty, IntProperty
@@ -10,7 +11,7 @@ class QuickRadialSymmetry(bpy.types.Operator):
     bl_idname = "mesh.radial_symmetry"
     bl_label = "Radial Symmetry"
     bl_description = "Setup a Quick Radial Symmetry"
-    bl_options = {'REGISTER', 'UNDO', 'GRAB_CURSOR'}
+    bl_options = {'REGISTER', 'UNDO',  "GRAB_CURSOR", "BLOCKING"}
 
     """
     Editing menu disabled until I figure out solution to bug
@@ -39,15 +40,51 @@ class QuickRadialSymmetry(bpy.types.Operator):
     sym_axis = 0
     initial_sym_axis = 0
     initial_sym_count = 0
+    original_sym_axis = 0
+    original_sym_count = 0
     offset_obj = "Empty"
     selection = "Empty"
     senitivity = 0.01
     modkey = 0
     using_settings = False
+    ignore_initial_sym_count = False
     change_axis = False
     change_rotation = False
     change_iteration = False
     symmetry_center = ""
+    first_run = False
+
+    def draw_ui(self, context, event):
+        width = bpy.context.area.width
+
+        font_id = 0
+        blf.color(font_id, 1, 1, 1, 1)
+        blf.position(font_id, width / 2 - 100, 140, 0)
+        blf.size(font_id, 30, 60)
+        blf.draw(font_id, "Count: ")
+
+        blf.color(font_id, 0, 0.8, 1, 1)
+        blf.position(font_id, width / 2, 140, 0)
+        blf.size(font_id, 30, 60)
+        blf.draw(font_id, str(self.sym_count))
+
+        blf.color(font_id, 1, 1, 1, 1)
+        blf.position(font_id, width / 2 - 100, 100, 0)
+        blf.draw(font_id, "Axis: ")
+
+        blf.color(font_id, 0, .8, 1, 1)
+        blf.position(font_id, width / 2, 100, 0)
+        blf.size(font_id, 30, 60)
+        blf.draw(font_id, str(self.ui_axis)[2])
+
+        blf.color(font_id, 1, 1, 1, 1)
+        blf.position(font_id, width / 2 - 100, 60, 0)
+        blf.draw(font_id, "Show Origin: ")
+
+        blf.color(font_id, 0, .8, 1, 1)
+        blf.position(font_id, width / 2 + 60, 60, 0)
+        blf.size(font_id, 30, 60)
+        blf.draw(font_id, str(not bpy.data.objects[self.offset_obj].hide_viewport))
 
     def setup_symmetry(self, context, selection):
         if selection is not []:
@@ -87,11 +124,15 @@ class QuickRadialSymmetry(bpy.types.Operator):
                 self.sym_count = self.ui_count
 
             else:
-                self.sym_count = self.initial_sym_count + int(((self.mouse_x - self.initial_pos_x) * self.senitivity))
+                if self.ignore_initial_sym_count:
+                    self.sym_count = int(((self.mouse_x - self.initial_pos_x) * self.senitivity))
+                else:
+                    self.sym_count = self.initial_sym_count + int(((self.mouse_x - self.initial_pos_x) * self.senitivity))
 
             if self.sym_count < 1:
                 self.sym_count = 1
                 self.initial_pos_x = self.mouse_x
+                self.ignore_initial_sym_count = True
 
             bpy.context.view_layer.objects.active = selection
 
@@ -116,7 +157,9 @@ class QuickRadialSymmetry(bpy.types.Operator):
             self.change_rotation = False
 
     def sync_ui_settings(self):
+        global axis
         # Use UI settings to drive parameters
+
         if self.using_settings:
             if 'X' in self.ui_axis:
                 self.sym_axis = 0
@@ -163,6 +206,22 @@ class QuickRadialSymmetry(bpy.types.Operator):
         self.sym_axis = self.initial_sym_axis
         self.sym_count = self.initial_sym_count
 
+        if not self.first_run:
+            self.original_sym_axis = self.initial_sym_axis
+            self.original_sym_count = self.initial_sym_count
+
+    def restore_settings(self, context, selection):
+        selection.modifiers["Radial Symmetry"].count = self.original_sym_count
+
+        if self.original_sym_axis == 0:
+                bpy.data.objects[self.offset_obj].rotation_euler = (math.radians(360 / self.original_sym_count), 0, 0)
+
+        elif self.original_sym_axis == 1:
+            bpy.data.objects[self.offset_obj].rotation_euler = (0, math.radians(360 / self.original_sym_count), 0)
+
+        elif self.original_sym_axis == 2:
+            bpy.data.objects[self.offset_obj].rotation_euler = (0, 0, math.radians(360 / self.original_sym_count))
+
     def __init__(self):
         print("Start")
 
@@ -200,14 +259,41 @@ class QuickRadialSymmetry(bpy.types.Operator):
             self.execute(context)
             self.change_rotation = True
 
+        elif event.type in {'H', 'Z'}:  # Show Pivot
+            if event.value == 'RELEASE':
+                if bpy.data.objects[self.offset_obj].hide_viewport:
+                    bpy.data.objects[self.offset_obj].hide_viewport = False
+                else:
+                    bpy.data.objects[self.offset_obj].hide_viewport = True
+
         elif event.type == 'LEFTMOUSE':  # Confirm
             if event.value == 'RELEASE':
                 self.using_settings = True
+                context.area.header_text_set(text=None)
+                bpy.types.SpaceView3D.draw_handler_remove(self.draw_handler, 'WINDOW')
 
+                #Switch between modes to force update UI
+                bpy.ops.object.mode_set(mode='EDIT')
+                bpy.ops.object.mode_set(mode='OBJECT')
                 return {'FINISHED'}
 
-        elif event.type in {'RIGHTMOUSE', 'ESC'}:  # Confirm
+        elif event.type in {'RIGHTMOUSE', 'ESC'}:  # Cancel
+            if not self.first_run:
+                self.restore_settings(context, bpy.data.objects[self.selection])
+            bpy.types.SpaceView3D.draw_handler_remove(self.draw_handler, 'WINDOW')
+            context.area.header_text_set(text=None)
+
+            #Switch between modes to force update UI
+            bpy.ops.object.mode_set(mode='EDIT')
+            bpy.ops.object.mode_set(mode='OBJECT')
+
+            if self.first_run:
+                bpy.ops.object.modifier_remove(modifier="Radial Symmetry")
+
             return {'CANCELLED'}
+
+        #Tooltip
+        context.area.header_text_set("LMB: confirm, RMB:Cancel, Mouse Left/Right for number of instances, CTRL + Mouse Left/ Right to change Symmetry Axis H: Show / Hide Origin")
         return {'RUNNING_MODAL'}
 
     def invoke(self, context, event):
@@ -216,8 +302,11 @@ class QuickRadialSymmetry(bpy.types.Operator):
 
         if bpy.data.objects[self.selection].modifiers.find("Radial Symmetry") < 0:
             self.setup_symmetry(context, bpy.data.objects[self.selection])
+            self.first_run = True
 
         self.recover_settings(context, bpy.data.objects[self.selection])
+
+        self.draw_handler = bpy.types.SpaceView3D.draw_handler_add(self.draw_ui, (self, context), 'WINDOW','POST_PIXEL')
 
         self.execute(context)
         context.window_manager.modal_handler_add(self)
