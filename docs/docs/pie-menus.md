@@ -37,5 +37,6 @@ Context Sensitive Pie Menu, gives quick access to relevant tools based on the co
 ###Curve Mode
 ![Alt Text](img/pie_smart_modify_curve.jpg)
 ###UV Mode
+![Alt Text](img/pie_smart_modify_uv.jpg)
 Requires textools
 

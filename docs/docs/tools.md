@@ -180,7 +180,7 @@ The tool can be run on rebased cylinders to continue editing after they have bee
 
 * Control + mouse movement changes the symmetry axis.
 
-* H To show and Hide the symmetry Origin.
+* H To Show/Hide the symmetry Origin.
 
 ---
 

@@ -12,10 +12,11 @@ The tool can be downloaded from [**Github**](https://github.com/maxivz/interacti
 
 Github is updated more frequentlly while Gumroad is only updated on big releases.
 
-##Installation TODO
-**Blender 2.8** or higher is requiered for this tools to work.
+##Installation
 
-**Blender 2.9** will provide the optimal experience.
+This plugin requieres **Blender 2.9**. While most of the tools might work in **Blender 2.8**, bugs can be expected and it wont provide the optimal experience.
+
+To Install follow the instructions  [**here**](../setup#installation)
 
 ## Features
 
@@ -35,7 +36,6 @@ Github is updated more frequentlly while Gumroad is only updated on big releases
 
 ###Transform
 
-* Transform Mode Cycle
 * CS Move
 * CS Rotate
 * CS Scale
@@ -56,10 +56,8 @@ Github is updated more frequentlly while Gumroad is only updated on big releases
 * Quick HP Lp Namer
 
 ###Pie Menus
-* Smart Modify
-* Transform Orientation
-* Snap Presets Pie
-* Proportional Edit Pie
+* Smart Modify Pie
+* Transform Options Pie
 
 ###Toggles
 * Modifiers On/Off
