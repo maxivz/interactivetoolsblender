@@ -32,7 +32,8 @@ class QuickLattice(bpy.types.Operator):
         if selection is not []:
             if context.mode == 'OBJECT':
                 verts = selection.data.vertices
-                vert_positions = [vert.co @ selection.matrix_world for vert in verts]
+                vert_positions = [
+                    vert.co @ selection.matrix_world for vert in verts]
                 rotation = bpy.data.objects[selection.name].rotation_euler
 
             elif context.mode == 'EDIT_MESH':
@@ -40,7 +41,8 @@ class QuickLattice(bpy.types.Operator):
                 minimum = Vector()
                 maximum = Vector()
                 mode = itools.get_mode()
-                selectionMode = (tuple(bpy.context.scene.tool_settings.mesh_select_mode))
+                selectionMode = (
+                    tuple(bpy.context.scene.tool_settings.mesh_select_mode))
 
                 if mode == 'VERT':
                     verts = itools.get_selected()
@@ -58,12 +60,13 @@ class QuickLattice(bpy.types.Operator):
                     verts = list(set(verts))
 
             vert_indexes = [vert.index for vert in verts]
-            vert_positions = [(selection.matrix_world @ vert.co) for vert in verts]
+            vert_positions = [(selection.matrix_world @ vert.co)
+                              for vert in verts]
 
             # Make vertex group, assign verts and update viewlayer
             itools.set_mode('OBJECT')
 
-            #Remove old vertex group if it existed
+            # Remove old vertex group if it existed
             vg = selection.vertex_groups.get("lattice_group")
             if vg is not None:
                 selection.vertex_groups.remove(vg)
@@ -92,7 +95,8 @@ class QuickLattice(bpy.types.Operator):
                     dimensions[axis] = 0.001
 
             # Add Lattice
-            bpy.ops.object.add(type='LATTICE', enter_editmode=False, location=(0, 0, 0))
+            bpy.ops.object.add(
+                type='LATTICE', enter_editmode=False, location=(0, 0, 0))
             lattice = bpy.context.active_object
             lattice.data.use_outside = True
             lattice.name = selection.name + ".Lattice"
@@ -107,7 +111,7 @@ class QuickLattice(bpy.types.Operator):
             mod = selection.modifiers.new(name="Lattice", type='LATTICE')
             mod.object = lattice
 
-            #Make new vertex group
+            # Make new vertex group
             mod.vertex_group = "lattice_group"
             bpy.context.view_layer.objects.active = lattice
 
@@ -124,9 +128,15 @@ class QuickLattice(bpy.types.Operator):
         bpy.data.objects[obj.name].select_set(True)
         bpy.context.view_layer.objects.active = obj
 
-        #Fix for blender 2.90
-        version =  bpy.app.version_string[:4]
-        if float(version) >= 2.90:
+        # Fix for blender 2.90
+        version = bpy.app.version_string[:4]
+
+        try:
+            version = float(version)
+        except ValueError:
+            version = float(version[:-1])
+
+        if version >= 2.90:
             bpy.ops.object.modifier_apply(modifier="Lattice")
         else:
             bpy.ops.object.modifier_apply(apply_as='DATA', modifier="Lattice")
@@ -156,7 +166,8 @@ class QuickLattice(bpy.types.Operator):
     @classmethod
     def poll(cls, context):
         mode = itools.get_mode()
-        cond_a = mode in ['VERT', 'EDGE', 'FACE'] and len(itools.get_selected()) > 0
+        cond_a = mode in ['VERT', 'EDGE', 'FACE'] and len(
+            itools.get_selected()) > 0
         cond_b = mode == 'OBJECT' and len(context.selected_objects) == 1
 
         if len(context.selected_objects) > 0:

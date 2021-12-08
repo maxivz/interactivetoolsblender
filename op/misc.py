@@ -3,6 +3,7 @@ from ..utils import itools as itools
 from .. utils import dictionaries as dic
 from .. utils.user_prefs import get_quickhplp_hp_suffix, get_quickhplp_lp_suffix, get_enable_wireshaded_cs, get_transform_mode_cycle_cyclic
 
+
 class TransformModeCycle(bpy.types.Operator):
     bl_idname = "mesh.transform_mode_cycle"
     bl_label = "Transform Mode Cycle"
@@ -19,7 +20,8 @@ class TransformModeCycle(bpy.types.Operator):
                     override = bpy.context.copy()
                     override["space_data"] = area.spaces[0]
                     override["area"] = area
-                    bpy.ops.wm.tool_set_by_id(override, name="builtin.select_box")
+                    bpy.ops.wm.tool_set_by_id(
+                        override, name="builtin.select_box")
 
                     if space.show_gizmo_object_translate:
                         space.show_gizmo_object_translate = False
@@ -83,16 +85,21 @@ class CSBevel(bpy.types.Operator):
 
         mode = itools.get_mode()
 
-        version =  bpy.app.version_string[:4]
+        version = bpy.app.version_string[:4]
+
+        try:
+            version = float(version)
+        except ValueError:
+            version = float(version[:-1])
 
         if mode == 'VERT':
-            if float(version) >= 2.90:
+            if version >= 2.90:
                 bpy.ops.mesh.bevel('INVOKE_DEFAULT', affect='VERTICES')
             else:
                 bpy.ops.mesh.bevel('INVOKE_DEFAULT', vertex_only=True)
 
         if mode == 'EDGE':
-            if float(version) >= 2.90:
+            if version >= 2.90:
                 bpy.ops.mesh.bevel('INVOKE_DEFAULT', affect='EDGES')
             else:
                 bpy.ops.mesh.bevel('INVOKE_DEFAULT', vertex_only=False)
@@ -246,7 +253,8 @@ class TransformOrientationOp(bpy.types.Operator):
         if space in ['GLOBAL', 'LOCAL', 'NORMAL', 'GIMBAL', 'VIEW', 'CURSOR']:
             dic.write("stored_transform_orientation", space)
 
-        bpy.ops.transform.create_orientation(name=self.target_space, use=True, overwrite=True)
+        bpy.ops.transform.create_orientation(
+            name=self.target_space, use=True, overwrite=True)
 
     def set_orientation(self, context):
         if self.mode in [4, 5, 6]:
@@ -318,6 +326,7 @@ class TransformPivotPointOp(bpy.types.Operator):
         self.set_transform_pivot_point(context)
 
         return{'FINISHED'}
+
 
 class TransformOptionsPie(bpy.types.Operator):
     bl_idname = "mesh.transform_options_pie"
@@ -431,7 +440,7 @@ class PropEditOp(bpy.types.Operator):
 
         elif self.mode == 10:
             if bpy.context.scene.tool_settings.use_proportional_connected:
-                    bpy.context.scene.tool_settings.use_proportional_connected = False
+                bpy.context.scene.tool_settings.use_proportional_connected = False
             else:
                 bpy.context.scene.tool_settings.use_proportional_connected = True
 
@@ -444,6 +453,7 @@ class PropEditOp(bpy.types.Operator):
     def execute(self, context):
         self.set_preset(context)
         return{'FINISHED'}
+
 
 class ObjectPropertiesPie(bpy.types.Operator):
     bl_idname = "mesh.obj_properties_pie"
@@ -482,7 +492,7 @@ class WireShadedToggle(bpy.types.Operator):
                         if space.shading.type == 'WIREFRAME':
                             stored_mode = dic.read("shading_mode")
 
-                            if len(stored_mode)< 1:
+                            if len(stored_mode) < 1:
                                 stored_mode = 'SOLID'
 
                             space.shading.type = stored_mode
@@ -583,6 +593,7 @@ class QuickFlattenAxis(bpy.types.Operator):
             elif self.mode == 4:
                 axis_transform = (1, 1, 0)
 
-            bpy.ops.transform.resize(value=axis_transform, orient_type='GLOBAL', mirror=True, use_proportional_edit=False, release_confirm=True)
+            bpy.ops.transform.resize(value=axis_transform, orient_type='GLOBAL',
+                                     mirror=True, use_proportional_edit=False, release_confirm=True)
 
         return{'FINISHED'}
