@@ -75,27 +75,33 @@ class QuickAlign(bpy.types.Operator):
 
     raycast = False
     target = ""
+    
 
     # Get name of the object under the mouse, if nothing is under it will return 'World'
     def mouse_raycast(self, context, event):
         region = context.region
         rv3d = context.region_data
         coord = event.mouse_region_x, event.mouse_region_y
+
+        if not all((region, coord, rv3d)):
+            return 'World'
+
         view_vector = region_2d_to_vector_3d(region, rv3d, coord)
         ray_origin = region_2d_to_origin_3d(region, rv3d, coord, clamp=20)
         ray_target = None
         ray_target = ray_origin + (view_vector * 1000)
         ray_target.normalized()
 
-        result, location, normal, index, object, matrix = context.scene.ray_cast(context.view_layer,
+        result, location, normal, index, object, matrix = context.scene.ray_cast(context.view_layer.depsgraph,
                                                                                  ray_origin,
                                                                                  ray_target)
-
+        
+        
         if bpy.context.mode == 'OBJECT':
             if result and not object.select_get():
                 return object.name
-            else:
-                return 'World'
+    
+        return 'World'
 
     @classmethod
     def poll(cls, context):
