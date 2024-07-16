@@ -24,6 +24,7 @@ bl_info = {
     "name": "Interactive Tools",
     "author": "Maxi Vazquez, Ajfurey",
     "description": "Collection of context sensitive tools",
+    "blender": (4, 2, 0),
     "location": "View3D",
     "version": (1, 4),
     "tracker_url": "https://github.com/maxivz/interactivetoolsblender/issues",
