@@ -22,9 +22,9 @@ from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, 
 
 bl_info = {
     "name": "Interactive Tools",
-    "author": "Maxi Vazquez",
+    "author": "Maxi Vazquez, Ajfurey",
     "description": "Collection of context sensitive tools",
-    "blender": (2, 81, 0),
+    "blender": (4, 2, 0),
     "location": "View3D",
     "version": (1, 4),
     "tracker_url": "https://github.com/maxivz/interactivetoolsblender/issues",

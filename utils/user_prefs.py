@@ -64,8 +64,7 @@ def addon_active_prop(addon_active, addon, row, url='none'):
 
     else:
         if url != 'none':
-            row.operator("wm.url_open", text='Get ' +
-                         addon, icon="ERROR").url = url
+            row.operator("wm.url_open", text='Get '+addon, icon="ERROR").url = url
 
         else:
             row.operator('menu.placeholder', text=addon, icon="ERROR")
@@ -198,16 +197,13 @@ def get_enable_wireshaded_cs():
     prefs = get_addon_preferences()
     return prefs.enable_wireshaded_cs
 
-
 def get_transform_mode_cycle_cyclic():
     prefs = get_addon_preferences()
     return prefs.transform_mode_cycle_cyclic
 
-
 def get_enable_hotkey_editor():
     prefs = get_addon_preferences()
     return prefs.enable_hotkey_editor
-
 
 def unregister_keymaps():
     wm = bpy.context.window_manager
@@ -235,13 +231,12 @@ def get_enable_legacy_tools():
     prefs = get_addon_preferences()
     return prefs.enable_legacy_tools
 
-
 # Store keymaps to access after registration
 addon_keymaps = []
 
 
 # Check for integrations:
-f2_active = addon_installed("mesh_f2")
+f2_active = addon_installed("bl_ext.blender_org.f2")
 loop_tools_active = addon_installed("mesh_looptools")
 qblocker_active = addon_installed("QBlocker")
 bezierutilities_active = addon_installed("blenderbezierutils")
@@ -303,20 +298,20 @@ class AddonPreferences(AddonPreferences):
                                     default=True)
 
     quickhplp_lp_suffix: StringProperty(name="Low Poly suffix",
-                                        description="Suffix to use for Low Poly Meshes",
-                                        default="_low")
+                                      description="Suffix to use for Low Poly Meshes",
+                                      default="_low")
 
     quickhplp_hp_suffix: StringProperty(name="High Poly suffix",
-                                        description="Suffix to use for High Poly Meshes",
-                                        default="_high")
+                                    description="Suffix to use for High Poly Meshes",
+                                    default="_high")
 
     enable_wireshaded_cs: BoolProperty(name="Wireframe / Shaded Context Sensitive Mode",
                                        description="Enables context sensitive mode for the Wireframe / Shaded Tool",
                                        default=True)
-
+                        
     transform_mode_cycle_cyclic: BoolProperty(name="Transform Mode Cycle Cyclic",
-                                              description="Enables switching to the transform tool right after the Scale Tool",
-                                              default=True)
+                                       description="Enables switching to the transform tool right after the Scale Tool",
+                                       default=True)
 
     enable_legacy_origin:  BoolProperty(name="Legacy Origin Edit Mode",
                                         description="Enable Legacy Origin Edit Mode",
@@ -338,6 +333,7 @@ class AddonPreferences(AddonPreferences):
 
         row.prop(self, "cateogries", expand=True)
 
+
         box = col.box()
 
         if self.cateogries == "GENERAL":
@@ -345,7 +341,7 @@ class AddonPreferences(AddonPreferences):
 
         elif get_enable_hotkey_editor() and self.cateogries == "KEYMAPS":
             self.draw_keymaps(box)
-
+        
         else:
             self.draw_keymaps_disabled(box)
 
@@ -353,14 +349,7 @@ class AddonPreferences(AddonPreferences):
         column = context.column()
         layout = column
 
-        version = bpy.app.version_string[:4]
-
-        try:
-            version = float(version)
-        except ValueError:
-            version = float(version[:-1])
-
-        # Super Smart Create
+        #Super Smart Create
         box = layout.box()
         row = box.row(align=True)
         row.label(text="Super Smart Create:")
@@ -374,18 +363,16 @@ class AddonPreferences(AddonPreferences):
             row.prop(self, "ssc_qblocker_integration", toggle=True)
         else:
             row = box.row(align=True)
-            row.label(
-                text="Qblocker Integration unavailable, install the addon to enable")
+            row.label(text="Qblocker Integration unavailable, install the addon to enable")
 
         if bezierutilities_active:
             row = box.row(align=True)
             row.prop(self, "ssc_bezierutilities_integration", toggle=True)
         else:
             row = box.row(align=True)
-            row.label(
-                text="Bezier Utilities Integration unavailable, install the addon to enable")
+            row.label(text="Bezier Utilities Integration unavailable, install the addon to enable")
 
-        # Selection
+        #Selection
         box = layout.box()
         row = box.row(align=True)
         row.label(text="Selection:")
@@ -397,7 +384,7 @@ class AddonPreferences(AddonPreferences):
         row = box.row(align=True)
         row.prop(self, "enable_show_faces", toggle=False)
 
-        # Smart Delete
+        #Smart Delete
         box = layout.box()
         row = box.row(align=True)
         row.label(text="Smart Delete:")
@@ -409,7 +396,7 @@ class AddonPreferences(AddonPreferences):
         row = box.row(align=True)
         row.prop(self, "enable_dissolve_faces", toggle=False)
 
-        # Quick Lp Hp Name
+        #Quick Lp Hp Name
         box = layout.box()
         row = box.row(align=True)
         row.label(text="Quick Lp Hp Name:")
@@ -421,7 +408,7 @@ class AddonPreferences(AddonPreferences):
         row = box.row(align=True)
         row.prop(self, "quickhplp_hp_suffix", toggle=False)
 
-        # Other
+        #Other
         box = layout.box()
         row = box.row(align=True)
         row.label(text="Other:")
@@ -439,12 +426,13 @@ class AddonPreferences(AddonPreferences):
         row = box.row(align=True)
         row.prop(self, "enable_legacy_tools", toggle=False)
 
-        if version >= 2.82:
+        if float(bpy.app.version_string[:3]) >= 2.82:
             row = box.row(align=True)
             row.prop(self, "enable_legacy_origin", toggle=False)
 
         row = box.row(align=True)
         row.prop(self, "enable_hotkey_editor", toggle=False)
+
 
         #
         # Recommended Addons::
@@ -468,8 +456,7 @@ class AddonPreferences(AddonPreferences):
                           url='https://github.com/SavMartin/TexTools-Blender')
 
         row = box.row(align=True)
-        row.label(
-            text="To take full advantage of this addon make sure the following addons are enabled.")
+        row.label(text="To take full advantage of this addon make sure the following addons are enabled.")
 
     def draw_keymaps_disabled(self, context):
         column = context.column()
@@ -481,8 +468,8 @@ class AddonPreferences(AddonPreferences):
         km = kc.keymaps['3D View Generic']
 
         row = layout.row(align=True)
-        row.label(
-            text="Feature currentlly disabled, to be released in future versions.")
+        row.label(text="Feature currentlly disabled, to be released in future versions.")
+
 
     def draw_keymaps(self, context):
         column = context.column()
@@ -496,10 +483,10 @@ class AddonPreferences(AddonPreferences):
         row = layout.row(align=True)
         row.label(text="This pannel is a Beta feature, use at own risk.")
         row = layout.row(align=True)
-        row.label(
-            text="This pannel needs to be opened every time Blender is run for it to enable the set hotkeys")
+        row.label(text="This pannel needs to be opened every time Blender is run for it to enable the set hotkeys")
         row = layout.row(align=True)
         row.label(text="Dont remove keymaps, disable or modify them instead.")
+
 
         #
         # Modes Cycling, double space:
