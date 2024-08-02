@@ -1,25 +1,7 @@
 import bpy
-import bmesh
-#f2 import prior to 7-16-24
-#import mesh_f2 
 from ..utils import itools as itools
 from ..utils import mesh as mesh
 from ..utils.user_prefs import get_f2_active, get_ssc_switch_modes
-
-
-#edit 7-16-24
-import sys
-import os
-
-# Get the current user's home directory
-home_directory = os.path.expanduser('~')
-# Get the Blender version number
-blender_version = bpy.app.version
-version_string = f"{blender_version[0]}.{blender_version[1]}"
-extensions_path = home_directory + f'\\AppData\\Roaming\\Blender Foundation\\Blender\\{version_string}\\extensions\\blender_org'
-sys.path.append(extensions_path)
-import f2
-#end edit
 
 class SuperSmartCreate(bpy.types.Operator):
     bl_idname = "mesh.super_smart_create"
@@ -98,7 +80,7 @@ class SuperSmartCreate(bpy.types.Operator):
 
             elif len(selection) == 1 or (mesh.verts_share_edge(selection) and mesh.are_border_verts(selection)):
                 if get_f2_active():
-                    f2.bpy.ops.mesh.f2('INVOKE_DEFAULT')
+                    bpy.ops.mesh.f2('INVOKE_DEFAULT')
 
             elif mesh.verts_share_face(selection):
                 self.connect_verts_to_last(selection)

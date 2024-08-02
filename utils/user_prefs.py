@@ -1,15 +1,17 @@
 import bpy
+import addon_utils
 from bpy.types import Operator, AddonPreferences, Menu
 from bpy.props import StringProperty, IntProperty, BoolProperty, EnumProperty
 from os.path import basename, dirname
 import rna_keymap_ui
 
 
-def addon_installed(addon):
-    addons = bpy.context.preferences.addons.keys()
+def addon_installed(addon_name):
+    #Thanks machin3 for the help to make this work for 4.2!
+    for mod in addon_utils.modules():
+        name = mod.bl_info["name"]
 
-    for addon_item in addons:
-        if addon in addon_item:
+        if name == addon_name:
             return True
 
     return False
@@ -236,7 +238,7 @@ addon_keymaps = []
 
 
 # Check for integrations:
-f2_active = addon_installed("bl_ext.blender_org.f2")
+f2_active = addon_installed("F2")
 loop_tools_active = addon_installed("mesh_looptools")
 qblocker_active = addon_installed("QBlocker")
 bezierutilities_active = addon_installed("blenderbezierutils")
