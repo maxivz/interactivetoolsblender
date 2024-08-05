@@ -38,12 +38,12 @@ class QuickPipe(bpy.types.Operator):
         font_id = 0
         blf.color(font_id, 1, 1, 1, 1)
         blf.position(font_id, width / 2 - 100, 140, 0)
-        blf.size(font_id, 30, 60)
+        blf.size(font_id, 25)
         blf.draw(font_id, "Depth: ")
 
         blf.color(font_id, 0, 0.8, 1, 1)
         blf.position(font_id, width / 2, 140, 0)
-        blf.size(font_id, 30, 60)
+        blf.size(font_id, 25)
         blf.draw(font_id, str(self.depth)[0:4])
 
         blf.color(font_id, 1, 1, 1, 1)
@@ -52,7 +52,7 @@ class QuickPipe(bpy.types.Operator):
 
         blf.color(font_id, 0, .8, 1, 1)
         blf.position(font_id, width / 2 + 40, 100, 0)
-        blf.size(font_id, 30, 60)
+        blf.size(font_id, 25)
         blf.draw(font_id, str(self.resolution))
 
 
