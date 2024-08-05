@@ -47,7 +47,7 @@ def is_border(selection):
     # every edge must be adjacent with two other edges, if its a closed
     # border the number of adjacent edges should be at least 2 X number edges
     adjacent_edges = [neightbour for edge in selection for verts in edge.verts
-                      for neightbour in verts.link_edges if neightbour in selection and neightbour is not edge]
+                      for neightbour in verts.link_edges if neightbour in selection and neightbour != edge]
     return (all(is_border_edge(edge) for edge in selection) and len(adjacent_edges) >= len(selection) * 2)
 
 

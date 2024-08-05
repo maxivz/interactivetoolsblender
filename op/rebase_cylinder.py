@@ -68,7 +68,7 @@ class RebaseCylinder(bpy.types.Operator):
         blf.draw(font_id, str(self.merge_distance)[0:6])
 
     def setup_rebase(self, context, selection):
-        if selection is not []:
+        if selection != []:
             # Separate Selected Edge
             bpy.ops.mesh.separate(type='SELECTED')
             new_selection = bpy.context.selected_objects
@@ -237,14 +237,14 @@ class RebaseCylinder(bpy.types.Operator):
     def modal(self, context, event):
         if event.type == 'MOUSEMOVE':  # Apply
             if event.ctrl:
-                if self.modkey is not 1:
+                if self.modkey != 1:
                     self.modkey = 1
                     self.initial_pos_x = event.mouse_x
                     self.initial_sides_count = self.sides_count
                 self.change_axis = True
 
             else:
-                if self.modkey is not 0:
+                if self.modkey != 0:
                     self.modkey = 0
                     self.initial_pos_x = event.mouse_x
                     self.initial_rebase_axis = self.rebase_axis

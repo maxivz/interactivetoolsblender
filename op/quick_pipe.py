@@ -57,7 +57,7 @@ class QuickPipe(bpy.types.Operator):
 
 
     def setup_pipe(self, context, selection):
-        if selection is not []:
+        if selection != []:
             #Select object:
             itools.set_mode('OBJECT')
             base_obj = itools.get_selected('OBJECT')
@@ -166,14 +166,14 @@ class QuickPipe(bpy.types.Operator):
     def modal(self, context, event):
         if event.type == 'MOUSEMOVE':  # Apply
             if event.ctrl:
-                if self.modkey is not 1:
+                if self.modkey != 1:
                     self.modkey = 1
                     self.initial_pos_x = event.mouse_x
                     self.initial_resolution = self.resolution
                 self.change_resolution = True
 
             else:
-                if self.modkey is not 0:
+                if self.modkey != 0:
                     self.modkey = 0
                     self.initial_pos_x = event.mouse_x
                     self.initial_depth = self.depth

@@ -541,7 +541,7 @@ class QuickHpLpNamer(bpy.types.Operator):
             lp = lp[0]
 
         for obj in selection:
-            if obj is not lp:
+            if obj != lp:
                 obj.name = lp.name[:-len(lp_suffix)] + hp_suffix
 
         return{'FINISHED'}

@@ -29,7 +29,7 @@ class QuickLattice(bpy.types.Operator):
     modkey = 0
 
     def setup_lattice(self, context, selection):
-        if selection is not []:
+        if selection != []:
             if context.mode == 'OBJECT':
                 verts = selection.data.vertices
                 vert_positions = [
@@ -68,7 +68,7 @@ class QuickLattice(bpy.types.Operator):
 
             # Remove old vertex group if it existed
             vg = selection.vertex_groups.get("lattice_group")
-            if vg is not None:
+            if vg != None:
                 selection.vertex_groups.remove(vg)
 
             vg = selection.vertex_groups.new(name="lattice_group")
@@ -143,7 +143,7 @@ class QuickLattice(bpy.types.Operator):
 
         # Delete vertex group
         vg = obj.vertex_groups.get("lattice_group")
-        if vg is not None:
+        if vg != None:
             obj.vertex_groups.remove(vg)
 
         # Delete lattice

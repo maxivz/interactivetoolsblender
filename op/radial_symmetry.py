@@ -87,7 +87,7 @@ class QuickRadialSymmetry(bpy.types.Operator):
         blf.draw(font_id, str(not bpy.data.objects[self.offset_obj].hide_viewport))
 
     def setup_symmetry(self, context, selection):
-        if selection is not []:
+        if selection != []:
             sel_pivot = selection.location
             new_obj = bpy.data.objects.new('new_obj', None)
             bpy.ops.object.empty_add(type='ARROWS', location=sel_pivot)
@@ -242,14 +242,14 @@ class QuickRadialSymmetry(bpy.types.Operator):
     def modal(self, context, event):
         if event.type == 'MOUSEMOVE':  # Apply
             if event.ctrl:
-                if self.modkey is not 1:
+                if self.modkey != 1:
                     self.modkey = 1
                     self.initial_pos_x = event.mouse_x
                     self.initial_sym_count = self.sym_count
                 self.change_axis = True
 
             else:
-                if self.modkey is not 0:
+                if self.modkey != 0:
                     self.modkey = 0
                     self.initial_pos_x = event.mouse_x
                     self.initial_sym_axis = self.sym_axis
