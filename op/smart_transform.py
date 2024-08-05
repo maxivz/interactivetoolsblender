@@ -8,23 +8,24 @@ def mouse_2d_to_3d(context, event):
     location = region_2d_to_location_3d(context.region, context.space_data.region_3d, (x, y), (0, 0, 0))
     return Vector(location)
 
-
 class CSMove(bpy.types.Operator):
     bl_idname = "mesh.cs_move"
     bl_label = "CS Move"
     bl_description = "Context Sensitive Move Tool"
     bl_options = {'REGISTER', 'UNDO'}
 
-    def smart_move(self):
+    def smart_move(self,context):
         area = bpy.context.area
         for space in area.spaces:
             if space.type != 'VIEW_3D':
                 continue
             # Make sure active tool is set to select
-            override = bpy.context.copy()
-            override["space_data"] = area.spaces[0]
-            override["area"] = area
-            bpy.ops.wm.tool_set_by_id(override, name="builtin.select_box")
+            context_override = bpy.context.copy()
+            context_override["space_data"] = area.spaces[0]
+            context_override["area"] = area
+
+            with context.temp_override(**context_override):
+                bpy.ops.wm.tool_set_by_id(name="builtin.select_box")
 
             if space.show_gizmo_object_translate:
                 bpy.ops.transform.translate('INVOKE_DEFAULT')
@@ -34,7 +35,7 @@ class CSMove(bpy.types.Operator):
                 space.show_gizmo_object_scale = False
 
     def execute(self, context):
-        self.smart_move()
+        self.smart_move(context)
         return{'FINISHED'}
 
 
@@ -44,17 +45,19 @@ class CSRotate(bpy.types.Operator):
     bl_description = "Context Sensitive Rotate Tool"
     bl_options = {'REGISTER', 'UNDO'}
 
-    def smart_rotate(self):
+    def smart_rotate(self, context):
         
         area = bpy.context.area
         for space in area.spaces:
             if space.type != 'VIEW_3D':
                 continue
             # Make sure active tool is set to select
-            override = bpy.context.copy()
-            override["space_data"] = area.spaces[0]
-            override["area"] = area
-            bpy.ops.wm.tool_set_by_id(override, name="builtin.select_box")
+            context_override = bpy.context.copy()
+            context_override["space_data"] = area.spaces[0]
+            context_override["area"] = area
+
+            with context.temp_override(**context_override):
+                bpy.ops.wm.tool_set_by_id(name="builtin.select_box")
 
             if space.show_gizmo_object_rotate:
                 bpy.ops.transform.rotate('INVOKE_DEFAULT')
@@ -64,17 +67,17 @@ class CSRotate(bpy.types.Operator):
                 space.show_gizmo_object_scale = False
 
     def execute(self, context):
-        self.smart_rotate()
+        self.smart_rotate(context)
         return{'FINISHED'}
 
-
+#TODO: Optimize CSMove, Rotate and Scale into a single class with inheritance
 class CSScale(bpy.types.Operator):
     bl_idname = "mesh.cs_scale"
     bl_label = "CS Scale"
     bl_description = "Context Sensitive Scale Tool"
     bl_options = {'REGISTER', 'UNDO'}
 
-    def smart_scale(self):
+    def smart_scale(self, context):
         areas = bpy.context.workspace.screens[0].areas
 
         area = bpy.context.area
@@ -82,10 +85,12 @@ class CSScale(bpy.types.Operator):
             if space.type != 'VIEW_3D':
                 continue
             # Make sure active tool is set to select
-            override = bpy.context.copy()
-            override["space_data"] = area.spaces[0]
-            override["area"] = area
-            bpy.ops.wm.tool_set_by_id(override, name="builtin.select_box")
+            context_override = bpy.context.copy()
+            context_override["space_data"] = area.spaces[0]
+            context_override["area"] = area
+
+            with context.temp_override(**context_override):
+                bpy.ops.wm.tool_set_by_id(name="builtin.select_box")
 
             if space.show_gizmo_object_scale:
                 bpy.ops.transform.resize('INVOKE_DEFAULT')
@@ -95,7 +100,7 @@ class CSScale(bpy.types.Operator):
                 space.show_gizmo_object_scale = True
 
     def execute(self, context):
-        self.smart_scale()
+        self.smart_scale(context)
         return{'FINISHED'}
 
 
