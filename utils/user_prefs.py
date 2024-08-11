@@ -239,11 +239,11 @@ addon_keymaps = []
 
 # Check for integrations:
 f2_active = addon_installed("F2")
-loop_tools_active = addon_installed("mesh_looptools")
+loop_tools_active = addon_installed("LoopTools")
 qblocker_active = addon_installed("QBlocker")
 bezierutilities_active = addon_installed("blenderbezierutils")
 textools_active = addon_installed("TexTools")
-set_flow_active = addon_installed("EdgeFlow-master")
+set_flow_active = addon_installed("EdgeFlow")
 
 
 class MenuPlaceholder(bpy.types.Operator):
@@ -428,7 +428,7 @@ class AddonPreferences(AddonPreferences):
         row = box.row(align=True)
         row.prop(self, "enable_legacy_tools", toggle=False)
 
-        if float(bpy.app.version_string[:3]) >= 2.82:
+        if bpy.app.version >= (2,82,0):
             row = box.row(align=True)
             row.prop(self, "enable_legacy_origin", toggle=False)
 

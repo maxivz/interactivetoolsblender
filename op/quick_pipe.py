@@ -38,12 +38,12 @@ class QuickPipe(bpy.types.Operator):
         font_id = 0
         blf.color(font_id, 1, 1, 1, 1)
         blf.position(font_id, width / 2 - 100, 140, 0)
-        blf.size(font_id, 30, 60)
+        blf.size(font_id, 25)
         blf.draw(font_id, "Depth: ")
 
         blf.color(font_id, 0, 0.8, 1, 1)
         blf.position(font_id, width / 2, 140, 0)
-        blf.size(font_id, 30, 60)
+        blf.size(font_id, 25)
         blf.draw(font_id, str(self.depth)[0:4])
 
         blf.color(font_id, 1, 1, 1, 1)
@@ -52,12 +52,12 @@ class QuickPipe(bpy.types.Operator):
 
         blf.color(font_id, 0, .8, 1, 1)
         blf.position(font_id, width / 2 + 40, 100, 0)
-        blf.size(font_id, 30, 60)
+        blf.size(font_id, 25)
         blf.draw(font_id, str(self.resolution))
 
 
     def setup_pipe(self, context, selection):
-        if selection is not []:
+        if selection != []:
             #Select object:
             itools.set_mode('OBJECT')
             base_obj = itools.get_selected('OBJECT')
@@ -166,14 +166,14 @@ class QuickPipe(bpy.types.Operator):
     def modal(self, context, event):
         if event.type == 'MOUSEMOVE':  # Apply
             if event.ctrl:
-                if self.modkey is not 1:
+                if self.modkey != 1:
                     self.modkey = 1
                     self.initial_pos_x = event.mouse_x
                     self.initial_resolution = self.resolution
                 self.change_resolution = True
 
             else:
-                if self.modkey is not 0:
+                if self.modkey != 0:
                     self.modkey = 0
                     self.initial_pos_x = event.mouse_x
                     self.initial_depth = self.depth

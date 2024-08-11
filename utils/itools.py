@@ -174,7 +174,7 @@ def select(target, mode='', item=True, replace=False, deselect=False, add_to_his
     if deselect:
         selection_value = False
 
-    if type(target) is not list:
+    if type(target) != list:
         target = [target]
 
     if mode == 'OBJECT':

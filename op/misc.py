@@ -17,11 +17,12 @@ class TransformModeCycle(bpy.types.Operator):
             for space in area.spaces:
                 if space.type == 'VIEW_3D':
                     # Make active tool is set to select
-                    override = bpy.context.copy()
-                    override["space_data"] = area.spaces[0]
-                    override["area"] = area
-                    bpy.ops.wm.tool_set_by_id(
-                        override, name="builtin.select_box")
+                    context_override = bpy.context.copy()
+                    context_override["space_data"] = area.spaces[0]
+                    context_override["area"] = area
+
+                    with context.temp_override(**context_override):
+                        bpy.ops.wm.tool_set_by_id( name="builtin.select_box")
 
                     if space.show_gizmo_object_translate:
                         space.show_gizmo_object_translate = False
@@ -541,7 +542,7 @@ class QuickHpLpNamer(bpy.types.Operator):
             lp = lp[0]
 
         for obj in selection:
-            if obj is not lp:
+            if obj != lp:
                 obj.name = lp.name[:-len(lp_suffix)] + hp_suffix
 
         return{'FINISHED'}

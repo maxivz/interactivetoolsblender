@@ -41,12 +41,12 @@ class RebaseCylinder(bpy.types.Operator):
         font_id = 0
         blf.color(font_id, 1, 1, 1, 1)
         blf.position(font_id, width / 2 - 100, 140, 0)
-        blf.size(font_id, 30, 60)
+        blf.size(font_id, 25)
         blf.draw(font_id, "Count: ")
 
         blf.color(font_id, 0, 0.8, 1, 1)
         blf.position(font_id, width / 2, 140, 0)
-        blf.size(font_id, 30, 60)
+        blf.size(font_id, 25)
         blf.draw(font_id, str(self.sides_count))
 
         blf.color(font_id, 1, 1, 1, 1)
@@ -55,7 +55,7 @@ class RebaseCylinder(bpy.types.Operator):
 
         blf.color(font_id, 0, .8, 1, 1)
         blf.position(font_id, width / 2, 100, 0)
-        blf.size(font_id, 30, 60)
+        blf.size(font_id, 25)
         blf.draw(font_id, str(self.ui_axis)[2])
 
         blf.color(font_id, 1, 1, 1, 1)
@@ -64,11 +64,11 @@ class RebaseCylinder(bpy.types.Operator):
 
         blf.color(font_id, 0, .8, 1, 1)
         blf.position(font_id, width / 2 + 60, 60, 0)
-        blf.size(font_id, 30, 60)
+        blf.size(font_id, 25)
         blf.draw(font_id, str(self.merge_distance)[0:6])
 
     def setup_rebase(self, context, selection):
-        if selection is not []:
+        if selection != []:
             # Separate Selected Edge
             bpy.ops.mesh.separate(type='SELECTED')
             new_selection = bpy.context.selected_objects
@@ -237,14 +237,14 @@ class RebaseCylinder(bpy.types.Operator):
     def modal(self, context, event):
         if event.type == 'MOUSEMOVE':  # Apply
             if event.ctrl:
-                if self.modkey is not 1:
+                if self.modkey != 1:
                     self.modkey = 1
                     self.initial_pos_x = event.mouse_x
                     self.initial_sides_count = self.sides_count
                 self.change_axis = True
 
             else:
-                if self.modkey is not 0:
+                if self.modkey != 0:
                     self.modkey = 0
                     self.initial_pos_x = event.mouse_x
                     self.initial_rebase_axis = self.rebase_axis

@@ -246,7 +246,7 @@ def select_loop_directional(edge, directional=True, direction=0):
                 print("LOOP WILL JUMP ROW")
                 new_selection = selection
                 iterate = False
-            if len([face for face in new_selection[0].link_faces if len(list(face.verts)) is not 4]) is not 0:
+            if len([face for face in new_selection[0].link_faces if len(list(face.verts)) != 4]) != 0:
                 # End selection on ngons or triangles
                 print("END LOOP")
                 iterate = False
