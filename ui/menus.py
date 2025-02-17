@@ -83,6 +83,10 @@ class VIEW3D_MT_edit_outliner_itools(bpy.types.Menu):
     def draw(self, context):
         layout = self.layout
         layout.operator('collection.rename_objs_by_collection', text="Rename Objs by Collection Name")
+        layout.operator('collection.edit_collection_offset_toggle', text="Edit Collection Offset Toggle")
+
+
+        
 
 def menu_object_mode_itools(self, context):
     self.layout.menu("VIEW3D_MT_object_mode_itools")
