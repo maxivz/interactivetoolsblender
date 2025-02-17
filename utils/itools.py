@@ -334,3 +334,17 @@ def get_children(obj_name):
             if ob.parent.name == obj_name:
                 children.append(ob)
     return children
+
+def get_collection_top_level_parent(collection):
+    """Finds the top-level parent of a collection by checking all collections in the scene."""
+    parent_level = []
+    for parent_collection in bpy.data.collections:
+        print(f"Parent {parent_collection}")
+        children_recursive = parent_collection.children_recursive
+        if collection in children_recursive:
+            parent_level.append((parent_collection, len(children_recursive)))
+
+    if parent_level:
+        return max(parent_level, key=lambda p: p[1])[0]
+
+    return None

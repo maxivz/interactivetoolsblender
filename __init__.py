@@ -17,7 +17,7 @@ from . op.quick_lattice import QuickLattice, LatticeResolution2x2x2, LatticeReso
 from . op.quick_pipe import QuickPipe
 from . op.rebase_cylinder import RebaseCylinder
 from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromSharps, UvsFromSharps
-from . op.collection_ops import RenameObjsByCollection, EditCollectionOffset
+from . op.collection_ops import RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection
 from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps, get_enable_legacy_tools
 
 bl_info = {
@@ -50,7 +50,7 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            MenuPlaceholder, SmartModify, LatticeResolution2x2x2,
            SnapPresetsOp, PropEditOp, TransformPivotPointOp,
            LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer, ChildrenVisibility,
-           RenameObjsByCollection, EditCollectionOffset)
+           RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection)
 
 legacy_classes = (SmartExtrudeModal, SmartTranslate)
 
