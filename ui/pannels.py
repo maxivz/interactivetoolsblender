@@ -61,6 +61,14 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row = layout.row(align=True)
         row.operator('mesh.quick_hplp_namer', text="Quick Hp Lp Namer")
 
+        layout.label(text="Collections")
+        row = layout.row()
+        row.operator('collection.edit_collection_offset_toggle', text="Edit Collection Offset")
+        row = layout.row()
+        row.operator('collection.rename_objs_by_collection', text="Rename Objects By Collection")
+        row = layout.row()
+        row.operator('collection.color_objs_by_collection', text="Color Objects By Collection")
+
         layout.label(text="Pie Menus")
         row = layout.row()
         row.operator('mesh.smart_modify', text="Smart Modify Pie")
