@@ -16,6 +16,7 @@ from . op.smart_transform import SmartTranslate, CSMove, CSRotate, CSScale
 from . op.quick_lattice import QuickLattice, LatticeResolution2x2x2, LatticeResolution3x3x3, LatticeResolution4x4x4
 from . op.quick_pipe import QuickPipe
 from . op.rebase_cylinder import RebaseCylinder
+from . op.quick_convex import QuickConvexHull
 from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromSharps, UvsFromSharps
 from . op.collection_ops import RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection
 from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps, get_enable_legacy_tools
@@ -50,7 +51,7 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            MenuPlaceholder, SmartModify, LatticeResolution2x2x2,
            SnapPresetsOp, PropEditOp, TransformPivotPointOp,
            LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer, ChildrenVisibility,
-           RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection)
+           RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection, QuickConvexHull)
 
 legacy_classes = (SmartExtrudeModal, SmartTranslate)
 

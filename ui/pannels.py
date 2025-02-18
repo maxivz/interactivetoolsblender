@@ -59,7 +59,11 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row.operator('mesh.context_sensitive_slide', text="CS Slide")
         row.operator('mesh.context_sensitive_bevel', text="CS Bevel")
         row = layout.row(align=True)
+        row.operator('mesh.quick_convex_hull', text="Quick Convex Hull")
+        row = layout.row(align=True)
         row.operator('mesh.quick_hplp_namer', text="Quick Hp Lp Namer")
+
+
 
         layout.label(text="Collections")
         row = layout.row()

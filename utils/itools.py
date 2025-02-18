@@ -348,3 +348,14 @@ def get_collection_top_level_parent(collection):
         return max(parent_level, key=lambda p: p[1])[0]
 
     return None
+
+def duplicate_object(target_obj,linked_data = False):
+    # Duplicate the object and mesh
+    new_obj = target_obj.copy()
+    if not linked_data:
+        new_obj.data = target_obj.data.copy()
+    bpy.context.collection.objects.link(new_obj)
+    
+    new_obj.matrix_world = target_obj.matrix_world.copy()
+
+    return new_obj
