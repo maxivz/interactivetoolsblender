@@ -194,6 +194,11 @@ def get_quickhplp_hp_suffix():
     prefs = get_addon_preferences()
     return prefs.quickhplp_hp_suffix
 
+def get_quickconvex_prefix():
+    prefs = get_addon_preferences()
+    return prefs.quickconvex_prefix
+
+
 
 def get_enable_wireshaded_cs():
     prefs = get_addon_preferences()
@@ -306,6 +311,10 @@ class AddonPreferences(AddonPreferences):
     quickhplp_hp_suffix: StringProperty(name="High Poly suffix",
                                     description="Suffix to use for High Poly Meshes",
                                     default="_high")
+    
+    quickconvex_prefix: StringProperty(name="Quick Convex Hull Prefix",
+                                    description="Prefix to use for new Quick Convex Hull mesh naming",
+                                    default="UCX")
 
     enable_wireshaded_cs: BoolProperty(name="Wireframe / Shaded Context Sensitive Mode",
                                        description="Enables context sensitive mode for the Wireframe / Shaded Tool",
@@ -424,6 +433,10 @@ class AddonPreferences(AddonPreferences):
 
         row = box.row(align=True)
         row.prop(self, "transform_mode_cycle_cyclic", toggle=False)
+
+        #Quick Convex Hull
+        row = box.row(align=True)
+        row.prop(self, "quickconvex_prefix", toggle=False)
 
         row = box.row(align=True)
         row.prop(self, "enable_legacy_tools", toggle=False)

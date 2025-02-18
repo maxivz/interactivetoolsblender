@@ -1,11 +1,9 @@
 import bpy
 import bmesh
-from mathutils import Vector
 from .. utils.materials import get_material
-from ..utils.itools import duplicate_object
+from ..utils.user_prefs import get_quickconvex_prefix
 
-HULL_PREFIX = "UCX" #TODO. Make this a setting
-HULL_MAT_COLOR = (0, 1, 0, 1) #TODO. Make this a setting
+HULL_MAT_COLOR = (0, 1, 0, 1) #TODO. Make this a setting in the future
 
 
 class QuickConvexHull(bpy.types.Operator):
@@ -27,6 +25,7 @@ class QuickConvexHull(bpy.types.Operator):
 
     def execute(self, context):
         edit_mode = False
+        hull_prefix = get_quickconvex_prefix()
         og_selection = context.selected_objects
         og_active = context.view_layer.objects.active
 
@@ -61,11 +60,11 @@ class QuickConvexHull(bpy.types.Operator):
                 bmesh.ops.delete(bm, geom=delete_verts)
 
             # Finish up, write the bmesh into a new mesh
-            new_bmesh = bpy.data.meshes.new(f"{HULL_PREFIX}_{og_selection[0].name}")
+            new_bmesh = bpy.data.meshes.new(f"{hull_prefix}_{og_selection[0].name}")
             bm.to_mesh(new_bmesh)
             bm.free()
 
-            convex_hull = bpy.data.objects.new(f"{HULL_PREFIX}_{og_selection[0].name}", new_bmesh)
+            convex_hull = bpy.data.objects.new(f"{hull_prefix}_{og_selection[0].name}", new_bmesh)
             bpy.context.collection.objects.link(convex_hull)
                 # Parent the convex hull to the original object and copy transforms
             convex_hull.parent = obj
