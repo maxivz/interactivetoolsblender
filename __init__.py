@@ -2,6 +2,7 @@ import bpy
 from . ui.menus import load_menus_itools, unload_menus_itools, VIEW3D_MT_object_mode_itools, VIEW3D_MT_edit_mesh_itools, VIEW3D_MT_edit_lattice_itools, VIEW3D_MT_edit_uvs_itools, VIEW3D_MT_edit_outliner_itools
 from . ui.pies import VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_SM_curve
 from . ui.pannels import VIEW3D_PT_Itools
+from . ui.pie_menus.make_new import VIEW3D_MT_PIE_Make_New
 from . op.super_smart_create import SuperSmartCreate
 from . op.radial_symmetry import QuickRadialSymmetry
 from . op.quick_align import QuickAlign
@@ -21,6 +22,7 @@ from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromS
 from . op.collection_ops import RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection
 from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps, get_enable_legacy_tools
 from .utils.custom_data import ToggleItoolsProperty
+from .op.new_objects import AddBezierEmpty
 from .op.handlers import load_handlers, unload_handlers
 bl_info = {
     "name": "Interactive Tools",
@@ -53,7 +55,7 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            SnapPresetsOp, PropEditOp, TransformPivotPointOp,
            LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer, ChildrenVisibility,
            RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection, QuickConvexHull,
-           ToggleItoolsProperty)
+           ToggleItoolsProperty, VIEW3D_MT_PIE_Make_New, AddBezierEmpty)
 
 legacy_classes = (SmartExtrudeModal, SmartTranslate)
 
