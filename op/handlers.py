@@ -1,19 +1,18 @@
 import bpy
 import bmesh
-from mathutils import Vector
+from ..utils.constants import COLLISION_COLORS_UPDATE
+from ..utils.custom_data import itools_data_get
+from .collection_ops import assign_object_collection_colors
 
-
-
-def fit_to_view_scale_handlers(scene):
-    """Handler that triggers fit to view on new object creation"""
-
-    pass
+def update_collection_colors(scene):
+    if itools_data_get(COLLISION_COLORS_UPDATE):
+        assign_object_collection_colors()
+        print("HANDLER RECOLOR RUNNING")
 
 
 def load_handlers():
-    bpy.app.handlers.depsgraph_update_post.append(fit_to_view_scale_handlers)
-    pass
+    bpy.app.handlers.depsgraph_update_post.append(update_collection_colors)
 
 def unload_handlers():
-    bpy.app.handlers.depsgraph_update_post.remove(fit_to_view_scale_handlers)
+    bpy.app.handlers.depsgraph_update_post.remove(update_collection_colors)
 

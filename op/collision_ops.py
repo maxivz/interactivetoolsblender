@@ -1,9 +1,8 @@
 import bpy
 import bmesh
-from .. utils.materials import get_material
+from ..utils.materials import get_material
 from ..utils.user_prefs import get_quickconvex_prefix
-
-HULL_MAT_COLOR = (0, 1, 0, 1) #TODO. Make this a setting in the future
+from ..utils.constants import CONVEXHULL_MAT_COLOR
 
 
 class QuickConvexHull(bpy.types.Operator):
@@ -16,7 +15,7 @@ class QuickConvexHull(bpy.types.Operator):
         # Get collision material and assign green color, create it if its missing
         get_material("Collision")
         mat = bpy.data.materials.get("Collision")
-        mat.diffuse_color = HULL_MAT_COLOR
+        mat.diffuse_color = CONVEXHULL_MAT_COLOR
         obj.data.materials.append(mat)
 
     @classmethod

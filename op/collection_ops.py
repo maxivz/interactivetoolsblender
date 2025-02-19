@@ -2,19 +2,15 @@ import bpy
 import random
 
 from .. utils.itools import get_collection_top_level_parent
-
-COLLECTION_COLOR = "Collection Color"
-
-#TODO: Make this into an option for the tool
-# Option to use the parent collection's color if it exists
-USE_PARENT_COLLECTION_COLOR = False 
+from .. utils.custom_data import itools_data_get
+from ..utils.constants import COLLECTION_COLOR, COLLECTION_COLORS_USE_PARENT_COLOR
 
 def get_collection_color(collection):
     """Returns the color of a collection, if it has a tag it uses that one, if it doesnt it assigns one"""
     if collection is None:
         return (1, 1, 1, 1) 
     
-    if USE_PARENT_COLLECTION_COLOR:
+    if itools_data_get(COLLECTION_COLORS_USE_PARENT_COLOR):
         parent_collection = get_collection_top_level_parent(collection)
         if parent_collection: 
             return get_collection_color(parent_collection)
@@ -56,6 +52,17 @@ class ColorObjsByCollection(bpy.types.Operator):
     bl_idname = "collection.color_objs_by_collection"
     bl_label = "Color Objects By Collection"
     bl_description = "Renames all objects in collection to reflect the collection name"
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        assign_object_collection_colors()
+        return {'FINISHED'}
+    
+class ColorObjsByCollection(bpy.types.Operator):
+    bl_idname = "collection.color_objs_by_collection"
+    bl_label = "Color Objects By Collection"
+    bl_description = """Sets the color of the objects to the color of its collection.
+    If the collection has a color tag it will use it, if it doesnt it will generate a random one"""
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
