@@ -33,15 +33,24 @@ class VIEW3D_MT_PIE_Make_New(Menu):
 
         row = column.row(align=True)
         row.operator("mesh.primitive_cube_add", text="Cube", icon="MESH_CUBE")
+        row.operator("wm.tool_set_by_id", text="", icon="GREASEPENCIL").name = "builtin.primitive_cube_add"
+
 
         row = column.row(align=True)
         row.operator("mesh.primitive_cylinder_add", text="Cylinder", icon="MESH_CYLINDER")
+        row.operator("wm.tool_set_by_id", text="", icon="GREASEPENCIL").name = "builtin.primitive_cylinder_add"
+
 
         row = column.row(align=True)
         row.operator("mesh.primitive_uv_sphere_add", text="Sphere", icon="MESH_UVSPHERE")
+        row.operator("wm.tool_set_by_id", text="", icon="GREASEPENCIL").name = "builtin.primitive_uv_sphere_add"
+
 
         row = column.row(align=True)
-        row.operator("curve.add_bezier_empty", text="Curve", icon="IPO_EASE_IN")
+        row.operator("curve.add_bezier_simple", text="Curve", icon="IPO_EASE_IN").mode = "Simple"
+        row.operator("curve.add_bezier_simple", text="", icon="GREASEPENCIL").mode = "Draw"
+
+        
 
         # 3 - BOTTOM
 
@@ -58,3 +67,4 @@ class VIEW3D_MT_PIE_Make_New(Menu):
             text="Collection Instance..." if has_collections else "No Collections to Instance",
             icon='OUTLINER_OB_GROUP_INSTANCE',
         )
+

@@ -22,7 +22,7 @@ from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromS
 from . op.collection_ops import RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection
 from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps, get_enable_legacy_tools
 from .utils.custom_data import ToggleItoolsProperty
-from .op.new_objects import AddBezierEmpty
+from .op.new_objects import AddBezierSimple
 from .op.handlers import load_handlers, unload_handlers
 bl_info = {
     "name": "Interactive Tools",
@@ -55,7 +55,7 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            SnapPresetsOp, PropEditOp, TransformPivotPointOp,
            LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer, ChildrenVisibility,
            RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection, QuickConvexHull,
-           ToggleItoolsProperty, VIEW3D_MT_PIE_Make_New, AddBezierEmpty)
+           ToggleItoolsProperty, VIEW3D_MT_PIE_Make_New, AddBezierSimple)
 
 legacy_classes = (SmartExtrudeModal, SmartTranslate)
 
