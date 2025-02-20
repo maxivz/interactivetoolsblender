@@ -17,13 +17,13 @@ from . op.smart_transform import SmartTranslate, CSMove, CSRotate, CSScale
 from . op.quick_lattice import QuickLattice, LatticeResolution2x2x2, LatticeResolution3x3x3, LatticeResolution4x4x4
 from . op.quick_pipe import QuickPipe
 from . op.rebase_cylinder import RebaseCylinder
-from .op.collision_ops import QuickConvexHull
+from . op.collision_ops import QuickConvexHull, CollisionCollectionUpdate
 from . op.uv_functions import QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromSharps, UvsFromSharps
 from . op.collection_ops import RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection
 from . utils.user_prefs import AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder, unregister_keymaps, get_enable_legacy_tools
-from .utils.custom_data import ToggleItoolsProperty
-from .op.new_objects import AddBezierSimple
-from .op.handlers import load_handlers, unload_handlers
+from . utils.custom_data import ToggleItoolsProperty
+from . op.new_objects import AddBezierSimple
+from . op.handlers import load_handlers, unload_handlers
 bl_info = {
     "name": "Interactive Tools",
     "author": "Maxi Vazquez, Ajfurey",
@@ -54,7 +54,7 @@ classes = (VIEW3D_PT_Itools, VIEW3D_MT_PIE_SSC_Duplicate, VIEW3D_MT_PIE_SSC_New_
            MenuPlaceholder, SmartModify, LatticeResolution2x2x2,
            SnapPresetsOp, PropEditOp, TransformPivotPointOp,
            LatticeResolution3x3x3, LatticeResolution4x4x4, QuickHpLpNamer, ChildrenVisibility,
-           RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection, QuickConvexHull,
+           RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection, QuickConvexHull, CollisionCollectionUpdate,
            ToggleItoolsProperty, VIEW3D_MT_PIE_Make_New, AddBezierSimple)
 
 legacy_classes = (SmartExtrudeModal, SmartTranslate)

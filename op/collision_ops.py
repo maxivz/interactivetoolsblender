@@ -2,8 +2,55 @@ import bpy
 import bmesh
 from ..utils.materials import get_material
 from ..utils.user_prefs import get_quickconvex_prefix
-from ..utils.constants import CONVEXHULL_MAT_COLOR
+from ..utils.constants import CONVEXHULL_MAT_COLOR, COLLISION_PREFIXES, COLLISION, DESCRIPTION_DIC, COLLISION_COLLECTION_UPDATE
 
+def get_collision_collection():
+    """Returns collision collection, if it doesnt exist it creates it and returns it"""
+    if COLLISION in bpy.data.collections:
+        return bpy.data.collections[COLLISION]
+    
+    col = bpy.data.collections.new(COLLISION)
+    col.color_tag = "COLOR_04"
+    bpy.context.scene.collection.children.link(col)
+    return col
+
+def update_global_collision_collection():
+    """Adds collision objs into global collision collection"""
+    collision_col = get_collision_collection()
+
+    for obj in bpy.context.scene.objects:
+        if not obj.name.startswith(tuple(COLLISION_PREFIXES)):
+            continue
+        
+        
+        if obj.name in collision_col.objects:
+            continue
+
+        collision_col.objects.link(obj)
+    
+    #Remove objs from collision colection that no longer posses a proper prefix
+    for obj in list(collision_col.objects):
+        if obj.name.startswith(tuple(COLLISION_PREFIXES)):
+            continue
+
+        collision_col.objects.unlink(obj)
+        collection_count = sum(1 for col in bpy.data.collections if obj.name in col.objects)
+
+        #If its in no other collection link it to the parent scene so obj is not lost
+        if collection_count > 0:
+            bpy.context.scene.objects.link(obj)
+
+
+
+class CollisionCollectionUpdate(bpy.types.Operator):
+    bl_idname = "itools.collision_collection_update"
+    bl_label = "Collision Collection Update"
+    bl_description = DESCRIPTION_DIC[COLLISION_COLLECTION_UPDATE]
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+        update_global_collision_collection()
+        return {'FINISHED'}
 
 class QuickConvexHull(bpy.types.Operator):
     bl_idname = "mesh.quick_convex_hull"
@@ -64,9 +111,11 @@ class QuickConvexHull(bpy.types.Operator):
             bm.free()
 
             convex_hull = bpy.data.objects.new(f"{hull_prefix}_{og_selection[0].name}", new_bmesh)
-            bpy.context.collection.objects.link(convex_hull)
-                # Parent the convex hull to the original object and copy transforms
             convex_hull.parent = obj
+
+            for col in og_active.users_collection:
+                if convex_hull.name not in col.objects:
+                    col.objects.link(convex_hull)
 
             self.assign_collision_mat(convex_hull)
 

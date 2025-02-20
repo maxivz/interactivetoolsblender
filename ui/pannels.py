@@ -1,6 +1,6 @@
 import bpy
 from ..utils.user_prefs import get_enable_legacy_tools
-from ..utils.constants import COLLISION_COLORS_UPDATE, COLLECTION_COLORS_USE_PARENT_COLOR, DESCRIPTION_DIC
+from ..utils.constants import COLLISION_COLORS_UPDATE, COLLECTION_COLORS_USE_PARENT_COLOR, DESCRIPTION_DIC, COLLISION_COLLECTION_UPDATE
 from ..utils.custom_data import itools_data_get
 
 def icon_toggle(row, operator_name, icon_name, constant):
@@ -92,6 +92,12 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         layout.label(text="Collisions")
         row = layout.row(align=True)
         row.operator('mesh.quick_convex_hull', text="Quick Convex Hull")
+        row = layout.row(align=True)
+        row.operator('itools.collision_collection_update', text="Collision Collection Update")
+        icon_toggle(row, "itools.toggle_property", "FILE_REFRESH", COLLISION_COLLECTION_UPDATE)
+        """BRUSH_DATA"""
+
+
 
         layout.label(text="Pie Menus")
         row = layout.row()
