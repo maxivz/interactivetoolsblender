@@ -31,7 +31,7 @@ class VIEW3D_MT_PIE_Make_New(Menu):
 
         row.operator("object.empty_add", text="Empty", icon="OUTLINER_OB_EMPTY").type = 'ARROWS'
         row = column.row(align=True)
-        row.operator("object.gpencil_add", text="Gpencil", icon="OUTLINER_OB_GREASEPENCIL").type = 'EMPTY'
+        row.operator("object.grease_pencil_add", text="Gpencil", icon="OUTLINER_OB_GREASEPENCIL").type = 'EMPTY'
 
         row = column.row(align=True)
         row.operator("object.camera_add", text="Camera", icon="OUTLINER_OB_CAMERA")
