@@ -143,19 +143,6 @@ class QuickPipe(bpy.types.Operator):
         bpy.context.object.data.bevel_resolution = self.original_resolution
         bpy.context.object.data.bevel_depth = self.original_depth
 
-    def __init__(self):
-        print("Start")
-
-    def __del__(self):
-        print("End")
-
-    """
-    @classmethod
-    def poll(cls, context):
-        return ((context.mode == 'OBJECT' and bpy.context.object.modifiers.find("Cylindrical Sides") > -1) or
-                bpy.context.mode == 'EDIT_MESH')
-    """
-
     def execute(self, context):
         #self.sync_ui_settings()
         self.calculate_depth(context, bpy.data.objects[self.selection])
