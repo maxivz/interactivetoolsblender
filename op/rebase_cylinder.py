@@ -213,12 +213,6 @@ class RebaseCylinder(bpy.types.Operator):
         
         mod.merge_threshold = self.original_merge_distance
 
-    def __init__(self):
-        print("Start")
-
-    def __del__(self):
-        print("End")
-
     @classmethod
     def poll(cls, context):
         if  bpy.context.object != None:
