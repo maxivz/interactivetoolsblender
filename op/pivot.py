@@ -38,7 +38,6 @@ class QuickEditPivot(bpy.types.Operator):
         pivot = bpy.context.active_object
         pivot.name = obj.name + ".PivotHelper"
         pivot.location = obj.location
-        print("Pivot")
 
     def get_pivot(self, context, obj):
         pivot = obj.name + ".PivotHelper"

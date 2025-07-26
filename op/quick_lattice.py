@@ -90,7 +90,6 @@ class QuickLattice(bpy.types.Operator):
 
             # Make sure no axis is 0 as this caused the bug where you couldnt move the lattice.
             for axis in range(3):
-                print(axis)
                 if dimensions[axis] == 0:
                     dimensions[axis] = 0.001
 

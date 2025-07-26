@@ -86,7 +86,6 @@ class SelectionModeCycle(bpy.types.Operator):
 
     def execute(self, context):
         mode = itools.get_mode()
-        print(mode)
         if mode == 'OBJECT':
             bpy.ops.object.editmode_toggle()
 

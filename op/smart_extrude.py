@@ -77,10 +77,6 @@ class SmartExtrudeModal(bpy.types.Operator):
         self.initial_mouse_pos = Vector((0, 0, 0))
         self.translation_accumulator = Vector((0, 0, 0))
         self.initial_pos = Vector((0, 0, 0))
-        print("Start")
-
-    def __del__(self):
-        print("End")
 
     def execute(self, context):
         return {'FINISHED'}
