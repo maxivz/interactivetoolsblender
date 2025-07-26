@@ -1,7 +1,7 @@
 import bpy
 import random
 
-from .. utils.itools import get_collection_top_level_parent
+from .. utils.itools import get_collection_top_level_parent, get_selected
 from .. utils.custom_data import itools_data_get
 from ..utils.constants import COLLECTION_COLOR, COLLECTION_COLORS_USE_PARENT_COLOR
 
@@ -92,6 +92,11 @@ class EditCollectionOffset(bpy.types.Operator):
     def edit_collection_offset_toggle(self, collection, context):
         locator_name = collection.name + "_origin"
         locator = bpy.data.objects.get(locator_name)
+
+        selection = get_selected()
+
+        if selection:
+            bpy.ops.object.select_all(action='DESELECT')
         
         if not locator:
             if collection.objects:
