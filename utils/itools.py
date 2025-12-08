@@ -41,7 +41,7 @@ def get_mode():
         elif selection_mode[2]:
             return 'FACE'
 
-    if mode == 'EDIT_GPENCIL':
+    if mode == 'EDIT_GREASE_PENCIL':
         return bpy.context.scene.tool_settings.gpencil_selectmode_edit
 
     return mode

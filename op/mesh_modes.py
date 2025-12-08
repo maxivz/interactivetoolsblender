@@ -20,13 +20,17 @@ def quick_selection(target_mode, safe_mode=False):
     if current_object != None:
 
         #Convert types from Mesh to Gpencil space
-        if current_object.type == 'GPENCIL':
+        if current_object.type == 'GREASEPENCIL':
             if target_mode == 'VERT':
                 target_mode = 'POINT'
             elif target_mode == 'EDGE':
                 target_mode = 'STROKE'
             elif target_mode == 'FACE':  
                 target_mode = 'SEGMENT'
+
+        #Convert types from Mesh to Curve space
+        if current_object.type == 'CURVE':
+            target_mode = "EDIT_CURVE"
 
         other_modes = itools.list_difference(['VERT', 'EDGE', 'FACE', 'POINT', 'STROKE', 'SEGMENT', 'OBJECT'], [target_mode])
         sticky = get_enable_sticky_selection()
@@ -62,8 +66,8 @@ def quick_selection(target_mode, safe_mode=False):
                 store_sel_data(current_mode)
             itools.set_mode('OBJECT')
 
-        if current_object.type == 'GPENCIL':
-            bpy.ops.object.mode_set(mode="EDIT_GPENCIL")
+        if current_object.type == 'GREASEPENCIL':
+            bpy.ops.object.mode_set(mode="EDIT")
 
             if current_mode in other_modes:
                 if target_mode == 'POINT':
@@ -75,6 +79,14 @@ def quick_selection(target_mode, safe_mode=False):
 
             elif current_mode == target_mode:
                 bpy.ops.object.mode_set(mode="OBJECT")
+    
+        if current_object.type == 'CURVE':
+            if current_mode == "OBJECT":
+                bpy.ops.object.mode_set(mode="EDIT")
+            
+            else:
+                bpy.ops.object.mode_set(mode="OBJECT")
+
 
 
 
