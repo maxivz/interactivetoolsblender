@@ -47,22 +47,13 @@ def assign_object_collection_colors():
         if collection:
             color = get_collection_color(collection)
             obj.color = color
-
-class ColorObjsByCollection(bpy.types.Operator):
-    bl_idname = "collection.color_objs_by_collection"
-    bl_label = "Color Objects By Collection"
-    bl_description = "Renames all objects in collection to reflect the collection name"
-    bl_options = {'REGISTER', 'UNDO'}
-
-    def execute(self, context):
-        assign_object_collection_colors()
-        return {'FINISHED'}
     
 class ColorObjsByCollection(bpy.types.Operator):
     bl_idname = "collection.color_objs_by_collection"
     bl_label = "Color Objects By Collection"
     bl_description = """Sets the color of the objects to the color of its collection.
-    If the collection has a color tag it will use it, if it doesnt it will generate a random one"""
+    If the collection has a color tag it will use it, if it doesnt it will generate a random one
+    The color is visible in Solid shading mode, with color mode set to attribute"""
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
