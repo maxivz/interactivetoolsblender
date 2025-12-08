@@ -149,6 +149,10 @@ def get_ssc_switch_modes():
     prefs = get_addon_preferences()
     return prefs.ssc_switch_modes
 
+def get_ssc_duplicate_pie_enable():
+    prefs = get_addon_preferences()
+    return prefs.scc_duplicate_pie_enable
+
 
 def get_ssc_qblocker_integration():
     prefs = get_addon_preferences()
@@ -285,6 +289,10 @@ class AddonPreferences(AddonPreferences):
     ssc_bezierutilities_integration: BoolProperty(name="Super Smart Create Bezier Utilities Integration",
                                                   description="Use Flexi Bezier Tool for spline creation, needs Beier Utilities to be used",
                                                   default=False)
+    
+    scc_duplicate_pie_enable: BoolProperty(name="Super Smart Duplicate Pie Enable",
+                                                  description="Enables the duplicate pie when in object mode when at least an object is selected",
+                                                  default=False)
 
     enable_sticky_selection: BoolProperty(name="Selection Sticky Mode",
                                           description="Enables Sticky Selection when using Quick Select Modes and Selection Cycle",
@@ -374,7 +382,9 @@ class AddonPreferences(AddonPreferences):
 
         row = box.row(align=True)
         row.prop(self, "ssc_switch_modes", toggle=False)
-
+        row = box.row(align=True)
+        row.prop(self, "scc_duplicate_pie_enable", toggle=False)
+        
         if qblocker_active:
             row = box.row(align=True)
             row.prop(self, "ssc_qblocker_integration", toggle=True)
@@ -434,7 +444,7 @@ class AddonPreferences(AddonPreferences):
 
         row = box.row(align=True)
         row.prop(self, "collision_prefixes", toggle=False)
-        
+
         #Other
         box = layout.box()
         row = box.row(align=True)

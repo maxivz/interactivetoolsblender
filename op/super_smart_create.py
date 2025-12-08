@@ -1,7 +1,7 @@
 import bpy
 from ..utils import itools as itools
 from ..utils import mesh as mesh
-from ..utils.user_prefs import get_f2_active, get_ssc_switch_modes
+from ..utils.user_prefs import get_f2_active, get_ssc_switch_modes, get_ssc_duplicate_pie_enable
 
 class SuperSmartCreate(bpy.types.Operator):
     bl_idname = "mesh.super_smart_create"
@@ -64,7 +64,7 @@ class SuperSmartCreate(bpy.types.Operator):
         mode = itools.get_mode()
 
         if mode == 'OBJECT':
-            if len(itools.get_selected()) > 0:
+            if len(itools.get_selected()) > 0 and get_ssc_duplicate_pie_enable():
                 bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_SSC_Duplicate")
 
             else:
