@@ -198,7 +198,9 @@ def get_quickconvex_prefix():
     prefs = get_addon_preferences()
     return prefs.quickconvex_prefix
 
-
+def get_collision_prefixes():
+    prefs = get_addon_preferences()
+    return prefs.collision_prefixes
 
 def get_enable_wireshaded_cs():
     prefs = get_addon_preferences()
@@ -315,6 +317,10 @@ class AddonPreferences(AddonPreferences):
     quickconvex_prefix: StringProperty(name="Quick Convex Hull Prefix",
                                     description="Prefix to use for new Quick Convex Hull mesh naming",
                                     default="UCX")
+    
+    collision_prefixes: StringProperty(name="Collision Prefixes",
+                                    description="Prefixes to use when adding objects to the collision collection. Separate the prefixes with a comma ',' and leave no space between them",
+                                    default="UCX,UBX,USP")
 
     enable_wireshaded_cs: BoolProperty(name="Wireframe / Shaded Context Sensitive Mode",
                                        description="Enables context sensitive mode for the Wireframe / Shaded Tool",
@@ -437,6 +443,7 @@ class AddonPreferences(AddonPreferences):
         #Quick Convex Hull
         row = box.row(align=True)
         row.prop(self, "quickconvex_prefix", toggle=False)
+        row.prop(self, "collision_prefixes", toggle=False)
 
         row = box.row(align=True)
         row.prop(self, "enable_legacy_tools", toggle=False)

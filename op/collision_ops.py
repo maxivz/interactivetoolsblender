@@ -1,8 +1,8 @@
 import bpy
 import bmesh
 from ..utils.materials import get_material
-from ..utils.user_prefs import get_quickconvex_prefix
-from ..utils.constants import CONVEXHULL_MAT_COLOR, COLLISION_PREFIXES, COLLISION, DESCRIPTION_DIC, COLLISION_COLLECTION_UPDATE
+from ..utils.user_prefs import get_quickconvex_prefix, get_collision_prefixes
+from ..utils.constants import CONVEXHULL_MAT_COLOR, COLLISION, DESCRIPTION_DIC, COLLISION_COLLECTION_UPDATE
 
 def get_collision_collection():
     """Returns collision collection, if it doesnt exist it creates it and returns it"""
@@ -17,9 +17,10 @@ def get_collision_collection():
 def update_global_collision_collection():
     """Adds collision objs into global collision collection"""
     collision_col = get_collision_collection()
+    collision_prefixes = tuple(get_collision_prefixes().split(","))
 
     for obj in bpy.context.scene.objects:
-        if not obj.name.startswith(tuple(COLLISION_PREFIXES)):
+        if not obj.name.startswith(collision_prefixes):
             continue
         
         
@@ -30,7 +31,7 @@ def update_global_collision_collection():
     
     #Remove objs from collision colection that no longer posses a proper prefix
     for obj in list(collision_col.objects):
-        if obj.name.startswith(tuple(COLLISION_PREFIXES)):
+        if obj.name.startswith(collision_prefixes):
             continue
 
         collision_col.objects.unlink(obj)
