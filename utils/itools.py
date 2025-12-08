@@ -155,7 +155,6 @@ def active_get(item=True):
 # Sets active object based on name
 def active_set(obj, item=True):
     if item:
-        print(obj)
         bpy.context.view_layer.objects.active = obj
     else:
         bpy.context.view_layer.objects.active = bpy.data.objects[obj]
@@ -304,9 +303,7 @@ def convert_selection(selection, to):
 def update_indexes(mode=''):
     bm = get_bmesh()
     if not mode:
-        print("Try to get mode")
         mode = get_mode()
-        print(mode)
 
     if 'VERT' or 'ALL' in mode:
         bm.verts.index_update()
