@@ -425,6 +425,16 @@ class AddonPreferences(AddonPreferences):
         row = box.row(align=True)
         row.prop(self, "quickhplp_hp_suffix", toggle=False)
 
+        #Quick Convex Hull
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Collision:")
+        row = box.row(align=True)
+        row.prop(self, "quickconvex_prefix", toggle=False)
+
+        row = box.row(align=True)
+        row.prop(self, "collision_prefixes", toggle=False)
+        
         #Other
         box = layout.box()
         row = box.row(align=True)
@@ -440,10 +450,6 @@ class AddonPreferences(AddonPreferences):
         row = box.row(align=True)
         row.prop(self, "transform_mode_cycle_cyclic", toggle=False)
 
-        #Quick Convex Hull
-        row = box.row(align=True)
-        row.prop(self, "quickconvex_prefix", toggle=False)
-        row.prop(self, "collision_prefixes", toggle=False)
 
         row = box.row(align=True)
         row.prop(self, "enable_legacy_tools", toggle=False)
