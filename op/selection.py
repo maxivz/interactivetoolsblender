@@ -5,13 +5,23 @@ import time
 
 ITERATION_LIMIT = 400
 
+def execute_loop_multi_select(ring=False):
+    try:
+        if ring:
+            bpy.ops.mesh.select_edge_ring_multi()
+        else:
+            bpy.ops.mesh.select_edge_loop_multi()
+    except AttributeError:
+        # If Error, 4.x fall back to the old operator
+        try:
+            bpy.ops.mesh.loop_multi_select(ring=ring)
+        except AttributeError:
+            # fallback older
+            bpy.ops.mesh.loop_select(ring=ring)
 
 def select_face_loops(ring=False):
-    if ring:
-        bpy.ops.mesh.loop_multi_select(ring=True)
+    execute_loop_multi_select(ring=ring)
 
-    else:
-        bpy.ops.mesh.loop_multi_select(ring=False)
 
     itools.set_mode('EDGE')
     bpy.ops.mesh.select_more()
@@ -26,11 +36,7 @@ def select_vert_loops(ring=False):
     edges = [edge.index for edge in bm.verts[vert[0]].link_edges]
     itools.select(edges, 'EDGE', item=False)
 
-    if ring:
-        bpy.ops.mesh.loop_multi_select(ring=True)
-
-    else:
-        bpy.ops.mesh.loop_multi_select(ring=False)
+    execute_loop_multi_select(ring=ring)
 
 
 def distance_between_elements(elements, mode, ring=False):
@@ -59,7 +65,7 @@ def organize_elements_by_loop(elements, mode, ring=False):
         if mode == 'VERT':
             select_vert_loops(ring=ring)
         elif mode == 'EDGE':
-            bpy.ops.mesh.loop_multi_select(ring=ring)
+            execute_loop_multi_select(ring=ring)
         elif mode == 'FACE':
             select_face_loops(ring=ring)
 
@@ -143,12 +149,12 @@ def smart_loop(ring=False):
 
             elif distance == 0:
                 itools.select(loop, mode, item=False, replace=True, add_to_history=True)
-                bpy.ops.mesh.loop_multi_select(ring=ring)
+                execute_loop_multi_select(ring=ring)
 
         else:
             if mode == 'EDGE':
                 itools.select(loop, mode, item=False, replace=True, add_to_history=True)
-                bpy.ops.mesh.loop_multi_select(ring=ring)
+                execute_loop_multi_select(ring=ring)
 
         final_selection += itools.get_selected(mode, item=False)
 

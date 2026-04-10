@@ -16,13 +16,12 @@ class TransformModeCycle(bpy.types.Operator):
         for area in areas:
             for space in area.spaces:
                 if space.type == 'VIEW_3D':
-                    # Make active tool is set to select
-                    context_override = bpy.context.copy()
-                    context_override["space_data"] = area.spaces[0]
-                    context_override["area"] = area
-
-                    with context.temp_override(**context_override):
-                        bpy.ops.wm.tool_set_by_id( name="builtin.select_box")
+                    
+                    region = next((r for r in area.regions if r.type == 'WINDOW'), None)
+                    
+                    if region:
+                        with context.temp_override(window=context.window, area=area, region=region, space_data=space):
+                            bpy.ops.wm.tool_set_by_id(name="builtin.select_box")
 
                     if space.show_gizmo_object_translate:
                         space.show_gizmo_object_translate = False
