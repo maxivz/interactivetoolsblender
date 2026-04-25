@@ -32,6 +32,15 @@ def quick_selection(target_mode, safe_mode=False):
         if current_object.type == 'CURVE':
             target_mode = "EDIT_CURVE"
 
+        #Convert types from Mesh to Armature space
+        if current_object.type == 'ARMATURE':
+            if target_mode == 'VERT':
+                target_mode = 'POINT'
+            elif target_mode == 'EDGE':
+                target_mode = 'STROKE'
+            elif target_mode == 'FACE':  
+                target_mode = 'SEGMENT'
+
         other_modes = itools.list_difference(['VERT', 'EDGE', 'FACE', 'POINT', 'STROKE', 'SEGMENT', 'OBJECT'], [target_mode])
         sticky = get_enable_sticky_selection()
 
@@ -81,6 +90,13 @@ def quick_selection(target_mode, safe_mode=False):
                 bpy.ops.object.mode_set(mode="OBJECT")
     
         if current_object.type == 'CURVE':
+            if current_mode == "OBJECT":
+                bpy.ops.object.mode_set(mode="EDIT")
+            
+            else:
+                bpy.ops.object.mode_set(mode="OBJECT")
+
+        if current_object.type == 'ARMATURE':
             if current_mode == "OBJECT":
                 bpy.ops.object.mode_set(mode="EDIT")
             

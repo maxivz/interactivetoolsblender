@@ -345,6 +345,20 @@ def get_collection_top_level_parent(collection):
 
     return None
 
+def get_all_collections(collection=None, collections=None):
+    """Finds all collections in scene searching trough children recusevely."""
+    if collection is None:
+        collection = bpy.context.scene.collection
+    if collections is None:
+        collections = []
+ 
+    for child in collection.children:
+        collections.append(child)
+        get_all_collections(child, collections)
+ 
+    return collections
+
+
 def duplicate_object(target_obj,linked_data = False):
     # Duplicate the object and mesh
     new_obj = target_obj.copy()
