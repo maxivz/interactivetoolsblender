@@ -2,7 +2,7 @@ import bpy
 
 def get_itools_data_obj():
     obj_name = "Itools_data_obj"
-    # Check if the object exists, make it if it doesnt
+    # Check if the data object exists, make it if it doesnt
     if obj_name not in bpy.data.objects:
         obj = bpy.data.objects.new(obj_name, None)
         obj.use_fake_user = True

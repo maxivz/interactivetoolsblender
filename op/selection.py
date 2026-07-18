@@ -8,10 +8,10 @@ ITERATION_LIMIT = 400
 
 def select_face_loops(ring=False):
     if ring:
-        bpy.ops.mesh.loop_multi_select(ring=True)
+        bpy.ops.mesh.select_edge_ring_multi()
 
     else:
-        bpy.ops.mesh.loop_multi_select(ring=False)
+        bpy.ops.mesh.select_edge_loop_multi()
 
     itools.set_mode('EDGE')
     bpy.ops.mesh.select_more()
@@ -27,10 +27,10 @@ def select_vert_loops(ring=False):
     itools.select(edges, 'EDGE', item=False)
 
     if ring:
-        bpy.ops.mesh.loop_multi_select(ring=True)
+        bpy.ops.mesh.select_edge_ring_multi()
 
     else:
-        bpy.ops.mesh.loop_multi_select(ring=False)
+        bpy.ops.mesh.select_edge_loop_multi()
 
 
 def distance_between_elements(elements, mode, ring=False):
@@ -58,13 +58,20 @@ def organize_elements_by_loop(elements, mode, ring=False):
 
         if mode == 'VERT':
             select_vert_loops(ring=ring)
+
         elif mode == 'EDGE':
-            bpy.ops.mesh.loop_multi_select(ring=ring)
+            if ring:
+                bpy.ops.mesh.select_edge_ring_multi()
+            else:
+                bpy.ops.mesh.select_edge_loop_multi()
+        
         elif mode == 'FACE':
             select_face_loops(ring=ring)
 
+
         element_loop = itools.get_selected(mode, item=False)
-        selected_elements.append(itools.list_intersection(element_loop, elements_to_check))
+
+        selected_elements.append(itools.list_intersection(element_loop, elements))
         elements_to_check = itools.list_difference(elements_to_check, element_loop)
 
     return selected_elements
@@ -143,12 +150,18 @@ def smart_loop(ring=False):
 
             elif distance == 0:
                 itools.select(loop, mode, item=False, replace=True, add_to_history=True)
-                bpy.ops.mesh.loop_multi_select(ring=ring)
+                if ring:
+                    bpy.ops.mesh.select_edge_ring_multi()
+                else:
+                    bpy.ops.mesh.select_edge_loop_multi()
 
         else:
             if mode == 'EDGE':
                 itools.select(loop, mode, item=False, replace=True, add_to_history=True)
-                bpy.ops.mesh.loop_multi_select(ring=ring)
+                if ring:
+                    bpy.ops.mesh.select_edge_ring_multi()
+                else:
+                    bpy.ops.mesh.select_edge_loop_multi()
 
         final_selection += itools.get_selected(mode, item=False)
 
