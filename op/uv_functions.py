@@ -39,8 +39,6 @@ class QuickRotateUv90Pos(bpy.types.Operator):
     bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
-        original_pos = selected_uv_verts_pos()
-        print(original_pos)
         bpy.ops.transform.rotate(value=math.radians(90), orient_axis='Z')
         new_pos = selected_uv_verts_pos()
         return{'FINISHED'}

@@ -149,6 +149,10 @@ def get_ssc_switch_modes():
     prefs = get_addon_preferences()
     return prefs.ssc_switch_modes
 
+def get_ssc_duplicate_pie_enable():
+    prefs = get_addon_preferences()
+    return prefs.scc_duplicate_pie_enable
+
 
 def get_ssc_qblocker_integration():
     prefs = get_addon_preferences()
@@ -194,6 +198,13 @@ def get_quickhplp_hp_suffix():
     prefs = get_addon_preferences()
     return prefs.quickhplp_hp_suffix
 
+def get_quickconvex_prefix():
+    prefs = get_addon_preferences()
+    return prefs.quickconvex_prefix
+
+def get_collision_prefixes():
+    prefs = get_addon_preferences()
+    return prefs.collision_prefixes
 
 def get_enable_wireshaded_cs():
     prefs = get_addon_preferences()
@@ -278,6 +289,10 @@ class AddonPreferences(AddonPreferences):
     ssc_bezierutilities_integration: BoolProperty(name="Super Smart Create Bezier Utilities Integration",
                                                   description="Use Flexi Bezier Tool for spline creation, needs Beier Utilities to be used",
                                                   default=False)
+    
+    scc_duplicate_pie_enable: BoolProperty(name="Super Smart Duplicate Pie Enable",
+                                                  description="Enables the duplicate pie when in object mode when at least an object is selected",
+                                                  default=False)
 
     enable_sticky_selection: BoolProperty(name="Selection Sticky Mode",
                                           description="Enables Sticky Selection when using Quick Select Modes and Selection Cycle",
@@ -306,6 +321,14 @@ class AddonPreferences(AddonPreferences):
     quickhplp_hp_suffix: StringProperty(name="High Poly suffix",
                                     description="Suffix to use for High Poly Meshes",
                                     default="_high")
+    
+    quickconvex_prefix: StringProperty(name="Quick Convex Hull Prefix",
+                                    description="Prefix to use for new Quick Convex Hull mesh naming",
+                                    default="UCX")
+    
+    collision_prefixes: StringProperty(name="Collision Prefixes",
+                                    description="Prefixes to use when adding objects to the collision collection. Separate the prefixes with a comma ',' and leave no space between them",
+                                    default="UCX,UBX,USP")
 
     enable_wireshaded_cs: BoolProperty(name="Wireframe / Shaded Context Sensitive Mode",
                                        description="Enables context sensitive mode for the Wireframe / Shaded Tool",
@@ -359,7 +382,9 @@ class AddonPreferences(AddonPreferences):
 
         row = box.row(align=True)
         row.prop(self, "ssc_switch_modes", toggle=False)
-
+        row = box.row(align=True)
+        row.prop(self, "scc_duplicate_pie_enable", toggle=False)
+        
         if qblocker_active:
             row = box.row(align=True)
             row.prop(self, "ssc_qblocker_integration", toggle=True)
@@ -410,6 +435,16 @@ class AddonPreferences(AddonPreferences):
         row = box.row(align=True)
         row.prop(self, "quickhplp_hp_suffix", toggle=False)
 
+        #Quick Convex Hull
+        box = layout.box()
+        row = box.row(align=True)
+        row.label(text="Collision:")
+        row = box.row(align=True)
+        row.prop(self, "quickconvex_prefix", toggle=False)
+
+        row = box.row(align=True)
+        row.prop(self, "collision_prefixes", toggle=False)
+
         #Other
         box = layout.box()
         row = box.row(align=True)
@@ -424,6 +459,7 @@ class AddonPreferences(AddonPreferences):
 
         row = box.row(align=True)
         row.prop(self, "transform_mode_cycle_cyclic", toggle=False)
+
 
         row = box.row(align=True)
         row.prop(self, "enable_legacy_tools", toggle=False)

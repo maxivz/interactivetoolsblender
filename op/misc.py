@@ -375,16 +375,15 @@ class SnapPresetsOp(bpy.types.Operator):
             bpy.context.scene.tool_settings.use_snap_align_rotation = False
 
         elif self.mode == 4:
-            bpy.context.scene.tool_settings.snap_elements = {'FACE'}
+            bpy.context.scene.tool_settings.snap_elements_individual = {'FACE_PROJECT'}
             bpy.context.scene.tool_settings.snap_target = 'CENTER'
             bpy.context.scene.tool_settings.use_snap_align_rotation = True
-            bpy.context.scene.tool_settings.use_snap_project = True
+
 
         elif self.mode == 5:
             bpy.context.scene.tool_settings.snap_elements = {'EDGE_MIDPOINT'}
             bpy.context.scene.tool_settings.snap_target = 'MEDIAN'
             bpy.context.scene.tool_settings.use_snap_align_rotation = False
-            bpy.context.scene.tool_settings.use_snap_project = False
 
     def execute(self, context):
         self.set_preset(context)

@@ -1,7 +1,19 @@
 import bpy
-from bpy.utils import register_class, unregister_class
 from ..utils.user_prefs import get_enable_legacy_tools
+from ..utils.constants import COLLISION_COLORS_UPDATE, COLLECTION_COLORS_USE_PARENT_COLOR, DESCRIPTION_DIC, COLLISION_COLLECTION_UPDATE
+from ..utils.custom_data import itools_data_get
 
+def icon_toggle(row, operator_name, icon_name, constant):
+    depress = False     
+    if itools_data_get(constant):
+        depress = True
+    op = row.operator(operator_name, text="", icon = icon_name, depress = depress)
+    op.prop_name = constant
+    
+    if constant in DESCRIPTION_DIC:
+        op.description = f"{DESCRIPTION_DIC[constant]} \nCLICK: ON/OFF"
+    
+    return op
 
 class VIEW3D_PT_Itools(bpy.types.Panel):
     bl_idname = "VIEW3D_PT_Itools"
@@ -60,6 +72,32 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row.operator('mesh.context_sensitive_bevel', text="CS Bevel")
         row = layout.row(align=True)
         row.operator('mesh.quick_hplp_namer', text="Quick Hp Lp Namer")
+
+
+
+        layout.label(text="Collections")
+        row = layout.row()
+        row.operator('collection.edit_collection_offset_toggle', text="Edit Collection Offset")
+        row = layout.row()
+        row.operator('collection.rename_objs_by_collection', text="Rename Objects By Collection")
+
+        #Color Object By Collection row
+        row = layout.row(align = True)
+        row.operator('collection.color_objs_by_collection', text="Color Objects By Collection")
+        icon_toggle(row, "itools.toggle_property", "FILE_REFRESH", COLLISION_COLORS_UPDATE)
+        icon_toggle(row, "itools.toggle_property", "ORIENTATION_PARENT", COLLECTION_COLORS_USE_PARENT_COLOR)
+
+
+
+        layout.label(text="Collisions")
+        row = layout.row(align=True)
+        row.operator('mesh.quick_convex_hull', text="Quick Convex Hull")
+        row = layout.row(align=True)
+        row.operator('itools.collision_collection_update', text="Collision Collection Update")
+        icon_toggle(row, "itools.toggle_property", "FILE_REFRESH", COLLISION_COLLECTION_UPDATE)
+        """BRUSH_DATA"""
+
+
 
         layout.label(text="Pie Menus")
         row = layout.row()

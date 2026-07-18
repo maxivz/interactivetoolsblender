@@ -15,7 +15,6 @@ class VIEW3D_MT_object_mode_itools(bpy.types.Menu):
         layout.separator()
         layout.operator("mesh.quick_pivot", text="Quick Origin")
         layout.operator("mesh.simple_edit_pivot", text="Edit Origin")
-        layout.operator("mesh.transform_orientation_pie_pie", text="Quick Transform Orientation")
         layout.operator('mesh.quick_align', text="Quick Align")
         layout.operator('mesh.quick_lattice', text="Quick Lattice")
         layout.operator('mesh.rebase_cylinder', text="Edit Rebased Cylinder")
@@ -44,7 +43,6 @@ class VIEW3D_MT_edit_mesh_itools(bpy.types.Menu):
 
         layout.separator()
         layout.operator("mesh.quick_pivot", text="Quick Origin")
-        layout.operator("mesh.transform_orientation_pie_pie", text="Quick Transform Orientation")
         layout.operator('mesh.quick_pipe', text="Quick Pipe")
         layout.operator('mesh.quick_lattice', text="Quick Lattice")
         layout.operator('mesh.rebase_cylinder', text="Rebase Cylinder")
@@ -77,6 +75,19 @@ class VIEW3D_MT_edit_uvs_itools(bpy.types.Menu):
         layout.operator("mesh.smart_modify", text="Smart Modify")
 
 
+class VIEW3D_MT_edit_outliner_itools(bpy.types.Menu):
+    bl_label = "Interactive Tools"
+
+    def draw(self, context):
+        layout = self.layout
+        layout.operator('collection.rename_objs_by_collection', text="Rename Objs by Collection Name")
+        layout.operator('collection.color_objs_by_collection', text="Color Objs by Collection Name")
+        layout.operator('collection.edit_collection_offset_toggle', text="Edit Collection Offset Toggle")
+        
+
+
+        
+
 def menu_object_mode_itools(self, context):
     self.layout.menu("VIEW3D_MT_object_mode_itools")
     self.layout.separator()
@@ -96,12 +107,19 @@ def menu_edit_uvs_itools(self, context):
     self.layout.menu("VIEW3D_MT_edit_uvs_itools")
     self.layout.separator()
 
+def menu_edit_outliner_itools(self, context):
+    bl_label = "Interactive Tools"
+    
+    self.layout.menu("VIEW3D_MT_edit_outliner_itools")
+    self.layout.separator()
+
 
 def load_menus_itools():
     bpy.types.VIEW3D_MT_object_context_menu.prepend(menu_object_mode_itools)
     bpy.types.VIEW3D_MT_edit_mesh_context_menu.prepend(menu_edit_mesh_itools)
     bpy.types.VIEW3D_MT_edit_lattice_context_menu.prepend(menu_edit_lattice_itools)
     bpy.types.IMAGE_MT_uvs_context_menu.prepend(menu_edit_uvs_itools)
+    bpy.types.OUTLINER_MT_collection.prepend(menu_edit_outliner_itools)
 
 
 def unload_menus_itools():
@@ -109,3 +127,5 @@ def unload_menus_itools():
     bpy.types.VIEW3D_MT_edit_mesh_context_menu.remove(menu_edit_mesh_itools)
     bpy.types.VIEW3D_MT_edit_lattice_context_menu.remove(menu_edit_lattice_itools)
     bpy.types.IMAGE_MT_uvs_context_menu.remove(menu_edit_uvs_itools)
+    bpy.types.OUTLINER_MT_collection.remove(menu_edit_outliner_itools)
+
