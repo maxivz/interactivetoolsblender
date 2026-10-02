@@ -137,7 +137,12 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         row.operator("object.link_to_collection", text="Link To Collection", icon = "DECORATE_LINKED")
         row = column.row(align=False)
         row.operator("collection.edit_collection_offset_toggle", text="Edit Collection Offset", icon = "EMPTY_DATA")
-
+        row = column.row(align=False)
+        op = row.operator('collection.move_to_active_collection', text="Add To Active Obj Col", icon = "ADD")
+        op.unlink_other_collections = False
+        row = column.row(align=False)
+        op = row.operator('collection.move_to_active_collection', text="Move To Active Obj Col", icon = "DECORATE_DRIVER")
+        op.unlink_other_collections = True
         # 6 - RIGHT
         submenu = pie.column()
         container = submenu.box()

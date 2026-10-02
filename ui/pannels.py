@@ -81,6 +81,13 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row = layout.row()
         row.operator('collection.rename_objs_by_collection', text="Rename Objects By Collection")
 
+        row = layout.row(align=True)
+        op = row.operator('collection.move_to_active_collection', text="Add To Active Obj Col")
+        op.unlink_other_collections = False
+        op = row.operator('collection.move_to_active_collection', text="Move To Active Obj Col")
+        op.unlink_other_collections = True
+
+
         #Color Object By Collection row
         row = layout.row(align = True)
         row.operator('collection.color_objs_by_collection', text="Color Objects By Collection")
