@@ -15,9 +15,9 @@ def update_collision_collection(scene):
 def load_handlers():
     bpy.app.handlers.depsgraph_update_post.append(update_collection_colors)
     bpy.app.handlers.depsgraph_update_post.append(update_collision_collection)
-
+    print("Itools: Loading Handlers")
 
 def unload_handlers():
     bpy.app.handlers.depsgraph_update_post.remove(update_collection_colors)
     bpy.app.handlers.depsgraph_update_post.remove(update_collision_collection)
-
+    print("Itools: Unloading Handlers")

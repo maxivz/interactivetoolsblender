@@ -3,12 +3,18 @@ import random
 
 from .. utils.itools import get_collection_top_level_parent, get_selected
 from .. utils.custom_data import itools_data_get
-from ..utils.constants import COLLECTION_COLOR, COLLECTION_COLORS_USE_PARENT_COLOR
+from ..utils.constants import COLLECTION_COLOR, COLLECTION_COLORS_USE_PARENT_COLOR, COLLECTION_COLORS_FORCE_RANDOM
 
 def get_collection_color(collection):
     """Returns the color of a collection, if it has a tag it uses that one, if it doesnt it assigns one"""
     if collection is None:
         return (1, 1, 1, 1) 
+
+    if not collection.get(COLLECTION_COLOR):
+        collection[COLLECTION_COLOR] = (random.random(), random.random(), random.random(), 1)
+
+    if itools_data_get(COLLECTION_COLORS_FORCE_RANDOM):
+        return collection[COLLECTION_COLOR]
     
     if itools_data_get(COLLECTION_COLORS_USE_PARENT_COLOR):
         parent_collection = get_collection_top_level_parent(collection)
@@ -30,10 +36,6 @@ def get_collection_color(collection):
         
         return color_map.get(collection.color_tag, 1)
 
-
-    if not collection.get(COLLECTION_COLOR):
-        collection[COLLECTION_COLOR] = (random.random(), random.random(), random.random(), 1)
-
     return collection[COLLECTION_COLOR]
 
 def assign_object_collection_colors():
@@ -43,7 +45,6 @@ def assign_object_collection_colors():
             continue  
 
         collection = next((col for col in bpy.data.collections if obj.name in col.objects), None)
-        
         if collection:
             color = get_collection_color(collection)
             obj.color = color

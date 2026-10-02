@@ -1,6 +1,7 @@
 COLLISION = "Collision"
 COLLISION_COLORS_UPDATE = "collision_colors_update"
 COLLECTION_COLORS_USE_PARENT_COLOR = "collection_colors_use_parent_color"
+COLLECTION_COLORS_FORCE_RANDOM = "collection_colors_force_random"
 COLLISION_COLLECTION_UPDATE = "collision_collection_update"
 COLLECTION_COLOR = "Collection Color" #TODO: Make this into an option for the tool
 CONVEXHULL_MAT_COLOR =  (0, 1, 0, 1)
