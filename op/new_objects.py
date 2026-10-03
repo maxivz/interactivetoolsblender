@@ -37,3 +37,19 @@ class AddBezierSimple(bpy.types.Operator):
                 context.scene.tool_settings.curve_paint_settings.depth_mode = "SURFACE"
 
         return{'FINISHED'}
+
+
+#Register Classes
+classes = [AddBezierSimple]
+
+def register():
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+   
+    for cls in reversed(classes):
+        unregister_class(cls)

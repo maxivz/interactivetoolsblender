@@ -229,11 +229,11 @@ def select_loop_directional(edge, directional=True, direction=0):
     # update_indexes(mesh, edges=True)
     while directionality_loop and counter < 2:
         while iterations < ITERATION_LIMIT and iterate:
-            print("")
-            print("----------------------------")
-            print(iterations)
-            print("Current Edge")
-            print(selection)
+            #print("")
+            #print("----------------------------")
+            #print(iterations)
+            #print("Current Edge")
+           # print(selection)
             if direction == 0:
                 new_selection = [selection[0].link_loops[0].link_loop_next.link_loop_radial_next.link_loop_next.edge]
 
@@ -278,3 +278,18 @@ def select_loop_directional(edge, directional=True, direction=0):
         counter += 1
     end = time.time()
     print("SELECT LOOP DIRECTIONAL ENDS TIME: %s", time)
+
+#Register Classes
+classes = [SmartSelectLoop, SmartSelectRing]
+
+def register():
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+   
+    for cls in reversed(classes):
+        unregister_class(cls)

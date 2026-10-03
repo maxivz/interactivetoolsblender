@@ -174,3 +174,19 @@ class ObjectMoveToActiveCollection(bpy.types.Operator):
 			target_col.objects.link(obj)
 
 		return {'FINISHED'}
+
+#Register Classes
+classes = [RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection, ObjectMoveToActiveCollection]
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

@@ -163,3 +163,19 @@ class QuickSelectionFace(bpy.types.Operator):
     def execute(self, context):
         quick_selection('FACE', safe_mode=True)
         return {'FINISHED'}
+
+#Register Classes
+classes = [SelectionModeCycle, QuickSelectionVert, QuickSelectionEdge, QuickSelectionFace]
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

@@ -107,7 +107,11 @@ def get_keymap(name):
 
 def get_addon_preferences():
     name = get_addon_name()
-    addon_preferences = bpy.context.preferences.addons[name].preferences
+    addon_data = bpy.context.preferences.addons.get(name)
+    if addon_data is None:
+        print("Addon not found:", name)
+        return None
+    addon_preferences = addon_data.preferences
     return addon_preferences
 
 
@@ -121,6 +125,14 @@ def get_hotkey_entry_item(km, kmi_name):
 #
 # Get addon preferences:
 #
+
+def get_addon_preferences_attr(attr_name):
+    prefs = get_addon_preferences()
+    if prefs is None:
+        return None
+    return getattr(prefs, attr_name, None)
+
+
 def get_set_flow_active():
     return set_flow_active
 
@@ -146,77 +158,67 @@ def get_textools_active():
 
 
 def get_ssc_switch_modes():
-    prefs = get_addon_preferences()
-    return prefs.ssc_switch_modes
+    return get_addon_preferences_attr("ssc_switch_modes")
 
 def get_ssc_duplicate_pie_enable():
-    prefs = get_addon_preferences()
-    return prefs.scc_duplicate_pie_enable
+    return get_addon_preferences_attr("scc_duplicate_pie_enable")
 
 
 def get_ssc_qblocker_integration():
-    prefs = get_addon_preferences()
-    return prefs.ssc_qblocker_integration
+    return get_addon_preferences_attr("ssc_qblocker_integration")
 
 
 def get_ssc_bezierutilities_integration():
-    prefs = get_addon_preferences()
-    return prefs.ssc_bezierutilities_integration
+    return get_addon_preferences_attr("ssc_bezierutilities_integration")
 
 
 def get_enable_sticky_selection():
-    prefs = get_addon_preferences()
-    return prefs.enable_sticky_selection
+    return get_addon_preferences_attr("enable_sticky_selection")
 
 
 def get_enable_show_faces():
-    prefs = get_addon_preferences()
-    return prefs.enable_show_faces
+    return get_addon_preferences_attr("enable_show_faces")
 
 
 def get_enable_dissolve_verts():
-    prefs = get_addon_preferences()
-    return prefs.enable_dissolve_verts
+    return get_addon_preferences_attr("enable_dissolve_verts")
 
 
 def get_enable_dissolve_faces():
-    prefs = get_addon_preferences()
-    return prefs.enable_dissolve_faces
+    return get_addon_preferences_attr("enable_dissolve_faces")
 
 
 def get_radsym_hide_pivot():
-    prefs = get_addon_preferences()
-    return prefs.radsym_hide_pivot
+    return get_addon_preferences_attr("radsym_hide_pivot")
 
 
 def get_quickhplp_lp_suffix():
-    prefs = get_addon_preferences()
-    return prefs.quickhplp_lp_suffix
+    return get_addon_preferences_attr("quickhplp_lp_suffix")
 
 
 def get_quickhplp_hp_suffix():
-    prefs = get_addon_preferences()
-    return prefs.quickhplp_hp_suffix
+    return get_addon_preferences_attr("quickhplp_hp_suffix")
+
 
 def get_quickconvex_prefix():
-    prefs = get_addon_preferences()
-    return prefs.quickconvex_prefix
+    return get_addon_preferences_attr("quickconvex_prefix")
+
 
 def get_collision_prefixes():
-    prefs = get_addon_preferences()
-    return prefs.collision_prefixes
+    return get_addon_preferences_attr("collision_prefixes")
+
 
 def get_enable_wireshaded_cs():
-    prefs = get_addon_preferences()
-    return prefs.enable_wireshaded_cs
+    return get_addon_preferences_attr("enable_wireshaded_cs")
+
 
 def get_transform_mode_cycle_cyclic():
-    prefs = get_addon_preferences()
-    return prefs.transform_mode_cycle_cyclic
+    return get_addon_preferences_attr("transform_mode_cycle_cyclic")
+
 
 def get_enable_hotkey_editor():
-    prefs = get_addon_preferences()
-    return prefs.enable_hotkey_editor
+    return get_addon_preferences_attr("enable_hotkey_editor")
+
 
 def unregister_keymaps():
     wm = bpy.context.window_manager
@@ -236,13 +238,11 @@ def unregister_keymaps():
 
 
 def get_enable_legacy_origin():
-    prefs = get_addon_preferences()
-    return prefs.enable_legacy_origin
+    return get_addon_preferences_attr("enable_legacy_origin")
 
 
 def get_enable_legacy_tools():
-    prefs = get_addon_preferences()
-    return prefs.enable_legacy_tools
+    return get_addon_preferences_attr("enable_legacy_tools")
 
 # Store keymaps to access after registration
 addon_keymaps = []
@@ -708,6 +708,25 @@ class OBJECT_OT_addon_prefs_example(Operator):
                 (addon_prefs.filepath, addon_prefs.number, addon_prefs.boolean))
 
         self.report({'INFO'}, info)
-        print(info)
+        print(f"Itools Info: {info}")
 
         return {'FINISHED'}
+
+#Register Classes
+#TODO: Figure out custom keymaps registration
+
+classes = [AddonPreferences, OBJECT_OT_addon_prefs_example, MenuPlaceholder]
+
+def register():
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    unregister_keymaps()
+   
+    for cls in reversed(classes):
+        unregister_class(cls)

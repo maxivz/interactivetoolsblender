@@ -691,3 +691,19 @@ class VIEW3D_MT_PIE_TransformOptions(Menu):
             row.operator("mesh.prop_edit_op", text="Deactivate", icon = "PROP_ON", depress=True).mode = 9
         else:
             row.operator("mesh.prop_edit_op", text="Acrivate", icon = "PROP_OFF").mode = 9
+
+#Register Classes
+classes = VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_SM_curve
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

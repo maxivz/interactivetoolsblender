@@ -320,3 +320,19 @@ class QuickRadialSymmetry(bpy.types.Operator):
         row2.label(text="Axis")
         row2.prop(self, "ui_axis")
     """
+
+#Register Classes
+classes = [QuickRadialSymmetry]
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

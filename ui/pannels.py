@@ -139,3 +139,20 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
             row.operator('mesh.smart_extrude_modal', text="Smart Extrude Legacy")
             row = layout.row()
             row.operator('mesh.smart_translate_modal', text="Smart Translate Legacy")
+
+
+#Register Classes
+classes = [VIEW3D_PT_Itools]
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

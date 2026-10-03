@@ -11,13 +11,15 @@ def update_collection_colors(scene):
 def update_collision_collection(scene):
     if itools_data_get(COLLISION_COLLECTION_UPDATE):
         update_global_collision_collection()
-    
-def load_handlers():
+
+
+def register():
     bpy.app.handlers.depsgraph_update_post.append(update_collection_colors)
     bpy.app.handlers.depsgraph_update_post.append(update_collision_collection)
     print("Itools: Loading Handlers")
 
-def unload_handlers():
+
+def unregister():
     bpy.app.handlers.depsgraph_update_post.remove(update_collection_colors)
     bpy.app.handlers.depsgraph_update_post.remove(update_collision_collection)
     print("Itools: Unloading Handlers")

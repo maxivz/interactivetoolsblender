@@ -96,3 +96,18 @@ class UvsFromSharps(bpy.types.Operator):
         bpy.ops.uv.unwrap(method='ANGLE_BASED', margin=0.02)
         bpy.ops.mesh.select_all(action='SELECT')
         return{'FINISHED'}
+
+#Register Classes
+classes = [QuickRotateUv90Pos, QuickRotateUv90Neg, SeamsFromSharps, UvsFromSharps]
+
+def register():
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+   
+    for cls in reversed(classes):
+        unregister_class(cls)

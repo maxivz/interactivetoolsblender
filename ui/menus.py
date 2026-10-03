@@ -1,6 +1,5 @@
 import bpy
 
-
 class VIEW3D_MT_object_mode_itools(bpy.types.Menu):
     bl_label = "Interactive Tools"
 
@@ -85,9 +84,6 @@ class VIEW3D_MT_edit_outliner_itools(bpy.types.Menu):
         layout.operator('collection.edit_collection_offset_toggle', text="Edit Collection Offset Toggle")
         
 
-
-        
-
 def menu_object_mode_itools(self, context):
     self.layout.menu("VIEW3D_MT_object_mode_itools")
     self.layout.separator()
@@ -129,3 +125,23 @@ def unload_menus_itools():
     bpy.types.IMAGE_MT_uvs_context_menu.remove(menu_edit_uvs_itools)
     bpy.types.OUTLINER_MT_collection.remove(menu_edit_outliner_itools)
 
+
+#Register Classes
+classes = [VIEW3D_MT_object_mode_itools, VIEW3D_MT_edit_mesh_itools, VIEW3D_MT_edit_lattice_itools, VIEW3D_MT_edit_uvs_itools, VIEW3D_MT_edit_outliner_itools]
+
+def register():
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
+
+    # Load Custom Menus
+    load_menus_itools()
+
+
+def unregister():
+    from bpy.utils import unregister_class
+    # Unload Custom Menus
+    unload_menus_itools()
+
+    for cls in reversed(classes):
+        unregister_class(cls)

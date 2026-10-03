@@ -124,3 +124,18 @@ class QuickConvexHull(bpy.types.Operator):
                 bpy.ops.object.mode_set(mode="EDIT")
 
         return {'FINISHED'}
+
+#Register Classes
+classes = [QuickConvexHull, CollisionCollectionUpdate]
+
+def register():
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+   
+    for cls in reversed(classes):
+        unregister_class(cls)

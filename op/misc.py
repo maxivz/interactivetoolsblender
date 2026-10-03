@@ -597,3 +597,22 @@ class QuickFlattenAxis(bpy.types.Operator):
                                      mirror=True, use_proportional_edit=False, release_confirm=True)
 
         return{'FINISHED'}
+
+#Register Classes
+classes = [TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSensitiveSlide, TargetWeldToggle,
+            QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, 
+            TransformOrientationCycle, TransformOrientationOp, QuickHpLpNamer, TransformOptionsPie, 
+            QuickVisualGeoToMesh, SnapPresetsOp, PropEditOp, ChildrenVisibility, TransformPivotPointOp]
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)
