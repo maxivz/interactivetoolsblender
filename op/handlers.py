@@ -1,12 +1,12 @@
 import bpy
 from ..utils.constants import COLLISION_COLORS_UPDATE, COLLISION_COLLECTION_UPDATE
 from ..utils.custom_data import itools_data_get
-from .collection_ops import assign_object_collection_colors
+from .collection_ops import collection_colors_assign_to_objects
 from .collision_ops import update_global_collision_collection
 
 def update_collection_colors(scene):
     if itools_data_get(COLLISION_COLORS_UPDATE):
-        assign_object_collection_colors()
+        collection_colors_assign_to_objects()
 
 def update_collision_collection(scene):
     if itools_data_get(COLLISION_COLLECTION_UPDATE):

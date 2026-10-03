@@ -231,7 +231,7 @@ def select_loop_directional(edge, directional=True, direction=0):
         while iterations < ITERATION_LIMIT and iterate:
             #print("")
             #print("----------------------------")
-            #print(iterations)
+            #print(iterations) 
             #print("Current Edge")
            # print(selection)
             if direction == 0:
