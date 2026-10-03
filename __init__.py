@@ -17,28 +17,16 @@ bl_info = {
 	"category": "Generic"
 }
 
-addon_files = [ op_import_classes, ui_import_classes, utils_import_classes]
+addon_files = [op_import_classes, ui_import_classes, utils_import_classes]
 
 def register():
 	for addon_file in addon_files:
 		addon_file.register()
 
-	# Keymapping
-
-	# register_keymaps()
-
-
 
 def unregister():
 	for addon_file in addon_files:
 		addon_file.unregister()
-
-
-
-	#for cls in reversed(classes):
-	#	unregister_class(cls)
-
-
 
 
 if __name__ == "__main__":
