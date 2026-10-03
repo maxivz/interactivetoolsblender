@@ -1,7 +1,19 @@
 import bpy
-from bpy.utils import register_class, unregister_class
 from ..utils.user_prefs import get_enable_legacy_tools
+from ..utils.constants import COLLISION_COLORS_UPDATE, COLLECTION_COLORS_USE_PARENT_COLOR, DESCRIPTION_DIC, COLLISION_COLLECTION_UPDATE, COLLECTION_COLORS_FORCE_RANDOM
+from ..utils.custom_data import itools_data_get
 
+def icon_toggle(row, operator_name, icon_name, constant):
+    depress = False     
+    if itools_data_get(constant):
+        depress = True
+    op = row.operator(operator_name, text="", icon = icon_name, depress = depress)
+    op.prop_name = constant
+    
+    if constant in DESCRIPTION_DIC:
+        op.description = f"{DESCRIPTION_DIC[constant]} \nCLICK: ON/OFF"
+    
+    return op
 
 class VIEW3D_PT_Itools(bpy.types.Panel):
     bl_idname = "VIEW3D_PT_Itools"
@@ -61,6 +73,40 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
         row = layout.row(align=True)
         row.operator('mesh.quick_hplp_namer', text="Quick Hp Lp Namer")
 
+
+
+        layout.label(text="Collections")
+        row = layout.row()
+        row.operator('collection.edit_collection_offset_toggle', text="Edit Collection Offset")
+        row = layout.row()
+        row.operator('collection.rename_objs_by_collection', text="Rename Objects By Collection")
+
+        row = layout.row(align=True)
+        op = row.operator('collection.move_to_active_collection', text="Add To Active Obj Col")
+        op.unlink_other_collections = False
+        op = row.operator('collection.move_to_active_collection', text="Move To Active Obj Col")
+        op.unlink_other_collections = True
+
+
+        #Color Object By Collection row
+        row = layout.row(align = True)
+        row.operator('collection.color_objs_by_collection', text="Color Objects By Collection")
+        icon_toggle(row, "itools.toggle_property", "FILE_REFRESH", COLLISION_COLORS_UPDATE)
+        icon_toggle(row, "itools.toggle_property", "SHADERFX", COLLECTION_COLORS_FORCE_RANDOM)
+        icon_toggle(row, "itools.toggle_property", "ORIENTATION_PARENT", COLLECTION_COLORS_USE_PARENT_COLOR)
+
+
+
+        layout.label(text="Collisions")
+        row = layout.row(align=True)
+        row.operator('mesh.quick_convex_hull', text="Quick Convex Hull")
+        row = layout.row(align=True)
+        row.operator('itools.collision_collection_update', text="Collision Collection Update")
+        icon_toggle(row, "itools.toggle_property", "FILE_REFRESH", COLLISION_COLLECTION_UPDATE)
+        """BRUSH_DATA"""
+
+
+
         layout.label(text="Pie Menus")
         row = layout.row()
         row.operator('mesh.smart_modify', text="Smart Modify Pie")
@@ -93,3 +139,20 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
             row.operator('mesh.smart_extrude_modal', text="Smart Extrude Legacy")
             row = layout.row()
             row.operator('mesh.smart_translate_modal', text="Smart Translate Legacy")
+
+
+#Register Classes
+classes = [VIEW3D_PT_Itools]
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

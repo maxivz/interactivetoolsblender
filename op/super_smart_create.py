@@ -1,7 +1,7 @@
 import bpy
 from ..utils import itools as itools
 from ..utils import mesh as mesh
-from ..utils.user_prefs import get_f2_active, get_ssc_switch_modes
+from ..utils.user_prefs import get_f2_active, get_ssc_switch_modes, get_ssc_duplicate_pie_enable
 
 class SuperSmartCreate(bpy.types.Operator):
     bl_idname = "mesh.super_smart_create"
@@ -64,11 +64,11 @@ class SuperSmartCreate(bpy.types.Operator):
         mode = itools.get_mode()
 
         if mode == 'OBJECT':
-            if len(itools.get_selected()) > 0:
+            if len(itools.get_selected()) > 0 and get_ssc_duplicate_pie_enable():
                 bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_SSC_Duplicate")
 
             else:
-                bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_SSC_New_Obj")
+                bpy.ops.wm.call_menu_pie(name="VIEW3D_MT_PIE_Make_New")
 
         # if Vertex is selected
         elif mode == 'VERT':
@@ -151,3 +151,20 @@ class SuperSmartCreate(bpy.types.Operator):
     def execute(self, context):
         self.super_smart_create()
         return{'FINISHED'}
+
+
+#Register Classes
+classes = [SuperSmartCreate]
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

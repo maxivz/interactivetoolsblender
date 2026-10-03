@@ -135,7 +135,14 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         row.operator("object.move_to_collection", text="Move To Collection", icon = "DECORATE_DRIVER")
         row = column.row(align=False)
         row.operator("object.link_to_collection", text="Link To Collection", icon = "DECORATE_LINKED")
-
+        row = column.row(align=False)
+        row.operator("collection.edit_collection_offset_toggle", text="Edit Collection Offset", icon = "EMPTY_DATA")
+        row = column.row(align=False)
+        op = row.operator('collection.move_to_active_collection', text="Add To Active Obj Col", icon = "ADD")
+        op.unlink_other_collections = False
+        row = column.row(align=False)
+        op = row.operator('collection.move_to_active_collection', text="Move To Active Obj Col", icon = "DECORATE_DRIVER")
+        op.unlink_other_collections = True
         # 6 - RIGHT
         submenu = pie.column()
         container = submenu.box()
@@ -463,9 +470,8 @@ class VIEW3D_MT_PIE_TransformOptions(Menu):
             pie.operator("mesh.snap_presets_op", text="Vert Center", icon="SNAP_VERTEX").mode = 2
 
         # 2 - BOTTOM
-        if(bpy.context.scene.tool_settings.snap_elements == {'FACE'} and
-            bpy.context.scene.tool_settings.use_snap_align_rotation == True and
-            bpy.context.scene.tool_settings.use_snap_project == True):
+        if(bpy.context.scene.tool_settings.snap_elements == {'FACE_PROJECT'} and
+            bpy.context.scene.tool_settings.use_snap_align_rotation == True):
             pie.operator("mesh.snap_presets_op", text="Face Normal", icon="SNAP_FACE",depress=True).mode = 4
         else:
             pie.operator("mesh.snap_presets_op", text="Face Normal", icon="SNAP_FACE").mode = 4
@@ -685,3 +691,19 @@ class VIEW3D_MT_PIE_TransformOptions(Menu):
             row.operator("mesh.prop_edit_op", text="Deactivate", icon = "PROP_ON", depress=True).mode = 9
         else:
             row.operator("mesh.prop_edit_op", text="Acrivate", icon = "PROP_OFF").mode = 9
+
+#Register Classes
+classes = VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_SM_curve
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

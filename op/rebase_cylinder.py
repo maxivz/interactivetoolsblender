@@ -213,12 +213,6 @@ class RebaseCylinder(bpy.types.Operator):
         
         mod.merge_threshold = self.original_merge_distance
 
-    def __init__(self):
-        print("Start")
-
-    def __del__(self):
-        print("End")
-
     @classmethod
     def poll(cls, context):
         if  bpy.context.object != None:
@@ -306,3 +300,18 @@ class RebaseCylinder(bpy.types.Operator):
 bpy.context.object.modifiers["Cylindrical Sides"].use_merge_vertices = True
 bpy.context.object.modifiers["Cylindrical Sides"].merge_threshold = 0.001
 """
+
+#Register Classes
+classes = [RebaseCylinder]
+
+def register():
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+   
+    for cls in reversed(classes):
+        unregister_class(cls)

@@ -41,7 +41,7 @@ def get_mode():
         elif selection_mode[2]:
             return 'FACE'
 
-    if mode == 'EDIT_GPENCIL':
+    if mode == 'EDIT_GREASE_PENCIL':
         return bpy.context.scene.tool_settings.gpencil_selectmode_edit
 
     return mode
@@ -155,7 +155,6 @@ def active_get(item=True):
 # Sets active object based on name
 def active_set(obj, item=True):
     if item:
-        print(obj)
         bpy.context.view_layer.objects.active = obj
     else:
         bpy.context.view_layer.objects.active = bpy.data.objects[obj]
@@ -304,9 +303,7 @@ def convert_selection(selection, to):
 def update_indexes(mode=''):
     bm = get_bmesh()
     if not mode:
-        print("Try to get mode")
         mode = get_mode()
-        print(mode)
 
     if 'VERT' or 'ALL' in mode:
         bm.verts.index_update()
@@ -334,3 +331,41 @@ def get_children(obj_name):
             if ob.parent.name == obj_name:
                 children.append(ob)
     return children
+
+def get_collection_top_level_parent(collection):
+    """Finds the top-level parent of a collection by checking all collections in the scene."""
+    parent_level = []
+    for parent_collection in bpy.data.collections:
+        children_recursive = parent_collection.children_recursive
+        if collection in children_recursive:
+            parent_level.append((parent_collection, len(children_recursive)))
+
+    if parent_level:
+        return max(parent_level, key=lambda p: p[1])[0]
+
+    return None
+
+def get_all_collections(collection=None, collections=None):
+    """Finds all collections in scene searching trough children recusevely."""
+    if collection is None:
+        collection = bpy.context.scene.collection
+    if collections is None:
+        collections = []
+ 
+    for child in collection.children:
+        collections.append(child)
+        get_all_collections(child, collections)
+ 
+    return collections
+
+
+def duplicate_object(target_obj,linked_data = False):
+    # Duplicate the object and mesh
+    new_obj = target_obj.copy()
+    if not linked_data:
+        new_obj.data = target_obj.data.copy()
+    bpy.context.collection.objects.link(new_obj)
+    
+    new_obj.matrix_world = target_obj.matrix_world.copy()
+
+    return new_obj
