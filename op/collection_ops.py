@@ -118,8 +118,22 @@ class RenameObjsByCollection(bpy.types.Operator):
 class EditCollectionOffset(bpy.types.Operator):
 	bl_idname = "collection.edit_collection_offset_toggle"
 	bl_label = "Edit Collection Offset"
-	bl_description = "Spawns a locator to edit the offset of the collection"
+	bl_description = """Spawns a locator to edit the offset of the collection 
+	ALT: Set the collection offset to the 3D cursor location"""
 	bl_options = {'REGISTER', 'UNDO'}
+
+	set_from_3dcursor: bpy.props.BoolProperty( 
+		name="Set from 3D Cursor",
+		description="Set the collection offset from the 3D cursor position",
+		default = False # type: ignore
+	)
+
+	def invoke(self, context, event):
+		# Show popup dialog with properties
+		self.set_from_3dcursor = False
+		if event.alt:
+			self.set_from_3dcursor = True
+		return self.execute(context)
 
 	def edit_collection_offset_toggle(self, collection, context):
 		locator_name = collection.name + "_origin"
@@ -148,7 +162,10 @@ class EditCollectionOffset(bpy.types.Operator):
 
 	def execute(self, context):
 		active_col = bpy.context.collection
-		self.edit_collection_offset_toggle(active_col, context)
+		if self.set_from_3dcursor:
+			active_col.instance_offset = context.scene.cursor.location
+		else:
+			self.edit_collection_offset_toggle(active_col, context)
 		return {'FINISHED'}
 
 
@@ -156,7 +173,8 @@ class EditCollectionOffset(bpy.types.Operator):
 class CollectionActiveObjectMoveTo(bpy.types.Operator):
 	bl_idname = "collection.move_to_active_collection"
 	bl_label = "Move Objects To Active Collection"
-	bl_description = "Moves selected objects to the active collection"
+	bl_description = """Moves selected objects to the selected collection the active object belong to.
+	ALT: Add selected objects to the selected collection instead of moving them"""
 	bl_options = {'REGISTER', 'UNDO'}
 
 	
@@ -175,6 +193,10 @@ class CollectionActiveObjectMoveTo(bpy.types.Operator):
 
 	def invoke(self, context, event):
 		# Show popup dialog with properties
+		self.unlink_other_collections = True
+		if event.alt:
+			self.unlink_other_collections = False
+
 		return context.window_manager.invoke_props_dialog(self)
 
 	def draw(self, context):
@@ -203,7 +225,8 @@ class CollectionActiveObjectMoveTo(bpy.types.Operator):
 class CollectionActiveObjectSelect(bpy.types.Operator):
 	bl_idname = "collection.collection_active_object_select"
 	bl_label = "Select collection of active object"
-	bl_description = "Selects collection the active object is part of"
+	bl_description = """Selects collection the active object is part of
+	ALT: Selects objects that are part of the collection instead"""
 	bl_options = {'REGISTER', 'UNDO'}
 
 	active_obj_collections: bpy.props.EnumProperty( 
@@ -221,7 +244,6 @@ class CollectionActiveObjectSelect(bpy.types.Operator):
 
 	def invoke(self, context, event):
 		self.select_collection = False
-
 		if event.alt:
 			self.select_collection = True
 		# Show popup dialog with properties
