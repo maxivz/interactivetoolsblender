@@ -16,10 +16,11 @@ from . import rebase_cylinder
 from . import collision_ops 
 from . import uv_functions 
 from . import collection_ops 
+from . import handlers
 
 files = [super_smart_create, radial_symmetry, quick_align, pivot, smart_extrude, mesh_modes, misc,
         smart_delete, smart_modify, selection, smart_transform, quick_lattice, quick_pipe, visibility,
-        rebase_cylinder, collision_ops, uv_functions, collection_ops]
+        rebase_cylinder, collision_ops, uv_functions, collection_ops, handlers]
 
 def register():
     for file in files:

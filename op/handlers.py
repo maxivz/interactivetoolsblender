@@ -17,12 +17,18 @@ def update_collision_collection(scene):
 
 
 def register():
-    bpy.app.handlers.depsgraph_update_post.append(update_collection_colors)
-    bpy.app.handlers.depsgraph_update_post.append(update_collision_collection)
+    if update_collection_colors not in  bpy.app.handlers.depsgraph_update_post:
+        bpy.app.handlers.depsgraph_update_post.append(update_collection_colors)
+
+    if update_collision_collection not in  bpy.app.handlers.depsgraph_update_post: 
+        bpy.app.handlers.depsgraph_update_post.append(update_collision_collection)
     print("Itools: Loading Handlers")
 
 
 def unregister():
-    bpy.app.handlers.depsgraph_update_post.remove(update_collection_colors)
-    bpy.app.handlers.depsgraph_update_post.remove(update_collision_collection)
+    if update_collection_colors in  bpy.app.handlers.depsgraph_update_post:
+        bpy.app.handlers.depsgraph_update_post.remove(update_collection_colors)
+
+    if update_collision_collection in  bpy.app.handlers.depsgraph_update_post: 
+        bpy.app.handlers.depsgraph_update_post.remove(update_collision_collection)
     print("Itools: Unloading Handlers")
