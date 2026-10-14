@@ -1,6 +1,6 @@
 import bpy
 
-def get_itools_data_obj():
+def itools_data_obj_get():
     obj_name = "Itools_data_obj"
     # Check if the data object exists, make it if it doesnt
     if obj_name not in bpy.data.objects:
@@ -11,13 +11,13 @@ def get_itools_data_obj():
 
 def itools_data_get(data_key):
     """Looks for itools data on data obj, if it doesnt find it returns nothing"""
-    itools_data_obj = get_itools_data_obj()
+    itools_data_obj = itools_data_obj_get()
 
     return itools_data_obj.get(data_key, None)
 
 def itools_data_set(data_key, value):
     """Sets data in itools data obj"""
-    itools_data_obj = get_itools_data_obj()
+    itools_data_obj = itools_data_obj_get()
     itools_data_obj[data_key] = value
     itools_data_obj.update_tag()
 
@@ -26,8 +26,8 @@ class ToggleItoolsProperty(bpy.types.Operator):
     bl_idname = "itools.toggle_property"
     bl_label = ""
 
-    prop_name: bpy.props.StringProperty()
-    description: bpy.props.StringProperty(default="Toggles Property")
+    prop_name: bpy.props.StringProperty() # type: ignore
+    description: bpy.props.StringProperty(default="Toggles Property") # type: ignore
 
     @classmethod
     def description(cls, context, properties):

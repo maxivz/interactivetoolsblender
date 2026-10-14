@@ -1,7 +1,7 @@
 import bpy
 from bpy.types import Menu
 from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_set_flow_active, get_bezierutilities_active, get_loop_tools_active, get_textools_active
-
+from .. op.collection_ops import collection_attr_get, UNION, INTERSECT, DIFFERENCE, collection_hide_viewport_get
 
 class VIEW3D_MT_PIE_SSC_Duplicate(Menu):
     # bl_idname = "mesh.ssc_duplicate_menu"
@@ -130,7 +130,62 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         row = column.row(align=False)
 
         #Collections
+        box = row.box()
+        column = box.column()
+        row = column.row(align=False)
         row.label(text="Collections")
+
+        active_col = context.view_layer.active_layer_collection.collection
+        row = column.row(align=False)
+        row.label(text=f"Active: {active_col.name}")
+
+
+        #Union
+        row = column.row(align = True)
+        op = row.operator("collection.collection_boolean_create", text="Add", icon="COLLECTION_COLOR_04")
+        op.bool_type = UNION
+
+        col = collection_attr_get(active_col, UNION)
+        if col:
+            icon = "HIDE_OFF"
+            hidden = collection_hide_viewport_get(col)
+
+            if hidden:
+                icon = "HIDE_ON"
+
+            op = row.operator("collection.hidden_set", text="", icon=icon)
+            op.col_target = col.name
+
+
+        #Intersect
+        op = row.operator("collection.collection_boolean_create", text="Int", icon="COLLECTION_COLOR_03")
+        op.bool_type = INTERSECT
+
+        col = collection_attr_get(active_col, INTERSECT)
+        if col:
+            icon = "HIDE_OFF"
+            hidden = collection_hide_viewport_get(col)
+
+            if hidden:
+                icon = "HIDE_ON"
+
+            op = row.operator("collection.hidden_set", text="", icon=icon)
+            op.col_target = col.name
+
+        op = row.operator("collection.collection_boolean_create", text="Sub", icon="COLLECTION_COLOR_01")
+        op.bool_type = DIFFERENCE
+
+        col = collection_attr_get(active_col, DIFFERENCE)
+        if col:
+            icon = "HIDE_OFF"
+            hidden = collection_hide_viewport_get(col)
+
+            if hidden:
+                icon = "HIDE_ON"
+
+            op = row.operator("collection.hidden_set", text="", icon=icon)
+            op.col_target = col.name
+
         row = column.row(align=False)
         row.operator("object.collection_active_object_select", text="Select Objs In Collection", icon = "RESTRICT_SELECT_OFF")
         row = column.row(align=False)
@@ -691,34 +746,9 @@ class VIEW3D_MT_PIE_TransformOptions(Menu):
         else:
             row.operator("mesh.prop_edit_op", text="Acrivate", icon = "PROP_OFF").mode = 9
 
-class VIEW3D_MT_PIE_Collections(Menu):
-    bl_label = "Collections"
-
-    def draw(self, context):
-        layout = self.layout
-        pie = layout.menu_pie()
-
-        # 4 - LEFT
-        pie.operator("object.link_to_collection", text="Link To Collection", icon = "DECORATE_LINKED")
-
-        # 6 - RIGHT
-        pie.operator("mesh.looptools_curve", text="Remove from Collection")
-
-        # 2 - BOTTOM
-        pie.operator("object.move_to_collection", text="Move To Collection", icon = "DECORATE_DRIVER")
-
-        # 8 - TOP
-        row = pie.row()
-        row.label(text="Test")
-
-        # 7 - TOP - LEFT
-        pie.operator("mesh.looptools_relax", text="Relax")
-
-        # 9 - TOP - RIGHT
-        pie.operator("mesh.looptools_space", text="Space")
 
 #Register Classes
-classes = VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_Collections, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_SM_curve
+classes = VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_SM_curve
 
 def register():
     from bpy.utils import register_class
