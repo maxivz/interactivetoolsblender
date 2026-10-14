@@ -66,9 +66,11 @@ class VIEW3D_MT_PIE_Make_New(Menu):
 
 
         row = column.row(align=True)
-        row.operator("curve.add_bezier_simple", text="Curve", icon="IPO_EASE_IN").mode = "Simple"
+        row.operator("curve.primitive_bezier_curve_add", text="Curve", icon="IPO_EASE_IN").align = obj_align
         row.emboss = "PULLDOWN_MENU"
-        row.operator("curve.add_bezier_simple", text="", icon="GREASEPENCIL").mode = "Draw"
+        op = row.operator("curve.primitive_bezier_curve_add", text="", icon="GREASEPENCIL")
+        op.align = obj_align
+        op.enter_editmode = True
 
         row = column.row(align=True)
 
