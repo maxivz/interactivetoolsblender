@@ -132,17 +132,16 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         #Collections
         row.label(text="Collections")
         row = column.row(align=False)
+        row.operator("object.collection_active_object_select", text="Select Objs In Collection", icon = "RESTRICT_SELECT_OFF")
+        row = column.row(align=False)
         row.operator("object.move_to_collection", text="Move To Collection", icon = "DECORATE_DRIVER")
         row = column.row(align=False)
         row.operator("object.link_to_collection", text="Link To Collection", icon = "DECORATE_LINKED")
         row = column.row(align=False)
         row.operator("collection.edit_collection_offset_toggle", text="Edit Collection Offset", icon = "EMPTY_DATA")
         row = column.row(align=False)
-        op = row.operator('collection.move_to_active_collection', text="Add To Active Obj Col", icon = "ADD")
-        op.unlink_other_collections = False
-        row = column.row(align=False)
-        op = row.operator('collection.move_to_active_collection', text="Move To Active Obj Col", icon = "DECORATE_DRIVER")
-        op.unlink_other_collections = True
+        row.operator('collection.move_to_active_collection', text="Move To Active Obj Col", icon = "DECORATE_DRIVER")
+  
         # 6 - RIGHT
         submenu = pie.column()
         container = submenu.box()
@@ -692,8 +691,34 @@ class VIEW3D_MT_PIE_TransformOptions(Menu):
         else:
             row.operator("mesh.prop_edit_op", text="Acrivate", icon = "PROP_OFF").mode = 9
 
+class VIEW3D_MT_PIE_Collections(Menu):
+    bl_label = "Collections"
+
+    def draw(self, context):
+        layout = self.layout
+        pie = layout.menu_pie()
+
+        # 4 - LEFT
+        pie.operator("object.link_to_collection", text="Link To Collection", icon = "DECORATE_LINKED")
+
+        # 6 - RIGHT
+        pie.operator("mesh.looptools_curve", text="Remove from Collection")
+
+        # 2 - BOTTOM
+        pie.operator("object.move_to_collection", text="Move To Collection", icon = "DECORATE_DRIVER")
+
+        # 8 - TOP
+        row = pie.row()
+        row.label(text="Test")
+
+        # 7 - TOP - LEFT
+        pie.operator("mesh.looptools_relax", text="Relax")
+
+        # 9 - TOP - RIGHT
+        pie.operator("mesh.looptools_space", text="Space")
+
 #Register Classes
-classes = VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_SM_curve
+classes = VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_Collections, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_SM_curve
 
 def register():
     from bpy.utils import register_class

@@ -76,14 +76,13 @@ class VIEW3D_PT_Itools(bpy.types.Panel):
 
 
         layout.label(text="Collections")
+        row = layout.row(align=False)
+        row.operator("collection.collection_active_object_select", text="Select Objs In Collection", icon = "RESTRICT_SELECT_OFF")
         row = layout.row()
         row.operator('collection.edit_collection_offset_toggle', text="Edit Collection Offset")
         row = layout.row()
         row.operator('collection.rename_objs_by_collection', text="Rename Objects By Collection")
-
         row = layout.row(align=True)
-        op = row.operator('collection.move_to_active_collection', text="Add To Active Obj Col")
-        op.unlink_other_collections = False
         op = row.operator('collection.move_to_active_collection', text="Move To Active Obj Col")
         op.unlink_other_collections = True
 
