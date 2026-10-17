@@ -1,7 +1,8 @@
 import bpy
 from bpy.types import Menu
 from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_set_flow_active, get_bezierutilities_active, get_loop_tools_active, get_textools_active
-
+from ..utils.collections import collection_attr_get, collection_hide_viewport_get
+from .. op.collection_ops import UNION, INTERSECT, DIFFERENCE
 
 class VIEW3D_MT_PIE_SSC_Duplicate(Menu):
     # bl_idname = "mesh.ssc_duplicate_menu"
@@ -130,12 +131,76 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         row = column.row(align=False)
 
         #Collections
+        box = row.box()
+        column = box.column()
+        row = column.row(align=False)
         row.label(text="Collections")
+
+        active_col = context.view_layer.active_layer_collection.collection
+        row = column.row(align=False)
+        row.label(text=f"Active: {active_col.name}")
+
+
+        #Union
+        row = column.row(align = True)
+        op = row.operator("collection.collection_boolean_create", text="Add", icon="COLLECTION_COLOR_04")
+        op.bool_type = UNION
+
+        col = collection_attr_get(active_col, UNION)
+        if col:
+            icon = "HIDE_OFF"
+            hidden = collection_hide_viewport_get(col)
+
+            if hidden:
+                icon = "HIDE_ON"
+
+            op = row.operator("collection.hidden_set", text="", icon=icon)
+            op.col_target = col.name
+
+
+        #Intersect
+        op = row.operator("collection.collection_boolean_create", text="Int", icon="COLLECTION_COLOR_03")
+        op.bool_type = INTERSECT
+
+        col = collection_attr_get(active_col, INTERSECT)
+        if col:
+            icon = "HIDE_OFF"
+            hidden = collection_hide_viewport_get(col)
+
+            if hidden:
+                icon = "HIDE_ON"
+
+            op = row.operator("collection.hidden_set", text="", icon=icon)
+            op.col_target = col.name
+
+        op = row.operator("collection.collection_boolean_create", text="Sub", icon="COLLECTION_COLOR_01")
+        op.bool_type = DIFFERENCE
+
+        col = collection_attr_get(active_col, DIFFERENCE)
+        if col:
+            icon = "HIDE_OFF"
+            hidden = collection_hide_viewport_get(col)
+
+            if hidden:
+                icon = "HIDE_ON"
+
+            op = row.operator("collection.hidden_set", text="", icon=icon)
+            op.col_target = col.name
+
+        row = column.row(align=False)
+        row.operator("collection.active_by_selection", text="Set Obj Collection as Active", icon = "RESTRICT_SELECT_OFF")
+
+        row = column.row(align=False)
+        row.operator("object.collection_active_object_select", text="Select Objs In Collection", icon = "RESTRICT_SELECT_OFF")
         row = column.row(align=False)
         row.operator("object.move_to_collection", text="Move To Collection", icon = "DECORATE_DRIVER")
         row = column.row(align=False)
         row.operator("object.link_to_collection", text="Link To Collection", icon = "DECORATE_LINKED")
-
+        row = column.row(align=False)
+        row.operator("collection.edit_collection_offset_toggle", text="Edit Collection Offset", icon = "EMPTY_DATA")
+        row = column.row(align=False)
+        row.operator('collection.move_to_active_collection', text="Move To Active Obj Col", icon = "DECORATE_DRIVER")
+  
         # 6 - RIGHT
         submenu = pie.column()
         container = submenu.box()
@@ -463,9 +528,8 @@ class VIEW3D_MT_PIE_TransformOptions(Menu):
             pie.operator("mesh.snap_presets_op", text="Vert Center", icon="SNAP_VERTEX").mode = 2
 
         # 2 - BOTTOM
-        if(bpy.context.scene.tool_settings.snap_elements == {'FACE'} and
-            bpy.context.scene.tool_settings.use_snap_align_rotation == True and
-            bpy.context.scene.tool_settings.use_snap_project == True):
+        if(bpy.context.scene.tool_settings.snap_elements == {'FACE_PROJECT'} and
+            bpy.context.scene.tool_settings.use_snap_align_rotation == True):
             pie.operator("mesh.snap_presets_op", text="Face Normal", icon="SNAP_FACE",depress=True).mode = 4
         else:
             pie.operator("mesh.snap_presets_op", text="Face Normal", icon="SNAP_FACE").mode = 4
@@ -685,3 +749,20 @@ class VIEW3D_MT_PIE_TransformOptions(Menu):
             row.operator("mesh.prop_edit_op", text="Deactivate", icon = "PROP_ON", depress=True).mode = 9
         else:
             row.operator("mesh.prop_edit_op", text="Acrivate", icon = "PROP_OFF").mode = 9
+
+
+#Register Classes
+classes = VIEW3D_MT_PIE_SSC_Duplicate,VIEW3D_MT_PIE_SM_uv ,VIEW3D_MT_PIE_SM_looptools, VIEW3D_MT_PIE_SM_lattice, VIEW3D_MT_PIE_SSC_New_Obj,VIEW3D_MT_PIE_TransformOptions, VIEW3D_MT_PIE_SM_object, VIEW3D_MT_PIE_SM_mesh, VIEW3D_MT_PIE_SM_curve
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

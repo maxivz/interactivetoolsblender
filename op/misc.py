@@ -375,16 +375,15 @@ class SnapPresetsOp(bpy.types.Operator):
             bpy.context.scene.tool_settings.use_snap_align_rotation = False
 
         elif self.mode == 4:
-            bpy.context.scene.tool_settings.snap_elements = {'FACE'}
+            bpy.context.scene.tool_settings.snap_elements_individual = {'FACE_PROJECT'}
             bpy.context.scene.tool_settings.snap_target = 'CENTER'
             bpy.context.scene.tool_settings.use_snap_align_rotation = True
-            bpy.context.scene.tool_settings.use_snap_project = True
+
 
         elif self.mode == 5:
             bpy.context.scene.tool_settings.snap_elements = {'EDGE_MIDPOINT'}
             bpy.context.scene.tool_settings.snap_target = 'MEDIAN'
             bpy.context.scene.tool_settings.use_snap_align_rotation = False
-            bpy.context.scene.tool_settings.use_snap_project = False
 
     def execute(self, context):
         self.set_preset(context)
@@ -598,3 +597,22 @@ class QuickFlattenAxis(bpy.types.Operator):
                                      mirror=True, use_proportional_edit=False, release_confirm=True)
 
         return{'FINISHED'}
+
+#Register Classes
+classes = [TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSensitiveSlide, TargetWeldToggle,
+            QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, 
+            TransformOrientationCycle, TransformOrientationOp, QuickHpLpNamer, TransformOptionsPie, 
+            QuickVisualGeoToMesh, SnapPresetsOp, PropEditOp, ChildrenVisibility, TransformPivotPointOp]
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

@@ -63,9 +63,9 @@ def is_adjacent(selection, mode):
 
     elif mode == 'FACE':
         edge_list = [edge for face in selection for edge in face.edges]
-        print("Edge list :", edge_list)
+        #print("Edge list :", edge_list)
         vert_list = [edge.verts for edge in edge_list]
-        print("Vert list :", vert_list)
+        #print("Vert list :", vert_list)
         common_vert = reduce(lambda x, y: itools.list_intersection(x, y), vert_list)
         return len(common_vert) > 0
 

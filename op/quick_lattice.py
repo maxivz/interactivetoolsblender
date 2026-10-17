@@ -90,7 +90,6 @@ class QuickLattice(bpy.types.Operator):
 
             # Make sure no axis is 0 as this caused the bug where you couldnt move the lattice.
             for axis in range(3):
-                print(axis)
                 if dimensions[axis] == 0:
                     dimensions[axis] = 0.001
 
@@ -220,3 +219,18 @@ class LatticeResolution4x4x4(bpy.types.Operator):
     def execute(self, context):
         set_lattice_resolution(4)
         return{'FINISHED'}
+
+#Register Classes
+classes = [QuickLattice, LatticeResolution2x2x2, LatticeResolution3x3x3, LatticeResolution4x4x4]
+
+def register():
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+   
+    for cls in reversed(classes):
+        unregister_class(cls)

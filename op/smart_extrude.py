@@ -72,14 +72,11 @@ class SmartExtrudeModal(bpy.types.Operator):
             bpy.ops.curve.extrude_move(CURVE_OT_extrude={"mode": 'TRANSLATION'},
                                        TRANSFORM_OT_translate={"value": (0, 0, 0)})
 
-    def __init__(self):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.initial_mouse_pos = Vector((0, 0, 0))
         self.translation_accumulator = Vector((0, 0, 0))
         self.initial_pos = Vector((0, 0, 0))
-        print("Start")
-
-    def __del__(self):
-        print("End")
 
     def execute(self, context):
         return {'FINISHED'}
@@ -155,3 +152,19 @@ class SmartExtrude(bpy.types.Operator):
     def execute(self, context):
         self.context_sensitive_extrude(context)
         return {'FINISHED'}
+
+
+#Register Classes
+classes = [SmartExtrude, SmartExtrudeModal]
+
+def register():
+    from bpy.utils import register_class
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+   
+    for cls in reversed(classes):
+        unregister_class(cls)
