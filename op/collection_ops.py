@@ -1,122 +1,18 @@
 import bpy
-import random
-
-from .. utils.itools import get_collection_top_level_parent, get_selected, parent_set, hide_viewport_set
-from .. utils.custom_data import itools_data_get
-from ..utils.constants import COLLECTION_COLOR, COLLECTION_COLORS_USE_PARENT_COLOR, COLLECTION_COLORS_FORCE_RANDOM
-
+from .. utils.itools import get_selected, parent_set, show_enum_values
+from .. utils.collections import (collection_colors_assign_to_objects,
+								collection_active_set,
+								collection_attr_set,
+								collection_hide_viewport_get,
+								collection_hide_viewport_set,
+								layer_collection_get,
+								active_obj_collection_list_generate,
+								active_obj_collections_amountr )
 DIFFERENCE = 'DIFFERENCE'
 UNION = 'UNION'
 INTERSECT = 'INTERSECT'
 
 
-def collection_color_get(collection):
-	"""Returns the color of a collection, if it has a tag it uses that one, if it doesnt it assigns one"""
-	if collection is None:
-		return (1, 1, 1, 1) 
-
-	if not collection.get(COLLECTION_COLOR):
-		collection[COLLECTION_COLOR] = (random.random(), random.random(), random.random(), 1)
-
-	if itools_data_get(COLLECTION_COLORS_FORCE_RANDOM):
-		return collection[COLLECTION_COLOR]
-	
-	if itools_data_get(COLLECTION_COLORS_USE_PARENT_COLOR):
-		parent_collection = get_collection_top_level_parent(collection)
-		if parent_collection: 
-			return collection_color_get(parent_collection)
-		
-
-	if collection.color_tag != 'NONE':
-		color_map = {
-			'COLOR_01': (1.0, 0.0, 0.0, 1.0),
-			'COLOR_02': (1.0, 0.7, 0.4, 1.0),
-			'COLOR_03': (1.0, 0.95, 0.5, 1.0),
-			'COLOR_04': (0.48, 0.8, 0.48, 1.0),
-			'COLOR_05': (0.36, 0.71, 0.91, 1.0),
-			'COLOR_06': (0.55, 0.35, 0.85, 1.0),
-			'COLOR_07': (0.77, 0.45, 0.72, 1.0),
-			'COLOR_08': (0.47, 0.33, 0.25, 1.0),
-		}
-		
-		return color_map.get(collection.color_tag, 1)
-
-	return collection[COLLECTION_COLOR]
-
-def collection_colors_assign_to_objects():
-	"""Assigns viewport display colors to objects based on their collections."""
-	for obj in bpy.data.objects:
-		if obj.type not in {'MESH', 'CURVE'}:
-			continue  
-
-		collection = next((col for col in bpy.data.collections if obj.name in col.objects), None)
-		if collection:
-			color = collection_color_get(collection)
-			obj.color = color
-
-
-
-def active_obj_collection_list_generate(self, context):
-	"""Returns a list of collection that the active object belong to as an Enum Property"""
-	items = []
-
-	active_obj = bpy.context.view_layer.objects.active
-	if active_obj is None:
-		return items
-
-	collections = [col for col in bpy.data.collections if active_obj.name in col.objects]
-
-	if collections:
-		for col in collections:
-			items.append((col.name, col.name, f"{col.name}"))
-
-	else:
-		items.append(("NONE", "No Collections Found", "No Collections Found"))
-
-	return items
-
-def layer_collection_get(col, _layer_collection=None):
-	"""Returns layer collection for target col"""
-	if _layer_collection is None:
-		_layer_collection = bpy.context.view_layer.layer_collection
-	if _layer_collection.name == col.name:
-		return _layer_collection
-	else:
-		for l_col in _layer_collection.children:
-			if rez := layer_collection_get(col, _layer_collection=l_col):
-				return rez
-
-def collection_active_get():
-	"""Gets active viewlayer collection"""
-	return bpy.context.view_layer.active_layer_collection 
-
-def collection_active_set(col):
-	"""Sets active viewlayer collection"""
-	bpy.context.view_layer.active_layer_collection = layer_collection_get(col)
-
-#Attributes
-def collection_attr_set(target_col, attr_name, attr_value):
-	"""Sets value on collection"""
-	target_col[attr_name] = attr_value
-
-
-def collection_attr_get(target_col, attr_name):
-	"""Sets value on collection"""
-	attr = target_col.get(attr_name)
-	if not attr:
-		return
-	return attr
-
-def collection_hide_viewport_get(target):
-	"""Sets hide viewport value for object"""
-	return target.hide_viewport
-
-
-def collection_hide_viewport_set(target, value):
-	"""Sets hide viewport value for object"""
-	target.hide_viewport = value
-
-	
 class ColorObjsByCollection(bpy.types.Operator):
 	bl_idname = "collection.color_objs_by_collection"
 	bl_label = "Color Objects By Collection"
@@ -196,15 +92,11 @@ class EditCollectionOffset(bpy.types.Operator):
 			self.edit_collection_offset_toggle(active_col, context)
 		return {'FINISHED'}
 
-
-
-class CollectionActiveObjectMoveTo(bpy.types.Operator):
-	bl_idname = "collection.move_to_active_collection"
-	bl_label = "Move Objects To Active Collection"
-	bl_description = """Moves selected objects to the selected collection the active object belong to.
-	ALT: Add selected objects to the selected collection instead of moving them"""
+class CollectionActiveObjectCollectionsTemplate(bpy.types.Operator):
+	bl_idname = "Template"
+	bl_label = "Template"
+	bl_description = """Template"""
 	bl_options = {'REGISTER', 'UNDO'}
-
 	
 	active_obj_collections: bpy.props.EnumProperty( 
 		name="Colllection Target",
@@ -212,24 +104,41 @@ class CollectionActiveObjectMoveTo(bpy.types.Operator):
 		items=active_obj_collection_list_generate, # type: ignore
 	)
 
+	def invoke(self, context, event):
+		# Show popup dialog with properties
+		if active_obj_collections_amountr(context) > 1:
+			return context.window_manager.invoke_props_dialog(self)
+
+		return self.execute(context)
+		
+
+	def draw(self, context):
+		layout = self.layout
+		layout.prop(self, "active_obj_collections", expand=True) 
+
+	def execute(self, context):
+		return {'FINISHED'}
+
+class CollectionActiveObjectMoveTo(CollectionActiveObjectCollectionsTemplate):
+	bl_idname = "collection.move_to_active_collection"
+	bl_label = "Move Objects To Active Collection"
+	bl_description = """Moves selected objects to the selected collection the active object belong to.
+	ALT: Add selected objects to the selected collection instead of moving them"""
+	bl_options = {'REGISTER', 'UNDO'}
+	
 	unlink_other_collections: bpy.props.BoolProperty( 
 		name="Unlink other collections",
 		description="Unlink other collections from Objects when performing the move",
 		default = False # type: ignore
 	)
 
-
 	def invoke(self, context, event):
 		# Show popup dialog with properties
 		self.unlink_other_collections = True
 		if event.alt:
 			self.unlink_other_collections = False
-
-		return context.window_manager.invoke_props_dialog(self)
-
-	def draw(self, context):
-		layout = self.layout
-		layout.prop(self, "active_obj_collections", expand=True) 
+		
+		return super().invoke(context, event)
 
 	def execute(self, context):
 		target_objs = context.selected_objects
@@ -250,18 +159,12 @@ class CollectionActiveObjectMoveTo(bpy.types.Operator):
 
 		return {'FINISHED'}
 
-class CollectionActiveObjectSelect(bpy.types.Operator):
+class CollectionActiveObjectSelect(CollectionActiveObjectCollectionsTemplate):
 	bl_idname = "collection.collection_active_object_select"
 	bl_label = "Select collection of active object"
 	bl_description = """Select objects in the active objects collection.
 	ALT: Selects the collection instead, focuses on it in the outliner"""
 	bl_options = {'REGISTER', 'UNDO'}
-
-	active_obj_collections: bpy.props.EnumProperty( 
-		name="Colllection Target",
-		description="Target Collection",
-		items=active_obj_collection_list_generate, # type: ignore
-	)
 
 	select_collection: bpy.props.BoolProperty( 
 		name="Select Collection",
@@ -274,12 +177,8 @@ class CollectionActiveObjectSelect(bpy.types.Operator):
 		self.select_collection = False
 		if event.alt:
 			self.select_collection = True
-		# Show popup dialog with properties
-		return context.window_manager.invoke_props_dialog(self)
 
-	def draw(self, context):
-		layout = self.layout
-		layout.prop(self, "active_obj_collections", expand=True) 
+		return super().invoke(context, event)
 
 	def execute(self, context):
 		target_col = bpy.data.collections.get(self.active_obj_collections)
@@ -299,17 +198,11 @@ class CollectionActiveObjectSelect(bpy.types.Operator):
 
 		return {'FINISHED'}
 
-class CollectionBooleanCreate(bpy.types.Operator):
+class CollectionBooleanCreate(CollectionActiveObjectCollectionsTemplate):
 	bl_idname = "collection.collection_boolean_create"
 	bl_label = "Creates a boolean collection for active collection"
 	bl_description = """Creates a boolean collection for active collection"""
 	bl_options = {'REGISTER', 'UNDO'}
-
-	active_obj_collections: bpy.props.EnumProperty( 
-		name="Colllection Target",
-		description="Target Collection",
-		items=active_obj_collection_list_generate, # type: ignore
-	)
 
 	bool_type: bpy.props.EnumProperty(
 		name="Boolean Type",
@@ -322,14 +215,9 @@ class CollectionBooleanCreate(bpy.types.Operator):
 		default='DIFFERENCE'
 		) # type: ignore
 
-
-	def draw(self, context):
-		layout = self.layout
-		layout.prop(self, "active_obj_collections", expand=True) 
-
 	def invoke(self, context, event):
 		# Show popup dialog with properties
-		return context.window_manager.invoke_props_dialog(self)
+		return super().invoke(context,event)
 
 	def execute(self, context):
 		obj_active = bpy.context.active_object
@@ -435,6 +323,23 @@ class CollectionHiddenSet(bpy.types.Operator):
 
 		return {'FINISHED'}
 
+class CollectionActiveBySelection(CollectionActiveObjectCollectionsTemplate):
+	bl_idname = "collection.active_by_selection"
+	bl_label = "Collection Active by selection"
+	bl_description = """Sets active collection from the selection the active object is part of"""
+	bl_options = {'REGISTER', 'UNDO'}
+
+	def execute(self, context):
+		target_col = self.active_obj_collections
+		layer_collection = context.view_layer.layer_collection
+		layer_col_target = layer_collection_get(layer_collection, target_col)
+
+		if layer_col_target:
+			context.view_layer.active_layer_collection = layer_col_target
+			return {'FINISHED'}
+
+		return {'FINISHED'}
+
 class CollectionsOptionsPie(bpy.types.Operator):
 	bl_idname = "collection.itools_collections_pie"
 	bl_label = "Collections Options Pie"
@@ -448,7 +353,7 @@ class CollectionsOptionsPie(bpy.types.Operator):
 #Register Classes
 classes = [RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection, 
 		   CollectionActiveObjectMoveTo, CollectionActiveObjectSelect, CollectionsOptionsPie,
-		   CollectionBooleanCreate, CollectionHiddenSet]
+		   CollectionBooleanCreate, CollectionHiddenSet, CollectionActiveBySelection]
 
 def register():
 	from bpy.utils import register_class

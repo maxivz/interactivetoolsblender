@@ -398,7 +398,6 @@ def hide_viewport_get(target):
 	return hidden
 	
 	
-	
 def hide_viewport_state_get(objects):
 	"""Gets viewport state for objects"""
 	state = {}
@@ -410,3 +409,5 @@ def hide_viewport_state_get(objects):
 
 	return state
 
+def show_enum_values(obj, prop_name):
+    print([item.identifier for item in obj.bl_rna.properties[prop_name].enum_items])
