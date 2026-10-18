@@ -193,6 +193,8 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         row = column.row(align=False)
         row.operator("object.collection_active_object_select", text="Select Objs In Collection", icon = "RESTRICT_SELECT_OFF")
         row = column.row(align=False)
+        row.operator("collection.subcollection_create", text="New Subcollection", icon = "PLUS")
+        row = column.row(align=False)
         row.operator("object.move_to_collection", text="Move To Collection", icon = "DECORATE_DRIVER")
         row = column.row(align=False)
         row.operator("object.link_to_collection", text="Link To Collection", icon = "DECORATE_LINKED")

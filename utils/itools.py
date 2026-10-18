@@ -324,13 +324,28 @@ def remove_duplicates(target):
 	return list(set(target))
 
 
-def get_children(obj_name):
+def children_get_selected(obj_name): #TODO: Replace with new children get
 	children = []
 	for ob in bpy.data.objects:
 		if ob.parent != None:
 			if ob.parent.name == obj_name:
 				children.append(ob)
 	return children
+
+def children_get(target_obj, recursive = True):
+	"""Gets all children of target obj, with recursive option"""
+	children_list = []
+
+	if not isinstance(target_obj, bpy.types.Object):
+		return children_list
+
+	for child in target_obj.children:
+		if child not in children_list: 
+			children_list.append(child)
+			# Recursively get children of children
+			children_get(child, children_list)
+
+	return children_list
 
 def get_collection_top_level_parent(collection):
 	"""Finds the top-level parent of a collection by checking all collections in the scene."""
@@ -410,4 +425,4 @@ def hide_viewport_state_get(objects):
 	return state
 
 def show_enum_values(obj, prop_name):
-    print([item.identifier for item in obj.bl_rna.properties[prop_name].enum_items])
+	print([item.identifier for item in obj.bl_rna.properties[prop_name].enum_items])

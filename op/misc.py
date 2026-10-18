@@ -122,7 +122,7 @@ class ChildrenVisibility(bpy.types.Operator):
     hide: bpy.props.BoolProperty(default=True)
 
     def change_children_visibility(self):
-        children = itools.get_children(itools.get_selected(item=False)[0])
+        children = itools.children_get_selected(itools.get_selected(item=False)[0])
         for obj in children:
             bpy.data.objects[obj.name].hide_viewport = self.hide
 

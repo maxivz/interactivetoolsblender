@@ -1,5 +1,5 @@
 import bpy
-from .. utils.itools import get_selected, parent_set, show_enum_values
+from .. utils.itools import get_selected, parent_set, children_get
 from .. utils.collections import (collection_colors_assign_to_objects,
 								collection_active_set,
 								collection_attr_set,
@@ -340,6 +340,87 @@ class CollectionActiveBySelection(CollectionActiveObjectCollectionsTemplate):
 
 		return {'FINISHED'}
 
+class SubCollectionCreate(CollectionActiveObjectCollectionsTemplate):
+	bl_idname = "collection.subcollection_create"
+	bl_label = "Subcollection Create"
+	bl_description = """Creates a new subcollection for the collection of the selected object"""
+	bl_options = {'REGISTER', 'UNDO'}
+
+	new_col_name: bpy.props.StringProperty( 
+		name="Sub Col Name",
+		description="Name of new subcollection",
+		default = "New SubCollection" # type: ignore
+	)
+
+	include_children: bpy.props.BoolProperty( 
+		name="Selected objects children",
+		description="Selected objects children",
+		default = True # type: ignore
+	)
+
+	def invoke(self, context, event):
+			# Show popup dialog with properties
+			self.new_col_name = "Sub Col Name"
+			return context.window_manager.invoke_props_dialog(self)
+			
+	
+	def draw(self, context):
+			layout = self.layout
+			if active_obj_collections_amountr(context) > 1:
+				layout.prop(self, "active_obj_collections", expand=True) 
+			layout.prop(self, "new_col_name", expand=True) 
+			layout.prop(self, "include_children", expand=True) 
+
+			
+
+	def execute(self, context): #TODO: Add to menu
+		parent_col = bpy.data.collections.get(self.active_obj_collections)
+
+		if not parent_col or parent_col == "NONE":
+			self.report({'WARNING'}, "Parent Collection not found!")
+			return { "CANCELLED" }
+
+		new_col = bpy.data.collections.new(self.new_col_name)
+		parent_col.children.link(new_col)
+
+		objs_selection_final =  []
+		objs_selected = context.selected_objects
+
+		if self.include_children:
+			for obj in objs_selected:
+				if obj not in objs_selection_final:
+					objs_selection_final.append(obj)
+
+				children = children_get(obj)
+				for child in children:
+					if child in objs_selection_final:
+						continue
+					objs_selection_final.append(child)
+
+		for obj in objs_selection_final:
+			#Set new Col
+			if obj.name in new_col.objects:
+				continue
+
+			for col in obj.users_collection:
+				col.objects.unlink(obj)
+
+			new_col.objects.link(obj)
+
+		bpy.context.view_layer.update() #Update viewlayer to update hirarchies before setting active
+	
+
+		#Set New Col as active
+		layer_collection = context.view_layer.layer_collection
+		layer_col_target = layer_collection_get(layer_collection, new_col.name)
+		
+		if layer_col_target:
+			context.view_layer.active_layer_collection = layer_col_target
+		
+
+		return {'FINISHED'}
+
+
 class CollectionsOptionsPie(bpy.types.Operator):
 	bl_idname = "collection.itools_collections_pie"
 	bl_label = "Collections Options Pie"
@@ -353,7 +434,8 @@ class CollectionsOptionsPie(bpy.types.Operator):
 #Register Classes
 classes = [RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection, 
 		   CollectionActiveObjectMoveTo, CollectionActiveObjectSelect, CollectionsOptionsPie,
-		   CollectionBooleanCreate, CollectionHiddenSet, CollectionActiveBySelection]
+		   CollectionBooleanCreate, CollectionHiddenSet, CollectionActiveBySelection,
+		   SubCollectionCreate]
 
 def register():
 	from bpy.utils import register_class

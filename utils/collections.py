@@ -133,3 +133,4 @@ def layer_collection_get(layer_col, target_col_name):
 		target_col = layer_collection_get(layer, target_col_name)
 		if target_col:
 			return target_col
+	return None
