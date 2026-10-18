@@ -397,6 +397,25 @@ class CollectionActiveBySelection(CollectionActiveObjectCollectionsTemplate):
 
 		return {'FINISHED'}
 
+class CollectionActiveSelectObjs(CollectionActiveObjectCollectionsTemplate):
+	bl_idname = "collection.active_select_objects"
+	bl_label = "Collection Active Select Objects"
+	bl_description = """Selects all objects in the collection"""
+	bl_options = {'REGISTER', 'UNDO'}
+
+	def execute(self, context):
+		obj_active = bpy.context.active_object
+
+		target_col = bpy.data.collections.get(self.active_obj_collections)
+
+		if not target_col or not target_col.objects:
+			return { "CANCELLED" }
+
+		for obj in target_col.objects:
+			obj.select_set(True)
+
+		return {'FINISHED'}
+
 class SubCollectionCreate(CollectionActiveObjectCollectionsTemplate):
 	bl_idname = "collection.subcollection_create"
 	bl_label = "Subcollection Create"
@@ -429,8 +448,7 @@ class SubCollectionCreate(CollectionActiveObjectCollectionsTemplate):
 			layout.prop(self, "include_children", expand=True) 
 
 			
-
-	def execute(self, context): #TODO: Add to menu
+	def execute(self, context):
 		parent_col = bpy.data.collections.get(self.active_obj_collections)
 
 		if not parent_col or parent_col == "NONE":
@@ -492,7 +510,7 @@ class CollectionsOptionsPie(bpy.types.Operator):
 classes = [RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection, 
 		   CollectionActiveObjectMoveTo, CollectionActiveObjectSelect, CollectionsOptionsPie,
 		   CollectionBooleanCreate, CollectionHiddenSet, CollectionActiveBySelection,
-		   CollectionBackupCreate, SubCollectionCreate]
+		   CollectionBackupCreate, CollectionActiveSelectObjs,SubCollectionCreate]
 
 def register():
 	from bpy.utils import register_class
