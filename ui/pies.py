@@ -2,7 +2,7 @@ import bpy
 from bpy.types import Menu
 from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_set_flow_active, get_bezierutilities_active, get_loop_tools_active, get_textools_active
 from ..utils.collections import collection_attr_get, collection_hide_viewport_get
-from .. op.collection_ops import UNION, INTERSECT, DIFFERENCE
+from .. op.collection_ops import UNION, INTERSECT, DIFFERENCE, BACKUP
 
 class VIEW3D_MT_PIE_SSC_Duplicate(Menu):
     # bl_idname = "mesh.ssc_duplicate_menu"
@@ -186,6 +186,21 @@ class VIEW3D_MT_PIE_SM_object(Menu):
 
             op = row.operator("collection.hidden_set", text="", icon=icon)
             op.col_target = col.name
+
+        op = row.operator("collection.collection_backup_create", text="Backup", icon="COLLECTION_COLOR_05")
+
+        col = collection_attr_get(active_col, BACKUP)
+        if col:
+            icon = "HIDE_OFF"
+            hidden = collection_hide_viewport_get(col)
+
+            if hidden:
+                icon = "HIDE_ON"
+
+            op = row.operator("collection.hidden_set", text="", icon=icon)
+            op.col_target = col.name
+
+        
 
         row = column.row(align=False)
         row.operator("collection.active_by_selection", text="Set Obj Collection as Active", icon = "RESTRICT_SELECT_OFF")

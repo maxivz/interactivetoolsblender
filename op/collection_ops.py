@@ -11,7 +11,7 @@ from .. utils.collections import (collection_colors_assign_to_objects,
 DIFFERENCE = 'DIFFERENCE'
 UNION = 'UNION'
 INTERSECT = 'INTERSECT'
-
+BACKUP = 'BACKUP'
 
 class ColorObjsByCollection(bpy.types.Operator):
 	bl_idname = "collection.color_objs_by_collection"
@@ -294,9 +294,66 @@ class CollectionBooleanCreate(CollectionActiveObjectCollectionsTemplate):
 		bool_mod.operand_type = 'COLLECTION'
 		bool_mod.collection = bool_col
 	
-
 		return {'FINISHED'}
 
+
+class CollectionBackupCreate(CollectionActiveObjectCollectionsTemplate):
+	bl_idname = "collection.collection_backup_create"
+	bl_label = "Creates a backup collection for active collection"
+	bl_description = """Creates a backup collection for active collection"""
+	bl_options = {'REGISTER', 'UNDO'}
+
+	def invoke(self, context, event):
+		# Show popup dialog with properties
+		return super().invoke(context,event)
+
+	def execute(self, context):
+		obj_active = bpy.context.active_object
+		objs_selected = context.selected_objects
+
+		if obj_active is None:
+			print("Error: No active object.")
+			return {'CANCELLED'}
+
+
+		#Remap bool type name, color for col
+		col_tag = BACKUP
+		color_tag = "COLOR_05"
+
+
+		#Check if col exists before creating it
+		target_col = bpy.data.collections.get(self.active_obj_collections)
+
+		if not target_col:
+			return { "CANCELLED" }
+		
+		new_col_name = f"{target_col.name}_{col_tag}"
+		new_col = bpy.data.collections.get(new_col_name)
+
+		if new_col is None:
+			new_col = bpy.data.collections.new(new_col_name)
+			target_col.children.link(new_col)
+			collection_attr_set(target_col, BACKUP, new_col)
+			new_col.color_tag = color_tag
+
+
+		bpy.context.view_layer.update() #Update viewlayer to update hirarchies before parenting
+
+		#Link objs to bool col 
+		for obj in objs_selected:
+			#Set new Col
+			if obj.name in new_col.objects:
+				continue
+
+			if obj == obj_active:
+				continue
+
+			for col in obj.users_collection:
+				col.objects.unlink(obj)
+
+			new_col.objects.link(obj)
+
+		return {'FINISHED'}
 
 
 class CollectionHiddenSet(bpy.types.Operator):
@@ -435,7 +492,7 @@ class CollectionsOptionsPie(bpy.types.Operator):
 classes = [RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection, 
 		   CollectionActiveObjectMoveTo, CollectionActiveObjectSelect, CollectionsOptionsPie,
 		   CollectionBooleanCreate, CollectionHiddenSet, CollectionActiveBySelection,
-		   SubCollectionCreate]
+		   CollectionBackupCreate, SubCollectionCreate]
 
 def register():
 	from bpy.utils import register_class
