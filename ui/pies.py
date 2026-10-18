@@ -116,8 +116,8 @@ class VIEW3D_MT_PIE_SM_object(Menu):
         row = column.row(align=False)
         row.label(text="Visibility")
         row = column.row(align=True)
-        row.operator("object.children_visibility", text="Show ", icon = "HIDE_OFF").hide = False
-        row.operator("object.children_visibility", text="Hide Children", icon = "HIDE_ON").hide = True
+        row.operator("object.children_hide_viewport_set", text="Show Children", icon = "HIDE_OFF").hide = False
+        row.operator("object.children_hide_viewport_set", text="Hide Children", icon = "HIDE_ON").hide = True
         row = column.row(align=True)
         row.operator("object.hide_view_clear", text="Show All", icon = "HIDE_OFF")
 

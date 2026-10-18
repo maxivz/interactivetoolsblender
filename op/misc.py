@@ -113,21 +113,34 @@ class CSBevel(bpy.types.Operator):
         return{'FINISHED'}
 
 
-class ChildrenVisibility(bpy.types.Operator):
-    bl_idname = "object.children_visibility"
+class ChildrenHideViewportSet(bpy.types.Operator):
+    bl_idname = "object.children_hide_viewport_set"
     bl_label = "Children Visibility"
     bl_description = "Hide or show children for the selected object"
     bl_options = {'REGISTER', 'UNDO'}
 
-    hide: bpy.props.BoolProperty(default=True)
-
-    def change_children_visibility(self):
-        children = itools.children_get_selected(itools.get_selected(item=False)[0])
-        for obj in children:
-            bpy.data.objects[obj.name].hide_viewport = self.hide
+    hide: bpy.props.BoolProperty(default=True) # type: ignore
 
     def execute(self, context):
-        self.change_children_visibility()
+        selected_objs = context.selected_objects
+
+        if not selected_objs:
+            return { "CANCELLED" }
+
+        children = []
+
+        for obj in context.selected_objects:
+            obj_children = itools.children_get(obj)
+            for child in obj_children:
+                if child in children:
+                    continue
+
+                children.append(child)
+
+
+        for obj in children:
+            itools.hide_viewport_set(obj, self.hide)
+        
         return{'FINISHED'}
 
 
@@ -602,7 +615,7 @@ class QuickFlattenAxis(bpy.types.Operator):
 classes = [TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSensitiveSlide, TargetWeldToggle,
             QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, 
             TransformOrientationCycle, TransformOrientationOp, QuickHpLpNamer, TransformOptionsPie, 
-            QuickVisualGeoToMesh, SnapPresetsOp, PropEditOp, ChildrenVisibility, TransformPivotPointOp]
+            QuickVisualGeoToMesh, SnapPresetsOp, PropEditOp, ChildrenHideViewportSet, TransformPivotPointOp]
 
 def register():
     from bpy.utils import register_class
