@@ -12,3 +12,6 @@ DESCRIPTION_DIC ={
     COLLECTION_COLORS_USE_PARENT_COLOR: "Use top level parent to set the color of the collections",
     COLLISION_COLLECTION_UPDATE: "Automatically add collision objects to a global collision collection"
 }
+ORIGIN = "Origin"
+WORLD_ALIGNED = "world_aligned"
+WORLD_ALIGNED_INSTANCE = f"{WORLD_ALIGNED}_inst"

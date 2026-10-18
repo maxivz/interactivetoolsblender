@@ -7,7 +7,9 @@ from .. utils.collections import (collection_colors_assign_to_objects,
 								collection_hide_viewport_set,
 								layer_collection_get,
 								active_obj_collection_list_generate,
-								active_obj_collections_amountr )
+								active_obj_collections_amountr,
+								collection_world_aligned_get,
+								collection_origin_get )
 DIFFERENCE = 'DIFFERENCE'
 UNION = 'UNION'
 INTERSECT = 'INTERSECT'
@@ -496,6 +498,31 @@ class SubCollectionCreate(CollectionActiveObjectCollectionsTemplate):
 		return {'FINISHED'}
 
 
+class CollectionWorldAlignSetup(CollectionActiveObjectCollectionsTemplate):
+	bl_idname = "collection.world_align_setup"
+	bl_label = "Collection World align setup"
+	bl_description = """Sets a world align collection for target col"""
+	bl_options = {'REGISTER', 'UNDO'}
+
+	def execute(self, context):
+		target_col = bpy.data.collections.get(self.active_obj_collections) 
+		collection_world_aligned_get(target_col)
+
+		return {'FINISHED'}
+
+class CollectionOriginGet(CollectionActiveObjectCollectionsTemplate):
+	bl_idname = "collection.origin_get"
+	bl_label = "Collection origin Get"
+	bl_description = """Gets the collection origin"""
+	bl_options = {'REGISTER', 'UNDO'}
+
+	def execute(self, context):
+		target_col = bpy.data.collections.get(self.active_obj_collections) 
+		collection_origin_get(target_col)
+
+		return {'FINISHED'}
+
+
 class CollectionsOptionsPie(bpy.types.Operator):
 	bl_idname = "collection.itools_collections_pie"
 	bl_label = "Collections Options Pie"
@@ -510,7 +537,8 @@ class CollectionsOptionsPie(bpy.types.Operator):
 classes = [RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection, 
 		   CollectionActiveObjectMoveTo, CollectionActiveObjectSelect, CollectionsOptionsPie,
 		   CollectionBooleanCreate, CollectionHiddenSet, CollectionActiveBySelection,
-		   CollectionBackupCreate, CollectionActiveSelectObjs,SubCollectionCreate]
+		   CollectionBackupCreate, CollectionActiveSelectObjs,SubCollectionCreate, 
+		   CollectionWorldAlignSetup, CollectionOriginGet]
 
 def register():
 	from bpy.utils import register_class

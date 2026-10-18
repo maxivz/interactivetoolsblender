@@ -324,14 +324,6 @@ def remove_duplicates(target):
 	return list(set(target))
 
 
-def children_get_selected(obj_name): #TODO: Replace with new children get
-	children = []
-	for ob in bpy.data.objects:
-		if ob.parent != None:
-			if ob.parent.name == obj_name:
-				children.append(ob)
-	return children
-
 def children_get(target_obj, recursive = True):
 	"""Gets all children of target obj, with recursive option"""
 	children_list = []
