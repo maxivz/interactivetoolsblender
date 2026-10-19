@@ -2,7 +2,7 @@ import bpy
 from bpy.types import Menu
 from .. utils.user_prefs import get_qblocker_active, get_ssc_qblocker_integration, get_ssc_bezierutilities_integration, get_set_flow_active, get_bezierutilities_active, get_loop_tools_active, get_textools_active
 from ..utils.collections import collection_attr_get, collection_hide_viewport_get
-from .. op.collection_ops import UNION, INTERSECT, DIFFERENCE, BACKUP
+from .. utils.constants import UNION, INTERSECT, DIFFERENCE, BACKUP
 
 class VIEW3D_MT_PIE_SSC_Duplicate(Menu):
     # bl_idname = "mesh.ssc_duplicate_menu"

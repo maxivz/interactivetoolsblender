@@ -1,11 +1,12 @@
 import bpy
 import random
 from mathutils import Matrix
-from .. utils.itools import get_collection_top_level_parent, get_selected
+from .. utils.itools import get_collection_top_level_parent
 from .. utils.custom_data import itools_data_get
 from ..utils.constants import (COLLECTION_COLOR, COLLECTION_COLORS_USE_PARENT_COLOR,
-                            COLLECTION_COLORS_FORCE_RANDOM, ORIGIN, WORLD_ALIGNED,
-							WORLD_ALIGNED_INSTANCE)
+							COLLECTION_COLORS_FORCE_RANDOM, ORIGIN, WORLD_ALIGNED,
+							WORLD_ALIGNED_INSTANCE, DIRECT_CHILDREN, ASSAMBLY_INSTANCE,
+							ASSAMBLY, ASSAMBLY_SCENE, COL_TYPE, COL_TAGS)
 from ..utils.scenes import scene_get, ITOOLS_DATA
 def collection_color_get(collection):
 	"""Returns the color of a collection, if it has a tag it uses that one, if it doesnt it assigns one"""
@@ -145,6 +146,22 @@ def collection_new(col_name, col_parent):
 
 	return col_new
 
+def collection_direct_children_col_get(col): #TODO: Make update function
+	"""Gets the direct children collection of target collection"""
+	direct_children_col = col.get(DIRECT_CHILDREN)
+	if not direct_children_col:
+		name = f"{col.name}_{DIRECT_CHILDREN}"
+		data_scene = scene_get(ITOOLS_DATA)
+		direct_children_col = collection_new(name, data_scene.collection)
+		col[DIRECT_CHILDREN] = direct_children_col
+		
+
+		for obj in col.objects: #TODO: Get children of objs that are not in other collections
+			direct_children_col.objects.link(obj)
+
+	return direct_children_col
+
+
 def collection_origin_get(col):
 	"""Gets the collection origin"""
 	origin_col = col.get(ORIGIN)
@@ -190,7 +207,8 @@ def collection_world_aligned_transform_update(col):
 
 	collection_origin = collection_origin_get(col)
 	
-	col.instance_offset = collection_origin.location #TODO: Make function out of this
+	col.instance_offset = collection_origin.location 
+	collection_direct_children_col_get(col).instance_offset = collection_origin.location
 
 	#Calculate correction
 	current_rotation = collection_origin.rotation_euler.copy()
@@ -209,24 +227,52 @@ def collection_world_aligned_get(col):
 		data_scene = scene_get(ITOOLS_DATA)
 		data_scene_col = data_scene.collection
 
-		world_aligned_col = collection_new(WORLD_ALIGNED, data_scene_col)
+		world_aligned_col_name = f"{col.name}_WORLD_ALIGNED"
+		world_aligned_col = collection_new(world_aligned_col_name, data_scene_col)
+		collection_attr_set(world_aligned_col, COL_TYPE, WORLD_ALIGNED)
+
 
 		#Instace col inside world aligned and rotate back to 0
 
 		instance_name = f"{col.name}_{WORLD_ALIGNED_INSTANCE}"
-		col_instance = bpy.data.objects.new(instance_name, None)
-		col_instance.instance_collection = col
-		col_instance.instance_type = 'COLLECTION'
-		col[WORLD_ALIGNED_INSTANCE] = col_instance
+		world_aligned_instance = bpy.data.objects.new(instance_name, None)
+		direct_children_col = collection_direct_children_col_get(col)
+		world_aligned_instance.instance_collection = direct_children_col
+		world_aligned_instance.instance_type = 'COLLECTION'
+		col[WORLD_ALIGNED_INSTANCE] = world_aligned_instance #TODO: Not sure i need this data
 
-		world_aligned_col.objects.link(col_instance)
+
+		world_aligned_col.objects.link(world_aligned_instance)
 		#Apply world offset and rotation
-		collection_world_aligned_transform_update(col)
+		collection_world_aligned_transform_update(col) #TODO: Use drivers to set these
 
 
 		col[WORLD_ALIGNED] = world_aligned_col #TODO: Maybe change name of this?
 
-	collection_world_aligned_transform_update(col) #TODO: Remove from here so it doesnt run two times
 	return world_aligned_col
 
-	
+def collection_assambly_instance_get(col):
+	assambly_instance = col.get(ASSAMBLY_INSTANCE)
+
+	if not assambly_instance:
+		assambly_scene = scene_get(ASSAMBLY_SCENE)
+		instance_name = f"{col.name}_Inst"
+		assambly_instance = bpy.data.objects.new(instance_name, None)
+		assambly_instance.instance_collection = collection_world_aligned_get(col)
+		assambly_instance.instance_type = 'COLLECTION'
+		col[ASSAMBLY_INSTANCE] = assambly_instance
+		assambly_scene.collection.objects.link(assambly_instance)
+
+
+
+	return assambly_instance
+
+def collection_tags_update(col):
+	"""Updates tags for collection"""
+	for tag in COL_TAGS:
+		col_tag = col.get(tag)
+
+		if not col_tag:
+			continue
+
+		collection_attr_set(col_tag, COL_TYPE, tag)

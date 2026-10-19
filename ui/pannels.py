@@ -1,6 +1,8 @@
 import bpy
 from ..utils.user_prefs import get_enable_legacy_tools
-from ..utils.constants import COLLISION_COLORS_UPDATE, COLLECTION_COLORS_USE_PARENT_COLOR, DESCRIPTION_DIC, COLLISION_COLLECTION_UPDATE, COLLECTION_COLORS_FORCE_RANDOM
+from ..utils.constants import (COLLISION_COLORS_UPDATE, COLLECTION_COLORS_USE_PARENT_COLOR, DESCRIPTION_DIC,
+                                COLLISION_COLLECTION_UPDATE, COLLECTION_COLORS_FORCE_RANDOM,
+                                DIFFERENCE, UNION, INTERSECT, BACKUP)
 from ..utils.custom_data import itools_data_get
 
 def icon_toggle(row, operator_name, icon_name, constant):

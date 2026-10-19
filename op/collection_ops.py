@@ -1,5 +1,6 @@
 import bpy
 from .. utils.itools import get_selected, parent_set, children_get
+from ..utils.scenes import scene_get
 from .. utils.collections import (collection_colors_assign_to_objects,
 								collection_active_set,
 								collection_attr_set,
@@ -9,11 +10,11 @@ from .. utils.collections import (collection_colors_assign_to_objects,
 								active_obj_collection_list_generate,
 								active_obj_collections_amountr,
 								collection_world_aligned_get,
-								collection_origin_get )
-DIFFERENCE = 'DIFFERENCE'
-UNION = 'UNION'
-INTERSECT = 'INTERSECT'
-BACKUP = 'BACKUP'
+								collection_origin_get,
+								collection_assambly_instance_get,
+								collection_tags_update)
+from ..utils.constants import ASSAMBLY, BACKUP, COL_TAGS, CHILDREN, PARENT, ASSAMBLY_SCENE, COL_TYPE
+
 
 class ColorObjsByCollection(bpy.types.Operator):
 	bl_idname = "collection.color_objs_by_collection"
@@ -251,10 +252,12 @@ class CollectionBooleanCreate(CollectionActiveObjectCollectionsTemplate):
 		bool_col_name = f"{target_col.name}_{bool_tag}"
 		bool_col = bpy.data.collections.get(bool_col_name)
 
-		if bool_col is None:
+		if bool_col is None: #TODO: Generalize
 			bool_col = bpy.data.collections.new(bool_col_name)
 			target_col.children.link(bool_col)
 			collection_attr_set(target_col, self.bool_type, bool_col)
+			collection_attr_set(bool_col, COL_TYPE, self.bool_type)
+
 			bool_col.color_tag = color_tag
 
 
@@ -332,10 +335,11 @@ class CollectionBackupCreate(CollectionActiveObjectCollectionsTemplate):
 		new_col_name = f"{target_col.name}_{col_tag}"
 		new_col = bpy.data.collections.get(new_col_name)
 
-		if new_col is None:
+		if new_col is None: #TODO: Generalize
 			new_col = bpy.data.collections.new(new_col_name)
 			target_col.children.link(new_col)
 			collection_attr_set(target_col, BACKUP, new_col)
+			collection_attr_set(new_col, COL_TYPE, BACKUP)
 			new_col.color_tag = color_tag
 
 
@@ -522,6 +526,60 @@ class CollectionOriginGet(CollectionActiveObjectCollectionsTemplate):
 
 		return {'FINISHED'}
 
+class CollectionsAssamblySetup(bpy.types.Operator):
+	bl_idname = "collection.assambly_setup"
+	bl_label = "Collections Assambly Setup" #TODO: Pick a better name
+	bl_description = "Sets up selected collection hirarchy in the assambly setup scene"
+	bl_options = {'REGISTER', 'UNDO'}
+
+	def execute(self, context):
+
+
+		active_collection_name = bpy.context.view_layer.active_layer_collection.name #TODO: Change for a function input
+		active_col = bpy.data.collections.get(active_collection_name)
+		hierarchy_dict = {}
+		hierarchy_dict[active_col.name] = {}
+		hierarchy_dict[active_col.name][CHILDREN] = list(active_col.children)
+
+		collection_assambly_instance_get(active_col)
+		
+
+		for col in active_col.children_recursive:
+			#TODO: Pass on BOOLEAN; BACKUP, etc
+			#Update collection tags:
+			collection_tags_update(col) #TODO: Remove once its not needed
+
+			col_type = col.get(COL_TYPE)
+			if col_type and col_type in COL_TAGS:
+				continue
+
+			#Get parent
+			parent = None
+			for key in hierarchy_dict.keys():
+				children = hierarchy_dict[key][CHILDREN]
+				print(f"key: {key}, children : {children}, target_col : {col}, found : {col in children}")
+				if col in children:
+					parent = bpy.data.collections.get(key)
+					break
+
+			#Add data to dictionary
+			hierarchy_dict[col.name] = {}
+			hierarchy_dict[col.name][CHILDREN] = list(col.children)
+				
+			#Spawn instance in assambly scene
+			
+			assambly_instance = collection_assambly_instance_get(col)
+
+			if not parent:
+				continue
+			parent_assambly = collection_assambly_instance_get(parent)
+			print(f"Parent: {parent}, assambly parent {parent_assambly}, assambly instance {assambly_instance}")
+			parent_set(assambly_instance, parent_assambly)
+			#TODO: Finish assamblying mesh hirarchy when spawning
+			#TODO: Handle Mirroring
+			#TODO: Rig parts based on hierarchy
+
+		return{'FINISHED'}
 
 class CollectionsOptionsPie(bpy.types.Operator):
 	bl_idname = "collection.itools_collections_pie"
@@ -538,7 +596,7 @@ classes = [RenameObjsByCollection, EditCollectionOffset, ColorObjsByCollection,
 		   CollectionActiveObjectMoveTo, CollectionActiveObjectSelect, CollectionsOptionsPie,
 		   CollectionBooleanCreate, CollectionHiddenSet, CollectionActiveBySelection,
 		   CollectionBackupCreate, CollectionActiveSelectObjs,SubCollectionCreate, 
-		   CollectionWorldAlignSetup, CollectionOriginGet]
+		   CollectionWorldAlignSetup, CollectionOriginGet, CollectionsAssamblySetup]
 
 def register():
 	from bpy.utils import register_class
