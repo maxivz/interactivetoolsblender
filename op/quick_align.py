@@ -201,3 +201,20 @@ class QuickAlign(bpy.types.Operator):
         row6 = col.row()
         row6.label(text="Scale")
         row6.prop(self, "scale_axis")
+
+
+#Register Classes
+classes = [QuickAlign]
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

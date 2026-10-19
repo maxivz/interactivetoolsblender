@@ -1,0 +1,34 @@
+COLLISION = "Collision"
+COLLISION_COLORS_UPDATE = "collision_colors_update"
+COLLECTION_COLORS_USE_PARENT_COLOR = "collection_colors_use_parent_color"
+COLLECTION_COLORS_FORCE_RANDOM = "collection_colors_force_random"
+COLLISION_COLLECTION_UPDATE = "collision_collection_update"
+COLLECTION_COLOR = "Collection Color" #TODO: Make this into an option for the tool
+CONVEXHULL_MAT_COLOR =  (0, 1, 0, 1)
+
+
+DESCRIPTION_DIC ={
+    COLLISION_COLORS_UPDATE: "Automatically update collision colors",
+    COLLECTION_COLORS_USE_PARENT_COLOR: "Use top level parent to set the color of the collections",
+    COLLISION_COLLECTION_UPDATE: "Automatically add collision objects to a global collision collection"
+}
+ORIGIN = "Origin"
+WORLD_ALIGNED = "world_aligned"
+WORLD_ALIGNED_INSTANCE = f"{WORLD_ALIGNED}_inst"
+DIRECT_CHILDREN = "direct_children"
+DIFFERENCE = 'DIFFERENCE'
+UNION = 'UNION'
+INTERSECT = 'INTERSECT'
+BACKUP = 'BACKUP'
+ASSAMBLY = 'ASSAMBLY'
+ASSAMBLY_SCENE = f"{ASSAMBLY}_SCENE"
+ASSAMBLY_INSTANCE = "assambly_instance"
+COL_TAG_SUB = "Sub"
+COL_TAG_UNION = "Add"
+COL_TAG_INTERSECT = "Int"
+COL_TAG_BACKUP = "Backup"
+COL_TYPE = "collection_type"
+
+COL_TAGS = [UNION, DIFFERENCE, INTERSECT, BACKUP]
+CHILDREN = "children"
+PARENT = "parent"

@@ -222,12 +222,6 @@ class QuickRadialSymmetry(bpy.types.Operator):
         elif self.original_sym_axis == 2:
             bpy.data.objects[self.offset_obj].rotation_euler = (0, 0, math.radians(360 / self.original_sym_count))
 
-    def __init__(self):
-        print("Start")
-
-    def __del__(self):
-        print("End")
-
     @classmethod
     def poll(cls, context):
         return context.mode == 'OBJECT' and len(context.selected_objects) > 0
@@ -326,3 +320,19 @@ class QuickRadialSymmetry(bpy.types.Operator):
         row2.label(text="Axis")
         row2.prop(self, "ui_axis")
     """
+
+#Register Classes
+classes = [QuickRadialSymmetry]
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)

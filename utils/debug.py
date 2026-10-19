@@ -40,12 +40,6 @@ class DebugOpModal(bpy.types.Operator):
 
     mode = 0
 
-    def __init__(self):
-        print("Start")
-
-    def __del__(self):
-        print("End")
-
     def execute(self, context):
         context.object.location.x = self.value / 100.0
         return {'FINISHED'}

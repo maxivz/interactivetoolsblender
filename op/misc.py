@@ -113,21 +113,34 @@ class CSBevel(bpy.types.Operator):
         return{'FINISHED'}
 
 
-class ChildrenVisibility(bpy.types.Operator):
-    bl_idname = "object.children_visibility"
+class ChildrenHideViewportSet(bpy.types.Operator):
+    bl_idname = "object.children_hide_viewport_set"
     bl_label = "Children Visibility"
     bl_description = "Hide or show children for the selected object"
     bl_options = {'REGISTER', 'UNDO'}
 
-    hide: bpy.props.BoolProperty(default=True)
-
-    def change_children_visibility(self):
-        children = itools.get_children(itools.get_selected(item=False)[0])
-        for obj in children:
-            bpy.data.objects[obj.name].hide_viewport = self.hide
+    hide: bpy.props.BoolProperty(default=True) # type: ignore
 
     def execute(self, context):
-        self.change_children_visibility()
+        selected_objs = context.selected_objects
+
+        if not selected_objs:
+            return { "CANCELLED" }
+
+        children = []
+
+        for obj in context.selected_objects:
+            obj_children = itools.children_get(obj)
+            for child in obj_children:
+                if child in children:
+                    continue
+
+                children.append(child)
+
+
+        for obj in children:
+            itools.hide_viewport_set(obj, self.hide)
+        
         return{'FINISHED'}
 
 
@@ -375,16 +388,15 @@ class SnapPresetsOp(bpy.types.Operator):
             bpy.context.scene.tool_settings.use_snap_align_rotation = False
 
         elif self.mode == 4:
-            bpy.context.scene.tool_settings.snap_elements = {'FACE'}
+            bpy.context.scene.tool_settings.snap_elements_individual = {'FACE_PROJECT'}
             bpy.context.scene.tool_settings.snap_target = 'CENTER'
             bpy.context.scene.tool_settings.use_snap_align_rotation = True
-            bpy.context.scene.tool_settings.use_snap_project = True
+
 
         elif self.mode == 5:
             bpy.context.scene.tool_settings.snap_elements = {'EDGE_MIDPOINT'}
             bpy.context.scene.tool_settings.snap_target = 'MEDIAN'
             bpy.context.scene.tool_settings.use_snap_align_rotation = False
-            bpy.context.scene.tool_settings.use_snap_project = False
 
     def execute(self, context):
         self.set_preset(context)
@@ -598,3 +610,22 @@ class QuickFlattenAxis(bpy.types.Operator):
                                      mirror=True, use_proportional_edit=False, release_confirm=True)
 
         return{'FINISHED'}
+
+#Register Classes
+classes = [TransformModeCycle, CSBevel, QuickFlattenAxis, ContextSensitiveSlide, TargetWeldToggle,
+            QuickModifierToggle, QuickWireToggle, WireShadedToggle, FlexiBezierToolsCreate, 
+            TransformOrientationCycle, TransformOrientationOp, QuickHpLpNamer, TransformOptionsPie, 
+            QuickVisualGeoToMesh, SnapPresetsOp, PropEditOp, ChildrenHideViewportSet, TransformPivotPointOp]
+
+def register():
+    from bpy.utils import register_class
+    
+    for cls in classes:
+        register_class(cls)
+
+
+def unregister():
+    from bpy.utils import unregister_class
+
+    for cls in reversed(classes):
+        unregister_class(cls)
